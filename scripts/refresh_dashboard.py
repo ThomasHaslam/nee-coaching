@@ -621,8 +621,19 @@ block, what to look at, what to practice. Reference the relevant training step. 
 Use imperative voice ('Pull...', 'Block 20 minutes...', 'Run a Scenario X.X drill...'), \
 NOT 'Coach should...' or any named person other than the teammate.",
   "rationale": "2-3 sentences. Why this specific training step is the right anchor \
-for this teammate's pattern."
+for this teammate's pattern.",
+  "deepDive": [
+    {"q": "What's the single biggest leverage point right now?", "a": "..."},
+    {"q": "Give me a 60-second 1:1 opener I can use today.", "a": "..."},
+    {"q": "Three questions to ask that will surface what's behind the numbers.", "a": "..."},
+    {"q": "If I only have 5 minutes, what should I focus on?", "a": "..."},
+    {"q": "What would success look like in two weeks?", "a": "..."}
+  ]
 }
+
+The five deepDive questions above are FIXED - keep them verbatim. Write each "a" \
+in 2-4 sentences, same voice rules as everything else. Each answer must be specific \
+to this teammate's actual numbers, not generic. Reference scenario steps when relevant.
 
 Return ONLY valid JSON. No prose outside the object."""
 
@@ -680,7 +691,7 @@ def generate_ai_coaching(tm: TM, slot_idx: int = 0) -> Optional[dict]:
     try:
         resp = client.messages.create(
             model=_AI_MODEL,
-            max_tokens=1000,
+            max_tokens=2200,
             system=_AI_SYSTEM,
             messages=[{"role": "user", "content": _ai_prompt(tm)}],
         )
@@ -794,6 +805,7 @@ def render_teammates(records: list[dict]) -> str:
             metrics_js = ", ".join(_metric_js(m) for m in tm["metrics"])
             anchor_js = json.dumps(tm.get("anchor", {}), ensure_ascii=False)
             source_js = json.dumps(tm.get("anchorSource", "template"))
+            deep_dive_js = json.dumps(tm.get("deepDive", []), ensure_ascii=False)
             chunks.append(
                 "    {\n"
                 f"      id: {json.dumps(tm['id'])}, priority: {tm['priority']}, "
@@ -805,6 +817,7 @@ def render_teammates(records: list[dict]) -> str:
                 f"      framework: {json.dumps(tm['framework'])},\n"
                 f"      anchor: {anchor_js},\n"
                 f"      anchorSource: {source_js},\n"
+                f"      deepDive: {deep_dive_js},\n"
                 f"      metrics: [{metrics_js}]\n"
                 "    },"
             )
@@ -858,11 +871,13 @@ def main() -> int:
             anchor = make_anchor(tm)
 
             ai = generate_ai_coaching(tm, slot_idx=i - 1)
+            deep_dive: list[dict] = []
             if ai:
                 why = ai["why"]
                 play = ai["play"]
                 anchor["rationale"] = ai["rationale"]
                 anchor_source = "ai"
+                deep_dive = ai.get("deepDive") or []
             else:
                 why = make_why(tm)
                 play = make_play(tm, slot_idx=i - 1)
@@ -880,6 +895,7 @@ def main() -> int:
                 "framework": make_framework(tm),
                 "anchor": anchor,
                 "anchorSource": anchor_source,
+                "deepDive": deep_dive,
                 "metrics": make_metrics(tm),
             })
         print(f"  {code.upper()}: {len(tms)} TMs read, picked {len(worst)} for coaching "
