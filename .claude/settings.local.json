@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git --version)",
+      "Bash(gh --version)",
+      "Bash(brew --version)",
+      "Read(//usr/local/bin/**)",
+      "Bash(/usr/local/bin/gh --version)",
+      "Bash(sudo -n mkdir -p /usr/local/bin)"
+    ]
+  }
+}
