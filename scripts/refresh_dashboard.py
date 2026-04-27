@@ -666,17 +666,25 @@ NOT 'Coach should...' or any named person other than the teammate.",
   "rationale": "2-3 sentences. Why this specific training step is the right anchor \
 for this teammate's pattern.",
   "deepDive": [
-    {"q": "What's the single biggest leverage point right now?", "a": "..."},
-    {"q": "Give me a 60-second 1:1 opener I can use today.", "a": "..."},
-    {"q": "Three questions to ask that will surface what's behind the numbers.", "a": "..."},
-    {"q": "If I only have 5 minutes, what should I focus on?", "a": "..."},
-    {"q": "What would success look like in two weeks?", "a": "..."}
+    {"category": "🎯 Today's Conversation", "q": "Give me a 60-second 1:1 opener I can use today.", "a": "..."},
+    {"category": "🎯 Today's Conversation", "q": "Write a verbatim opening line for the conversation.", "a": "..."},
+    {"category": "🎯 Today's Conversation", "q": "What posture should I bring? Curious, firm, or supportive?", "a": "..."},
+    {"category": "📊 Diagnose the Pattern", "q": "What's the single biggest leverage point right now?", "a": "..."},
+    {"category": "📊 Diagnose the Pattern", "q": "Three questions to surface what's behind the numbers.", "a": "..."},
+    {"category": "📊 Diagnose the Pattern", "q": "What would I expect to see if my hypothesis is correct?", "a": "..."},
+    {"category": "🚀 Path Forward", "q": "Build me a 7-day improvement plan.", "a": "..."},
+    {"category": "🚀 Path Forward", "q": "What does success look like in two weeks?", "a": "..."},
+    {"category": "🚀 Path Forward", "q": "What's the warning sign that this isn't working?", "a": "..."},
+    {"category": "🚀 Path Forward", "q": "If I only have 5 minutes today, what's the one thing?", "a": "..."}
   ]
 }
 
-The five deepDive questions above are FIXED - keep them verbatim. Write each "a" \
-in 2-4 sentences, same voice rules as everything else. Each answer must be specific \
-to this teammate's actual numbers, not generic. Reference scenario steps when relevant.
+The ten deepDive questions above are FIXED - keep them verbatim, including the category \
+prefix. Write each "a" in 2-5 sentences, same voice rules. Each answer must be specific \
+to this teammate's actual numbers and reference real scenario steps where relevant. \
+Vary your phrasing across the answers so the leader doesn't see the same construction \
+repeated. The "verbatim opening line" answer should be a direct quote the leader can \
+literally say.
 
 Return ONLY valid JSON. No prose outside the object."""
 
@@ -747,6 +755,81 @@ the metric pattern and which CSL Scenario step would unlock it."
 }
 
 Return ONLY valid JSON."""
+
+
+_HUDDLE_SYSTEM = """You are COACH RICK, master sales coach for the New England Elite \
+1-800-GOT-JUNK? region. You have just reviewed today's coaching list (5 worst per franchise) \
+plus today's top performers (5 best per franchise). Write a SHORT MORNING HUDDLE BRIEF \
+that any leader can read aloud at the start of their daily team huddle.
+
+VOICE:
+- Energetic, real, specific. Like a coach hyping the team before practice.
+- NEVER name a coach, manager, or person other than the teammates you mention.
+- Use real names from the data when shouting people out or flagging concerns.
+- No em dashes. No filler.
+- 90-120 seconds when read aloud (about 180-220 words total).
+
+STRUCTURE (use these section headings exactly):
+- "What's working" — 2-3 sentences celebrating something real from today's top performers.
+- "Where the focus needs to be" — 2-3 sentences naming the team-wide pattern from the worst-5 list (without piling on individuals).
+- "Today's challenge" — One specific behavioral challenge for the whole region, tied to a CSL Scenario step. Make it concrete (e.g., 'Every CSL gives the assumptive ask within 3 seconds of the bid').
+
+Return JSON exactly:
+{
+  "headline": "One short rallying line (under 80 chars).",
+  "whatsWorking": "2-3 sentences.",
+  "whereFocus": "2-3 sentences.",
+  "todaysChallenge": "1-2 sentences. Concrete, behavioral, tied to a Scenario step."
+}
+
+Return ONLY valid JSON."""
+
+
+def generate_huddle_brief(coaching_records: list[dict], top_records: list[dict]) -> Optional[dict]:
+    """Generate today's morning huddle brief based on the full team picture."""
+    client = _ai_client()
+    if client is None:
+        return None
+    try:
+        worst_lines = []
+        for r in coaching_records:
+            metrics = {m["l"]: m["v"] for m in r.get("metrics", [])}
+            worst_lines.append(
+                f"{r['name']} ({r['role']}, {FRANCHISE_NAMES.get(r['franchiseCode'], r['franchiseCode'])}) "
+                f"score {metrics.get('Score', '?')} severity {r['severity']}"
+            )
+        top_lines = []
+        for r in top_records:
+            top_lines.append(
+                f"{r['name']} ({r['role']}, {FRANCHISE_NAMES.get(r['franchiseCode'], r['franchiseCode'])}) "
+                f"score {r['score']}/100, {r['resiJobs']} jobs, highlights: {', '.join(r['highlights']) if r['highlights'] else 'n/a'}"
+            )
+        prompt = (
+            f"Today's date: {datetime.now(timezone.utc).strftime('%A, %B %d')}.\n\n"
+            "TODAY'S COACHING LIST (worst per franchise):\n"
+            + "\n".join(worst_lines)
+            + "\n\nTODAY'S TOP PERFORMERS (best per franchise):\n"
+            + "\n".join(top_lines)
+            + "\n\nWrite today's morning huddle brief."
+        )
+        resp = client.messages.create(
+            model=_AI_MODEL,
+            max_tokens=700,
+            system=_HUDDLE_SYSTEM,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        raw = resp.content[0].text.strip()
+        if raw.startswith("```"):
+            raw = raw.strip("`")
+            if raw.startswith("json"):
+                raw = raw[4:].strip()
+        data = json.loads(raw)
+        if not all(k in data for k in ("headline", "whatsWorking", "whereFocus", "todaysChallenge")):
+            return None
+        return data
+    except Exception as e:
+        print(f"::warning::Huddle brief generation failed: {e}", file=sys.stderr)
+        return None
 
 
 _MVP_PICK_SYSTEM = """You are COACH RICK, master sales coach for the New England Elite \
@@ -875,7 +958,7 @@ def generate_ai_coaching(tm: TM, slot_idx: int = 0) -> Optional[dict]:
     try:
         resp = client.messages.create(
             model=_AI_MODEL,
-            max_tokens=2200,
+            max_tokens=3500,
             system=_AI_SYSTEM,
             messages=[{"role": "user", "content": _ai_prompt(tm)}],
         )
@@ -1017,6 +1100,7 @@ def update_index_html(
     coach_pick: Optional[dict] = None,
     top_performers: Optional[list[dict]] = None,
     mvp_pick: Optional[dict] = None,
+    huddle_brief: Optional[dict] = None,
 ) -> None:
     src = INDEX_HTML.read_text(encoding="utf-8")
 
@@ -1027,7 +1111,7 @@ def update_index_html(
     new_body = render_teammates(records)
     src = pattern.sub(lambda m: m.group(1) + new_body + m.group(3), src)
 
-    # 2. Replace COACH_PICK constant (used by the hero section)
+    # 2. Replace COACH_PICK (legacy, kept for backwards-compat with stale HTML)
     pick_js = json.dumps(coach_pick or None, ensure_ascii=False)
     pick_pattern = re.compile(r"(const COACH_PICK = )(.*?);", re.DOTALL)
     if pick_pattern.search(src):
@@ -1044,6 +1128,12 @@ def update_index_html(
     mvp_pattern = re.compile(r"(const MVP_PICK = )(.*?);", re.DOTALL)
     if mvp_pattern.search(src):
         src = mvp_pattern.sub(lambda m: m.group(1) + mvp_js + ";", src)
+
+    # 5. Replace HUDDLE_BRIEF constant
+    huddle_js = json.dumps(huddle_brief or None, ensure_ascii=False)
+    huddle_pattern = re.compile(r"(const HUDDLE_BRIEF = )(.*?);", re.DOTALL)
+    if huddle_pattern.search(src):
+        src = huddle_pattern.sub(lambda m: m.group(1) + huddle_js + ";", src)
 
     # 5. Update / insert LAST_UPDATED HTML comment near the top
     last_updated_marker = re.compile(r"<!--\s*LAST_UPDATED:.*?-->", re.IGNORECASE)
@@ -1120,17 +1210,17 @@ def main() -> int:
         print("::error::No teammates picked. Refusing to overwrite index.html.", file=sys.stderr)
         return 4
 
-    # Coach Rick picks today's highest-leverage coaching conversation across the region.
-    pick = generate_coach_pick(all_records)
-    # Coach Rick picks today's regional MVP for recognition.
+    # Coach Rick picks today's regional MVP for recognition (the headline pick).
     mvp = generate_mvp_pick(top_records)
+    # Coach Rick writes the morning huddle brief based on the full team picture.
+    huddle = generate_huddle_brief(all_records, top_records)
 
     updated_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     update_index_html(
         all_records, updated_iso,
-        coach_pick=pick,
         top_performers=top_records,
         mvp_pick=mvp,
+        huddle_brief=huddle,
     )
     print(f"index.html updated. LAST_UPDATED={updated_iso}, {len(all_records)} TMs written, "
           f"{len(top_records)} top performers.", file=sys.stderr)

@@ -7,7 +7,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0e1a">
-<title>NEE Coaching</title>
+<meta name="description" content="New England Elite · Daily AI-powered coaching dashboard for 1-800-GOT-JUNK? franchise leaders.">
+<meta property="og:title" content="New England Elite · Coaching Dashboard">
+<meta property="og:description" content="Coach Rick's daily picks, top performers, and a morning huddle brief.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0e1a'/%3E%3Ctext x='50%25' y='62%25' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23d4a256' font-weight='600'%3EN%3C/text%3E%3C/svg%3E">
+<title>NEE Coaching · New England Elite</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -219,17 +224,229 @@
     background: linear-gradient(90deg, rgba(167,139,250,0.18), rgba(96,165,250,0.18));
   }
 
-  /* ===== TWO-CARD ROW (PICK + MVP) ===== */
-  .rick-row {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
+  .mvp-pick-hero {
+    margin-bottom: 16px;
+    padding: 22px 26px;
+  }
+  .mvp-pick-hero .mvp-pick-headline { font-size: 26px; }
+  .mvp-pick-hero .mvp-pick-rationale { font-size: 15px; max-width: 80ch; }
+
+  /* ===== HUDDLE BRIEF ===== */
+  .huddle-brief {
+    margin: 0 auto 22px auto;
+    background: linear-gradient(180deg, rgba(96,165,250,0.07), rgba(167,139,250,0.04));
+    border: 1px solid rgba(96,165,250,0.30);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+  .huddle-brief[hidden] { display: none; }
+  .huddle-brief[open] { border-color: rgba(96,165,250,0.55); }
+  .huddle-brief summary {
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
     gap: 14px;
-    margin-bottom: 22px;
+    flex-wrap: wrap;
   }
-  @media (max-width: 900px) {
-    .rick-row { grid-template-columns: 1fr; }
+  .huddle-brief summary::-webkit-details-marker { display: none; }
+  .huddle-brief-icon { font-size: 22px; }
+  .huddle-brief-title {
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
   }
-  .rick-row .rick-pick { margin-bottom: 0; }
+  .huddle-brief-headline {
+    flex: 1;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.4;
+    min-width: 200px;
+  }
+  .huddle-brief-toggle {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+  .huddle-brief[open] .huddle-brief-toggle { display: none; }
+
+  .huddle-brief-body {
+    padding: 4px 22px 20px 22px;
+    border-top: 1px solid var(--border);
+  }
+  .huddle-section {
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+  }
+  .huddle-section:first-child { border-top: none; padding-top: 16px; }
+  .huddle-section-label {
+    font-size: 10px;
+    color: #c4b5fd;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .huddle-section p {
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.65;
+    max-width: 80ch;
+  }
+  .huddle-section-challenge p {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .huddle-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .huddle-print-btn,
+  .huddle-copy-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .huddle-print-btn:hover, .huddle-copy-btn:hover {
+    background: rgba(96,165,250,0.10);
+    border-color: rgba(96,165,250,0.4);
+  }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-bright);
+    color: var(--text);
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 2000;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ===== COMMAND PALETTE ===== */
+  .palette {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 12, 22, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1500;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12vh;
+  }
+  .palette.show { display: flex; animation: chat-fade 0.15s ease; }
+  .palette-box {
+    width: 92%;
+    max-width: 560px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-bright);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.6);
+  }
+  #palette-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .palette-results { max-height: 50vh; overflow-y: auto; }
+  .palette-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    text-align: left;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s ease;
+    gap: 12px;
+  }
+  .palette-row:hover, .palette-row.active {
+    background: rgba(167,139,250,0.10);
+  }
+  .palette-name { font-size: 14px; font-weight: 600; }
+  .palette-meta { font-size: 11px; color: var(--text-dim); flex-shrink: 0; }
+  .palette-empty { padding: 20px; color: var(--text-dim); text-align: center; font-size: 13px; }
+  .palette-foot {
+    padding: 8px 20px;
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ===== PRINT STYLESHEET ===== */
+  @media print {
+    body { background: white; color: black; }
+    .header, .controls-row, .scoring-panel, .footer, .chat-overlay, .palette,
+    .toast, .ask-ai-btn, .complete-btn, .filter-bar, .global-counter,
+    .top-performers, .franchise-sev-row, .standards-badge, .collapse-icon,
+    .footer-utility, .huddle-actions {
+      display: none !important;
+    }
+    .container { max-width: 100%; padding: 16px; }
+    .hero, .mvp-pick, .huddle-brief, .franchise-group, .tm-card {
+      background: white !important;
+      border: 1px solid #ccc !important;
+      color: black !important;
+      page-break-inside: avoid;
+    }
+    .hero-greeting, .hero-line, .hero-sub,
+    .mvp-pick-headline, .mvp-pick-rationale, .mvp-pick-badge,
+    .huddle-brief-title, .huddle-brief-headline,
+    .huddle-section p, .huddle-section-label,
+    .card-name, .card-why, .card-play, .anchor-rationale, .anchor-quote-text,
+    .franchise-title, .franchise-context {
+      color: black !important;
+    }
+    .franchise-cards { display: grid !important; }
+    .huddle-brief[open] .huddle-brief-body,
+    .huddle-brief:not([open]) .huddle-brief-body { display: block !important; }
+    .anchor-block { background: #f7f7f7 !important; border: 1px solid #ddd !important; }
+    .deepdive-item, .anchor-secondary, .anchor-quote-wrap, .scoring-panel { display: none !important; }
+  }
 
   /* ===== REGIONAL MVP CARD ===== */
   .mvp-pick {
@@ -368,6 +585,20 @@
     letter-spacing: 1.4px;
     font-weight: 700;
     margin: 4px 0;
+  }
+  .deepdive-cat-label {
+    font-size: 11px;
+    color: #c4b5fd;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    margin: 14px 0 4px 0;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+  }
+  .deepdive-cat-label:first-child {
+    margin-top: 4px;
+    border-top: none;
+    padding-top: 0;
   }
   .deepdive-item {
     background: linear-gradient(180deg, rgba(167,139,250,0.06), rgba(96,165,250,0.04));
@@ -1623,8 +1854,8 @@
 
   <header class="header">
     <div>
-      <div class="brand-mark">New England Elite</div>
-      <h1 class="brand-title">Teammate Coaching</h1>
+      <div class="brand-mark">A Southwind Region</div>
+      <h1 class="brand-title">New England Elite</h1>
       <div class="brand-tagline">Elite Leaders Create Elite Leaders.</div>
     </div>
     <div class="date-block">
@@ -1644,23 +1875,38 @@
     </div>
   </section>
 
-  <div class="rick-row">
-    <section class="rick-pick" id="rick-pick" hidden>
-      <div class="rick-pick-badge">Coach Rick's pick of the day · coach this teammate</div>
-      <div class="rick-pick-headline" id="rick-pick-headline"></div>
-      <div class="rick-pick-rationale" id="rick-pick-rationale"></div>
-      <div class="rick-pick-action">
-        <button class="rick-pick-btn" id="rick-pick-btn">Open this teammate</button>
-        <button class="rick-pick-chat" id="rick-pick-chat">💬 Talk to Coach Rick about this</button>
-      </div>
-    </section>
+  <section class="mvp-pick mvp-pick-hero" id="mvp-pick" hidden>
+    <div class="mvp-pick-badge">🏆 Coach Rick's Pick of the Day · Regional Top Performer</div>
+    <div class="mvp-pick-headline" id="mvp-pick-headline"></div>
+    <div class="mvp-pick-rationale" id="mvp-pick-rationale"></div>
+  </section>
 
-    <section class="mvp-pick" id="mvp-pick" hidden>
-      <div class="mvp-pick-badge">🏆 Regional MVP of the day · recognize this teammate</div>
-      <div class="mvp-pick-headline" id="mvp-pick-headline"></div>
-      <div class="mvp-pick-rationale" id="mvp-pick-rationale"></div>
-    </section>
-  </div>
+  <details class="huddle-brief" id="huddle-brief" hidden>
+    <summary>
+      <span class="huddle-brief-icon">📣</span>
+      <span class="huddle-brief-title">Coach Rick's Morning Huddle Brief</span>
+      <span class="huddle-brief-headline" id="huddle-brief-headline"></span>
+      <span class="huddle-brief-toggle">tap to read aloud</span>
+    </summary>
+    <div class="huddle-brief-body">
+      <div class="huddle-section">
+        <div class="huddle-section-label">✅ What's working</div>
+        <p id="huddle-whats-working"></p>
+      </div>
+      <div class="huddle-section">
+        <div class="huddle-section-label">🎯 Where the focus needs to be</div>
+        <p id="huddle-where-focus"></p>
+      </div>
+      <div class="huddle-section huddle-section-challenge">
+        <div class="huddle-section-label">🔥 Today's challenge</div>
+        <p id="huddle-todays-challenge"></p>
+      </div>
+      <div class="huddle-actions">
+        <button class="huddle-print-btn" id="huddle-print-btn">🖨️ Print this brief</button>
+        <button class="huddle-copy-btn" id="huddle-copy-btn">📋 Copy to clipboard</button>
+      </div>
+    </div>
+  </details>
 
   <div class="controls-row">
     <div class="filter-bar">
@@ -1796,10 +2042,11 @@
 </div>
 
 <script>
-  // ===== COACH RICK'S DAILY PICKS (rewritten daily by the workflow) =====
-  const COACH_PICK = {"tmId": "tm-bno-1", "headline": "Deven's 29% NPS is costing revenue and reputation.", "rationale": "Deven scores lowest on the list at 63/100 with urgent severity, but the real problem is 29% NPS paired with $438 AJS. That's a teammate actively damaging customer relationships while leaving money on the table. One conversation on CSL Scenario Step 2 (Discovery and Qualification) will unlock both complaint prevention and ticket size growth immediately."};
-  const MVP_PICK = null;
-  const TOP_PERFORMERS = [];
+  // ===== COACH RICK'S DAILY OUTPUTS (rewritten daily by the workflow) =====
+  const COACH_PICK = null;     // legacy slot, no longer surfaced in UI
+  const MVP_PICK = null;       // headline pick: regional top performer to recognize
+  const TOP_PERFORMERS = [];   // top 3-5 per franchise
+  const HUDDLE_BRIEF = null;   // morning huddle script (90 sec)
 
   // ===== FRANCHISE STRUCTURE =====
   const FRANCHISES = [
@@ -2350,6 +2597,24 @@
           ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           : '';
         safeSet(id, existing);
+
+        // Celebrate progress with a toast
+        if (existing.completed && typeof showToast === 'function') {
+          let coached = 0;
+          for (const c of TEAMMATES) {
+            const s = safeGet(c.id);
+            if (s && s.completed) coached++;
+          }
+          const remaining = TEAMMATES.length - coached;
+          if (remaining === 0) {
+            showToast('🎉 All ' + TEAMMATES.length + ' coached today. Real momentum.');
+          } else if (coached === 1) {
+            showToast('Nice. 1 down, ' + remaining + ' to go.');
+          } else {
+            showToast(coached + ' of ' + TEAMMATES.length + ' coached.');
+          }
+        }
+
         render();
       });
     });
@@ -2488,13 +2753,23 @@
     }
 
     if (dd.length && CHAT_HISTORY.length === 0) {
+      // Group questions by category, preserving order of first appearance
+      const groups = [];
+      const seen = new Map();
+      for (const qa of dd) {
+        const cat = qa.category || 'Coach Rick\'s read';
+        if (!seen.has(cat)) { seen.set(cat, []); groups.push(cat); }
+        seen.get(cat).push(qa);
+      }
       html += `<div class="deepdive-block">
-        <div class="deepdive-label">📚 Coach Rick's daily read</div>
-        ${dd.map((qa, idx) => `
-          <details class="deepdive-item" ${idx === 0 ? 'open' : ''}>
-            <summary>${escapeHtml(qa.q)}</summary>
-            <div class="deepdive-answer">${escapeHtml(qa.a)}</div>
-          </details>
+        ${groups.map((cat, gi) => `
+          <div class="deepdive-cat-label">${escapeHtml(cat)}</div>
+          ${seen.get(cat).map((qa, idx) => `
+            <details class="deepdive-item" ${gi === 0 && idx === 0 ? 'open' : ''}>
+              <summary>${escapeHtml(qa.q)}</summary>
+              <div class="deepdive-answer">${escapeHtml(qa.a)}</div>
+            </details>
+          `).join('')}
         `).join('')}
       </div>`;
     }
@@ -2579,33 +2854,6 @@
     }
   });
 
-  // ===== COACH RICK PICK RENDER =====
-  function renderCoachPick() {
-    const block = document.getElementById('rick-pick');
-    if (!COACH_PICK || !COACH_PICK.tmId) { block.hidden = true; return; }
-    const tm = TEAMMATES.find(t => t.id === COACH_PICK.tmId);
-    if (!tm) { block.hidden = true; return; }
-    block.hidden = false;
-    const fr = FRANCHISES.find(f => f.code === tm.franchiseCode);
-    document.getElementById('rick-pick-headline').textContent =
-      `${COACH_PICK.headline} (${tm.name} · ${tm.role} · ${fr ? fr.name : tm.franchiseCode})`;
-    document.getElementById('rick-pick-rationale').textContent = COACH_PICK.rationale;
-
-    document.getElementById('rick-pick-btn').onclick = () => {
-      const code = tm.franchiseCode;
-      document.querySelectorAll('.filter-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.filter === code);
-      });
-      currentFilter = code;
-      render();
-      setTimeout(() => {
-        const el = document.querySelector(`[data-id="${tm.id}"]`);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 80);
-    };
-    document.getElementById('rick-pick-chat').onclick = () => openChat(tm.id);
-  }
-
   // ===== MVP RENDER =====
   function renderMvpPick() {
     const block = document.getElementById('mvp-pick');
@@ -2646,11 +2894,132 @@
     `;
   }
 
+  // ===== HUDDLE BRIEF RENDER =====
+  function renderHuddleBrief() {
+    const el = document.getElementById('huddle-brief');
+    if (!HUDDLE_BRIEF || !HUDDLE_BRIEF.headline) { el.hidden = true; return; }
+    el.hidden = false;
+    document.getElementById('huddle-brief-headline').textContent = HUDDLE_BRIEF.headline;
+    document.getElementById('huddle-whats-working').textContent = HUDDLE_BRIEF.whatsWorking || '';
+    document.getElementById('huddle-where-focus').textContent = HUDDLE_BRIEF.whereFocus || '';
+    document.getElementById('huddle-todays-challenge').textContent = HUDDLE_BRIEF.todaysChallenge || '';
+
+    document.getElementById('huddle-print-btn').onclick = () => window.print();
+    document.getElementById('huddle-copy-btn').onclick = async () => {
+      const text =
+        `Coach Rick's Morning Huddle Brief\n` +
+        `${HUDDLE_BRIEF.headline}\n\n` +
+        `WHAT'S WORKING\n${HUDDLE_BRIEF.whatsWorking}\n\n` +
+        `WHERE THE FOCUS NEEDS TO BE\n${HUDDLE_BRIEF.whereFocus}\n\n` +
+        `TODAY'S CHALLENGE\n${HUDDLE_BRIEF.todaysChallenge}\n`;
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('Huddle brief copied. Paste into Slack or your notes.');
+      } catch {
+        showToast('Could not copy. Select the text manually.');
+      }
+    };
+  }
+
+  // ===== TOAST NOTIFICATIONS =====
+  let TOAST_TIMER = null;
+  function showToast(msg) {
+    let toast = document.getElementById('toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'toast';
+      toast.className = 'toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('show');
+    if (TOAST_TIMER) clearTimeout(TOAST_TIMER);
+    TOAST_TIMER = setTimeout(() => toast.classList.remove('show'), 3200);
+  }
+
+  // ===== Cmd+K COMMAND PALETTE =====
+  function openPalette() {
+    let pal = document.getElementById('palette');
+    if (!pal) {
+      pal = document.createElement('div');
+      pal.id = 'palette';
+      pal.className = 'palette';
+      pal.innerHTML = `
+        <div class="palette-box">
+          <input type="text" id="palette-input" placeholder="Search any teammate by name..." autocomplete="off"/>
+          <div class="palette-results" id="palette-results"></div>
+          <div class="palette-foot">↑↓ navigate · Enter open · Esc close</div>
+        </div>`;
+      document.body.appendChild(pal);
+      pal.addEventListener('click', (e) => { if (e.target.id === 'palette') closePalette(); });
+    }
+    pal.classList.add('show');
+    const input = document.getElementById('palette-input');
+    input.value = '';
+    renderPaletteResults('');
+    setTimeout(() => input.focus(), 30);
+    input.oninput = () => renderPaletteResults(input.value);
+    input.onkeydown = paletteKeydown;
+  }
+  function closePalette() {
+    const pal = document.getElementById('palette');
+    if (pal) pal.classList.remove('show');
+  }
+  function renderPaletteResults(q) {
+    const results = document.getElementById('palette-results');
+    const lower = q.toLowerCase().trim();
+    const matches = TEAMMATES
+      .filter(t => !lower || t.name.toLowerCase().includes(lower) || t.role.toLowerCase().includes(lower))
+      .slice(0, 12);
+    if (!matches.length) {
+      results.innerHTML = `<div class="palette-empty">No teammates match. Try a partial name.</div>`;
+      return;
+    }
+    results.innerHTML = matches.map((t, i) => {
+      const fr = FRANCHISES.find(f => f.code === t.franchiseCode);
+      const m = (t.metrics || []).find(x => x.l === 'Score');
+      const score = m ? m.v : '';
+      return `<button class="palette-row ${i === 0 ? 'active' : ''}" data-id="${t.id}">
+        <span class="palette-name">${escapeHtml(t.name)}</span>
+        <span class="palette-meta">${escapeHtml(t.role)} · ${escapeHtml(fr ? fr.name : t.franchiseCode)} · ${escapeHtml(score)}</span>
+      </button>`;
+    }).join('');
+    results.querySelectorAll('.palette-row').forEach(b => {
+      b.onclick = () => { closePalette(); openChat(b.dataset.id); };
+    });
+  }
+  function paletteKeydown(e) {
+    const rows = document.querySelectorAll('.palette-row');
+    if (!rows.length) return;
+    let idx = Array.from(rows).findIndex(r => r.classList.contains('active'));
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      rows[idx].classList.remove('active');
+      rows[(idx + 1) % rows.length].classList.add('active');
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      rows[idx].classList.remove('active');
+      rows[(idx - 1 + rows.length) % rows.length].classList.add('active');
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const active = document.querySelector('.palette-row.active');
+      if (active) active.click();
+    } else if (e.key === 'Escape') {
+      closePalette();
+    }
+  }
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      openPalette();
+    }
+  });
+
   // ===== INIT =====
   setTodayDate();
   render();
-  renderCoachPick();
   renderMvpPick();
+  renderHuddleBrief();
 </script>
 </body>
 </html>
