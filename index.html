@@ -633,6 +633,35 @@
     white-space: pre-wrap;
   }
 
+  /* ===== CHAT HISTORY HEADER ===== */
+  .chat-history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(167,139,250,0.05);
+    border: 1px dashed rgba(167,139,250,0.25);
+    border-radius: 8px;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .chat-history-clear {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .chat-history-clear:hover {
+    background: rgba(239,68,68,0.1);
+    color: #ef4444;
+    border-color: rgba(239,68,68,0.3);
+  }
+
 
   /* ===== ASK AI BUTTON ===== */
   .ask-ai-btn {
@@ -2676,9 +2705,11 @@
     render();
   });
 
-  // ===== AI CHAT =====
-  // Paste your deployed Cloudflare Worker URL here once you deploy it.
-  // See worker/DEPLOY.md for the 5-minute walkthrough.
+  // ===== COACH RICK CHAT =====
+  // Real chat works on Cloudflare Pages (auto-detects /api/chat on same origin).
+  // On GitHub Pages or preview, falls back to the pre-generated deep-dive only.
+  const CHAT_API_PATH = "/api/chat";
+  // Legacy: external worker URL fallback (only used if user pasted one in)
   const CHAT_WORKER_URL = "";
 
   const SUGGESTED_PROMPTS = [
@@ -2692,38 +2723,86 @@
   let CHAT_TM = null;          // current teammate object
   let CHAT_HISTORY = [];       // [{role, text}, ...]
   let CHAT_BUSY = false;
+  // Per-leader, per-TM chat history persists across sessions (only on this device)
+  const CHAT_HIST_PREFIX = 'nee-coaching:chat:';
+  // Auto-detected once: does this deployment have the /api/chat function?
+  // null = unknown, true = yes (Cloudflare Pages), false = no (GitHub Pages)
+  let CHAT_API_AVAILABLE = null;
+
+  async function detectChatApi() {
+    if (CHAT_API_AVAILABLE !== null) return CHAT_API_AVAILABLE;
+    if (CHAT_WORKER_URL) { CHAT_API_AVAILABLE = true; return true; }
+    try {
+      const r = await fetch(CHAT_API_PATH, { method: 'OPTIONS' });
+      CHAT_API_AVAILABLE = r.ok || r.status === 204;
+    } catch {
+      CHAT_API_AVAILABLE = false;
+    }
+    return CHAT_API_AVAILABLE;
+  }
+
+  function loadChatHistory(tmId) {
+    try {
+      const raw = localStorage.getItem(CHAT_HIST_PREFIX + tmId);
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  }
+  function saveChatHistory(tmId, history) {
+    try {
+      // cap at last 30 messages so we don't bloat storage
+      localStorage.setItem(CHAT_HIST_PREFIX + tmId, JSON.stringify(history.slice(-30)));
+    } catch {}
+  }
+  function clearChatHistory(tmId) {
+    try { localStorage.removeItem(CHAT_HIST_PREFIX + tmId); } catch {}
+  }
 
   function franchiseNameByCode(code) {
     const f = FRANCHISES.find(x => x.code === code);
     return f ? f.name : code;
   }
 
-  function openChat(tmId) {
+  async function openChat(tmId) {
     const tm = TEAMMATES.find(t => t.id === tmId);
     if (!tm) return;
     CHAT_TM = { ...tm, franchiseName: franchiseNameByCode(tm.franchiseCode) };
-    CHAT_HISTORY = [];
+    CHAT_HISTORY = loadChatHistory(tmId);
 
     document.getElementById('chat-tm-name').textContent =
       `${CHAT_TM.name} · ${CHAT_TM.role} · ${CHAT_TM.franchiseName}`;
-    renderSuggestions();
-    renderThread();
     const overlay = document.getElementById('chat-overlay');
-    overlay.classList.add('is-open'); overlay.setAttribute('aria-hidden','false');
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden','false');
 
     const fn = document.getElementById('chat-footnote');
-    if (!CHAT_WORKER_URL) {
-      fn.classList.add('config-needed');
-      fn.textContent = 'Chat is not configured yet. Deploy the worker (see worker/DEPLOY.md) and paste its URL into CHAT_WORKER_URL near the bottom of index.html.';
-    } else {
-      fn.classList.remove('config-needed');
-      fn.textContent = 'Powered by Claude. Replies are based on this teammate\'s data and CSL Scenario training material.';
-    }
+    const form = document.getElementById('chat-form');
+    // Optimistically show the form while detecting
+    form.style.display = 'flex';
+    fn.style.display = 'block';
+    fn.classList.remove('config-needed');
+    fn.textContent = 'Coach Rick is checking in...';
     setTimeout(() => document.getElementById('chat-input').focus(), 80);
+
+    renderSuggestions();
+    renderThread();
+
+    const ok = await detectChatApi();
+    if (ok) {
+      fn.textContent = "Powered by Claude. Coach Rick has the full CSL Scenario library and this teammate's data. Multi-turn history is saved on this device.";
+    } else {
+      form.style.display = 'none';
+      fn.classList.add('config-needed');
+      fn.textContent = "Free-form chat needs a serverless function. The pre-generated Q&A below is fully working. To enable real chat, see worker/DEPLOY.md.";
+    }
+    renderSuggestions();
+    renderThread();
   }
 
   function closeChat() {
-    { const o = document.getElementById('chat-overlay'); o.classList.remove('is-open'); o.setAttribute('aria-hidden','true'); }
+    const o = document.getElementById('chat-overlay');
+    o.classList.remove('is-open');
+    o.setAttribute('aria-hidden','true');
+    if (CHAT_TM) saveChatHistory(CHAT_TM.id, CHAT_HISTORY);
     CHAT_TM = null;
     CHAT_HISTORY = [];
   }
@@ -2744,20 +2823,25 @@
   function renderThread() {
     const t = document.getElementById('chat-thread');
     const dd = (CHAT_TM && CHAT_TM.deepDive) || [];
+    const apiOn = CHAT_API_AVAILABLE === true;
     let html = '';
 
     if (CHAT_HISTORY.length === 0) {
       html += dd.length
-        ? `<div class="chat-intro"><strong>Coach Rick's read on ${escapeHtml(CHAT_TM.name)}.</strong> Tap any question for the full answer.${CHAT_WORKER_URL ? " Or ask anything in the box below." : ""}</div>`
+        ? `<div class="chat-intro"><strong>Coach Rick's read on ${escapeHtml(CHAT_TM.name)}.</strong> Tap any question below for the full answer.${apiOn ? " Or ask anything in the box at the bottom." : ""}</div>`
         : `<div class="chat-intro"><strong>Coach Rick here.</strong> Ask anything about ${escapeHtml(CHAT_TM ? CHAT_TM.name : 'this teammate')} below.</div>`;
+    } else {
+      html += `<div class="chat-history-header">
+        <span>Continuing your conversation about ${escapeHtml(CHAT_TM.name)} (${CHAT_HISTORY.filter(m => m.role === 'user').length} ${CHAT_HISTORY.filter(m => m.role === 'user').length === 1 ? 'question' : 'questions'} so far)</span>
+        <button class="chat-history-clear" id="chat-clear-btn" title="Clear conversation">Clear</button>
+      </div>`;
     }
 
     if (dd.length && CHAT_HISTORY.length === 0) {
-      // Group questions by category, preserving order of first appearance
       const groups = [];
       const seen = new Map();
       for (const qa of dd) {
-        const cat = qa.category || 'Coach Rick\'s read';
+        const cat = qa.category || "Coach Rick's read";
         if (!seen.has(cat)) { seen.set(cat, []); groups.push(cat); }
         seen.get(cat).push(qa);
       }
@@ -2780,6 +2864,14 @@
 
     t.innerHTML = html;
     if (CHAT_HISTORY.length > 0) t.scrollTop = t.scrollHeight;
+
+    const clearBtn = document.getElementById('chat-clear-btn');
+    if (clearBtn) clearBtn.onclick = () => {
+      if (!confirm('Clear this conversation about ' + CHAT_TM.name + '?')) return;
+      CHAT_HISTORY = [];
+      clearChatHistory(CHAT_TM.id);
+      renderThread();
+    };
   }
 
   function escapeHtml(s) {
@@ -2790,15 +2882,19 @@
 
   async function sendChat(question) {
     if (CHAT_BUSY || !CHAT_TM) return;
-    if (!question.trim()) return;
+    const q = (question || '').trim();
+    if (!q) return;
 
-    CHAT_HISTORY.push({ role: 'user', text: question.trim() });
-    CHAT_HISTORY.push({ role: 'bot', text: 'Thinking...' });
+    CHAT_HISTORY.push({ role: 'user', text: q });
+    CHAT_HISTORY.push({ role: 'bot', text: 'Coach Rick is thinking...' });
     renderThread();
 
-    if (!CHAT_WORKER_URL) {
+    const endpoint = CHAT_WORKER_URL || CHAT_API_PATH;
+    const ok = await detectChatApi();
+    if (!ok && !CHAT_WORKER_URL) {
       CHAT_HISTORY.pop();
-      CHAT_HISTORY.push({ role: 'error', text: 'Chat worker not configured. See worker/DEPLOY.md to deploy the proxy and paste the URL into CHAT_WORKER_URL in index.html.' });
+      CHAT_HISTORY.push({ role: 'error', text: 'Chat function is not deployed yet. Switch the site to Cloudflare Pages (see worker/DEPLOY.md) and the chat will work everywhere automatically.' });
+      saveChatHistory(CHAT_TM.id, CHAT_HISTORY);
       renderThread();
       return;
     }
@@ -2807,17 +2903,17 @@
     document.getElementById('chat-send').disabled = true;
 
     try {
-      const r = await fetch(CHAT_WORKER_URL, {
+      const r = await fetch(endpoint, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           teammate: CHAT_TM,
-          history: CHAT_HISTORY.slice(0, -1),  // exclude the "Thinking..." placeholder
-          question: question.trim(),
+          history: CHAT_HISTORY.slice(0, -2),  // exclude latest user msg + thinking placeholder
+          question: q,
         }),
       });
       const data = await r.json();
-      CHAT_HISTORY.pop();   // remove "Thinking..."
+      CHAT_HISTORY.pop();   // remove "thinking" placeholder
       if (!r.ok || data.error) {
         CHAT_HISTORY.push({ role: 'error', text: data.error || `Request failed (${r.status}).` });
       } else {
@@ -2825,10 +2921,11 @@
       }
     } catch (e) {
       CHAT_HISTORY.pop();
-      CHAT_HISTORY.push({ role: 'error', text: 'Network error: ' + e.message });
+      CHAT_HISTORY.push({ role: 'error', text: 'Network error: ' + (e && e.message ? e.message : 'unknown') });
     } finally {
       CHAT_BUSY = false;
       document.getElementById('chat-send').disabled = false;
+      saveChatHistory(CHAT_TM.id, CHAT_HISTORY);
       renderThread();
     }
   }
