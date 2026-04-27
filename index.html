@@ -148,6 +148,136 @@
     .hero-line { font-size: 24px; }
   }
 
+  /* ===== COACH RICK PICK ===== */
+  .rick-pick {
+    margin: 0 auto 22px auto;
+    padding: 18px 22px;
+    background:
+      radial-gradient(120% 200% at 0% 0%, rgba(167,139,250,0.10), transparent 60%),
+      linear-gradient(180deg, rgba(167,139,250,0.06), rgba(96,165,250,0.04));
+    border: 1px solid rgba(167,139,250,0.30);
+    border-radius: 14px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
+    position: relative;
+    overflow: hidden;
+  }
+  .rick-pick[hidden] { display: none; }
+  .rick-pick::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(180deg, #a78bfa, #60a5fa);
+  }
+  .rick-pick-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #c4b5fd;
+    background: rgba(167,139,250,0.12);
+    border: 1px solid rgba(167,139,250,0.3);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .rick-pick-headline {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .rick-pick-rationale {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 80ch;
+  }
+  .rick-pick-action {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .rick-pick-btn,
+  .rick-pick-chat {
+    border: 1px solid rgba(167,139,250,0.4);
+    color: var(--text);
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+  }
+  .rick-pick-btn:hover, .rick-pick-chat:hover {
+    background: rgba(167,139,250,0.12);
+    border-color: rgba(167,139,250,0.65);
+  }
+  .rick-pick-btn:active, .rick-pick-chat:active { transform: scale(0.97); }
+  .rick-pick-chat {
+    background: linear-gradient(90deg, rgba(167,139,250,0.18), rgba(96,165,250,0.18));
+  }
+
+  /* ===== CHAT INTRO + DEEP DIVE Q&A ===== */
+  .chat-intro {
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--bg-section);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .chat-intro strong { color: var(--text); }
+  .deepdive-block { display: flex; flex-direction: column; gap: 6px; }
+  .deepdive-label {
+    font-size: 10px;
+    color: #c4b5fd;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    font-weight: 700;
+    margin: 4px 0;
+  }
+  .deepdive-item {
+    background: linear-gradient(180deg, rgba(167,139,250,0.06), rgba(96,165,250,0.04));
+    border: 1px solid rgba(167,139,250,0.20);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+  .deepdive-item[open] { border-color: rgba(167,139,250,0.45); }
+  .deepdive-item summary {
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .deepdive-item summary::-webkit-details-marker { display: none; }
+  .deepdive-item summary::before { content: "▸"; color: #a78bfa; font-size: 11px; flex-shrink: 0; }
+  .deepdive-item[open] summary::before { content: "▾"; }
+  .deepdive-item summary:hover { background: rgba(167,139,250,0.06); }
+  .deepdive-answer {
+    padding: 0 14px 12px 32px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+
+
   /* ===== ASK AI BUTTON ===== */
   .ask-ai-btn {
     background: linear-gradient(90deg, rgba(167,139,250,0.12), rgba(96,165,250,0.12));
@@ -174,12 +304,13 @@
     background: rgba(8, 12, 22, 0.7);
     backdrop-filter: blur(4px);
     z-index: 1000;
-    display: flex;
+    display: none;
     align-items: flex-end;
     justify-content: center;
     padding: 16px;
     animation: chat-fade 0.18s ease;
   }
+  .chat-overlay.is-open { display: flex; }
   @keyframes chat-fade {
     from { opacity: 0; }
     to   { opacity: 1; }
@@ -1388,6 +1519,16 @@
     </div>
   </section>
 
+  <section class="rick-pick" id="rick-pick" hidden>
+    <div class="rick-pick-badge">Coach Rick's pick of the day</div>
+    <div class="rick-pick-headline" id="rick-pick-headline"></div>
+    <div class="rick-pick-rationale" id="rick-pick-rationale"></div>
+    <div class="rick-pick-action">
+      <button class="rick-pick-btn" id="rick-pick-btn">Open this teammate</button>
+      <button class="rick-pick-chat" id="rick-pick-chat">💬 Talk to Coach Rick about this</button>
+    </div>
+  </section>
+
   <div class="controls-row">
     <div class="filter-bar">
       <span class="filter-label">Show:</span>
@@ -1496,14 +1637,14 @@
 </div>
 
 <!-- ===== AI CHAT PANEL ===== -->
-<div class="chat-overlay" id="chat-overlay" hidden>
-  <div class="chat-panel" role="dialog" aria-label="AI Coach">
+<div class="chat-overlay" id="chat-overlay" aria-hidden="true">
+  <div class="chat-panel" role="dialog" aria-label="Coach Rick">
     <div class="chat-header">
       <div class="chat-header-left">
-        <div class="chat-title">AI Coach</div>
+        <div class="chat-title">🎯 Coach Rick</div>
         <div class="chat-tm" id="chat-tm-name">—</div>
       </div>
-      <button class="chat-close" id="chat-close" title="Close">×</button>
+      <button class="chat-close" id="chat-close" title="Close" aria-label="Close">×</button>
     </div>
     <div class="chat-suggestions" id="chat-suggestions"></div>
     <div class="chat-thread" id="chat-thread"></div>
@@ -1522,6 +1663,9 @@
 </div>
 
 <script>
+  // ===== COACH RICK'S PICK OF THE DAY (rewritten daily by the workflow) =====
+  const COACH_PICK = null;
+
   // ===== FRANCHISE STRUCTURE =====
   const FRANCHISES = [
     {
@@ -1938,7 +2082,7 @@
           <div class="action-row">
             <span class="save-status" id="save-${c.id}">Saved</span>
             <span class="meta-info">${state.completed ? `Coached · ${state.completedAt || ''}` : 'Mark complete after the conversation'}</span>
-            <button class="ask-ai-btn" data-id="${c.id}" title="Open AI Coach for this teammate">💬 Ask AI Coach</button>
+            <button class="ask-ai-btn" data-id="${c.id}" title="Open Coach Rick for this teammate">💬 Ask Coach Rick</button>
             <button class="complete-btn ${state.completed ? 'completed' : ''}" data-id="${c.id}">
               ${state.completed ? '✓ Completed' : 'Mark Coached'}
             </button>
@@ -2164,7 +2308,7 @@
     renderSuggestions();
     renderThread();
     const overlay = document.getElementById('chat-overlay');
-    overlay.hidden = false;
+    overlay.classList.add('is-open'); overlay.setAttribute('aria-hidden','false');
 
     const fn = document.getElementById('chat-footnote');
     if (!CHAT_WORKER_URL) {
@@ -2178,7 +2322,7 @@
   }
 
   function closeChat() {
-    document.getElementById('chat-overlay').hidden = true;
+    { const o = document.getElementById('chat-overlay'); o.classList.remove('is-open'); o.setAttribute('aria-hidden','true'); }
     CHAT_TM = null;
     CHAT_HISTORY = [];
   }
@@ -2198,19 +2342,33 @@
 
   function renderThread() {
     const t = document.getElementById('chat-thread');
-    if (CHAT_HISTORY.length === 0) {
-      t.innerHTML = `
-        <div class="chat-msg chat-msg-bot">
-Hi. Ask anything about ${CHAT_TM ? CHAT_TM.name : 'this teammate'} and I'll answer using their performance data plus the CSL Scenario training material.
+    const dd = (CHAT_TM && CHAT_TM.deepDive) || [];
+    let html = '';
 
-Try one of the prompts above, or write your own.
-        </div>`;
-      return;
+    if (CHAT_HISTORY.length === 0) {
+      html += dd.length
+        ? `<div class="chat-intro"><strong>Coach Rick's read on ${escapeHtml(CHAT_TM.name)}.</strong> Tap any question for the full answer.${CHAT_WORKER_URL ? " Or ask anything in the box below." : ""}</div>`
+        : `<div class="chat-intro"><strong>Coach Rick here.</strong> Ask anything about ${escapeHtml(CHAT_TM ? CHAT_TM.name : 'this teammate')} below.</div>`;
     }
-    t.innerHTML = CHAT_HISTORY
+
+    if (dd.length && CHAT_HISTORY.length === 0) {
+      html += `<div class="deepdive-block">
+        <div class="deepdive-label">📚 Coach Rick's daily read</div>
+        ${dd.map((qa, idx) => `
+          <details class="deepdive-item" ${idx === 0 ? 'open' : ''}>
+            <summary>${escapeHtml(qa.q)}</summary>
+            <div class="deepdive-answer">${escapeHtml(qa.a)}</div>
+          </details>
+        `).join('')}
+      </div>`;
+    }
+
+    html += CHAT_HISTORY
       .map(m => `<div class="chat-msg chat-msg-${m.role === 'user' ? 'user' : (m.role === 'error' ? 'error' : 'bot')}">${escapeHtml(m.text)}</div>`)
       .join('');
-    t.scrollTop = t.scrollHeight;
+
+    t.innerHTML = html;
+    if (CHAT_HISTORY.length > 0) t.scrollTop = t.scrollHeight;
   }
 
   function escapeHtml(s) {
@@ -2269,7 +2427,7 @@ Try one of the prompts above, or write your own.
     if (e.target.id === 'chat-overlay') closeChat();
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !document.getElementById('chat-overlay').hidden) closeChat();
+    if (e.key === 'Escape' && document.getElementById('chat-overlay').classList.contains('is-open')) closeChat();
   });
   document.getElementById('chat-form').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -2285,9 +2443,37 @@ Try one of the prompts above, or write your own.
     }
   });
 
+  // ===== COACH RICK PICK RENDER =====
+  function renderCoachPick() {
+    const block = document.getElementById('rick-pick');
+    if (!COACH_PICK || !COACH_PICK.tmId) { block.hidden = true; return; }
+    const tm = TEAMMATES.find(t => t.id === COACH_PICK.tmId);
+    if (!tm) { block.hidden = true; return; }
+    block.hidden = false;
+    const fr = FRANCHISES.find(f => f.code === tm.franchiseCode);
+    document.getElementById('rick-pick-headline').textContent =
+      `${COACH_PICK.headline} (${tm.name} · ${tm.role} · ${fr ? fr.name : tm.franchiseCode})`;
+    document.getElementById('rick-pick-rationale').textContent = COACH_PICK.rationale;
+
+    document.getElementById('rick-pick-btn').onclick = () => {
+      const code = tm.franchiseCode;
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.filter === code);
+      });
+      currentFilter = code;
+      render();
+      setTimeout(() => {
+        const el = document.querySelector(`[data-id="${tm.id}"]`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 80);
+    };
+    document.getElementById('rick-pick-chat').onclick = () => openChat(tm.id);
+  }
+
   // ===== INIT =====
   setTodayDate();
   render();
+  renderCoachPick();
 </script>
 </body>
 </html>
