@@ -875,58 +875,54 @@ def generate_huddle_brief(coaching_records: list[dict], top_records: list[dict])
         return None
 
 
-_MVP_PICK_SYSTEM = """You are COACH RICK, master sales coach for the New England Elite \
-1-800-GOT-JUNK? region. You have just reviewed today's TOP PERFORMERS list (top 3-5 \
-per franchise = up to 20 total). Pick the SINGLE TEAMMATE who deserves regional \
-recognition today as Coach Rick's Daily MVP.
-
-"MVP" means: who's setting the standard right now? Either the highest absolute \
-performance, OR the most impressive turnaround at scale, OR consistency across all \
-four metrics that the rest of the region should be modeling.
-
-Your output is a recognition shout-out that any leader can read aloud in a huddle.
+_MOTIVATIONAL_SYSTEM = """You are COACH RICK. Write today's motivational message for the New \
+England Elite leadership team. They lead a junk-removal franchise, not a Silicon Valley startup.
 
 VOICE:
-- Warm, energetic, specific. Recognition with substance, not generic praise.
-- NEVER name a coach or manager. Only name the teammate being recognized.
-- Cite the specific number that earned the recognition.
-- No em dashes. No filler.
+- Plain. Honest. Like a coach getting his guys ready before the shift.
+- Short. 2-4 sentences. Under 60 words total.
+- No corporate cheerleader energy. No "synergy" or "let's crush it" garbage.
+- Use real words: trucks, jobs, the close, the shift, the team, the work.
+- Reference today's reality lightly if it sharpens the message - the urgent count, the top \
+scores, the day of the week. Don't force it.
+- No em dashes.
+
+What you're going for: the leader reads this and feels ready. Not pumped-up fake. Ready. The way \
+a real coach makes you feel before you go do hard work.
+
+NEVER use these words: framework, paradigm, intentionality, bandwidth, holistically, optimize, \
+leverage (verb), strategically, granular, ecosystem, alignment (noun), cadence, north star, \
+unpack, lean in, surface, calibrate, synergy, crush it.
 
 Return JSON exactly:
 {
-  "tmName": "<name as it appears in the list>",
-  "franchiseCode": "<bno|bso|cp|ct>",
-  "headline": "One short shout-out sentence (under 90 chars).",
-  "rationale": "2-3 sentences. Cite the specific metric(s) that earned this. \
-Frame it as something other teammates can learn from."
+  "headline": "One punchy line (under 70 chars). The hook.",
+  "body": "2-3 short sentences. The substance."
 }
 
 Return ONLY valid JSON."""
 
 
-def generate_mvp_pick(top_records: list[dict]) -> Optional[dict]:
-    """Pick today's regional MVP across all four franchises."""
+def generate_motivational_message(coaching_records: list[dict], top_records: list[dict]) -> Optional[dict]:
+    """Generate today's motivational message from Coach Rick."""
     client = _ai_client()
-    if client is None or not top_records:
+    if client is None:
         return None
     try:
-        lines = []
-        for r in top_records:
-            lines.append(
-                f"{r['name']} ({r['role']}, {FRANCHISE_NAMES.get(r['franchiseCode'], r['franchiseCode'])}) "
-                f"| score {r['score']}/100 | resi jobs {r['resiJobs']} "
-                f"| highlights: {', '.join(r['highlights']) if r['highlights'] else '(none above standard)'}"
-            )
-        summary = "\n".join(lines)
+        urgent = sum(1 for r in coaching_records if r.get("severity") == "urgent")
+        high = sum(1 for r in coaching_records if r.get("severity") == "high")
+        top_count = len(top_records)
+        day_of_week = datetime.now(timezone.utc).strftime("%A")
         prompt = (
-            "TODAY'S TOP PERFORMERS LIST (top per franchise):\n\n"
-            + summary
-            + "\n\nPick today's regional MVP for recognition."
+            f"Today is {day_of_week}.\n"
+            f"Across the region: {urgent} urgent teammates, {high} high-priority teammates "
+            f"on today's coaching list. {top_count} teammates standing out as top performers.\n\n"
+            "Write today's motivational message."
         )
         resp = client.messages.create(
             model=_AI_MODEL,
-            max_tokens=400,
-            system=_MVP_PICK_SYSTEM,
+            max_tokens=300,
+            system=_MOTIVATIONAL_SYSTEM,
             messages=[{"role": "user", "content": prompt}],
         )
         raw = resp.content[0].text.strip()
@@ -935,12 +931,42 @@ def generate_mvp_pick(top_records: list[dict]) -> Optional[dict]:
             if raw.startswith("json"):
                 raw = raw[4:].strip()
         data = json.loads(raw)
-        if not all(k in data for k in ("tmName", "franchiseCode", "headline", "rationale")):
+        if not all(k in data for k in ("headline", "body")):
             return None
         return data
     except Exception as e:
-        print(f"::warning::MVP pick generation failed: {e}", file=sys.stderr)
+        print(f"::warning::Motivational message generation failed: {e}", file=sys.stderr)
         return None
+
+
+def pick_top_5_regional(roster_records: list[dict]) -> list[dict]:
+    """Top 5 across the entire region. Tiebreaker: AJS (higher wins)."""
+    def _ajs_value(r: dict) -> float:
+        for m in r.get("metrics") or []:
+            if m.get("l") == "Adj AJS":
+                v = str(m.get("v", "")).replace("$", "").replace(",", "")
+                try:
+                    return float(v)
+                except ValueError:
+                    return 0.0
+        return 0.0
+
+    sorted_roster = sorted(
+        roster_records,
+        key=lambda r: (-r.get("score", 0), -_ajs_value(r)),
+    )
+    out: list[dict] = []
+    for r in sorted_roster[:5]:
+        out.append({
+            "name": r["name"],
+            "role": r["role"],
+            "franchiseCode": r["franchiseCode"],
+            "score": r["score"],
+            "ajs": _ajs_value(r),
+            "tier": r.get("tier", ""),
+            "resiJobs": r.get("resiJobs", 0),
+        })
+    return out
 
 
 def generate_coach_pick(records: list[dict]) -> Optional[dict]:
@@ -1142,8 +1168,9 @@ def update_index_html(
     updated_iso: str,
     coach_pick: Optional[dict] = None,
     top_performers: Optional[list[dict]] = None,
-    mvp_pick: Optional[dict] = None,
+    motivational_message: Optional[dict] = None,
     huddle_brief: Optional[dict] = None,
+    top_5_regional: Optional[list[dict]] = None,
 ) -> None:
     src = INDEX_HTML.read_text(encoding="utf-8")
 
@@ -1166,17 +1193,27 @@ def update_index_html(
     if top_pattern.search(src):
         src = top_pattern.sub(lambda m: m.group(1) + top_js + ";", src)
 
-    # 4. Replace MVP_PICK constant
-    mvp_js = json.dumps(mvp_pick or None, ensure_ascii=False)
+    # 4. Replace MOTIVATIONAL_MESSAGE constant (replaces old MVP_PICK)
+    msg_js = json.dumps(motivational_message or None, ensure_ascii=False)
+    msg_pattern = re.compile(r"(const MOTIVATIONAL_MESSAGE = )(.*?);", re.DOTALL)
+    if msg_pattern.search(src):
+        src = msg_pattern.sub(lambda m: m.group(1) + msg_js + ";", src)
+    # Backwards-compat: also clear the old MVP_PICK constant if it still exists
     mvp_pattern = re.compile(r"(const MVP_PICK = )(.*?);", re.DOTALL)
     if mvp_pattern.search(src):
-        src = mvp_pattern.sub(lambda m: m.group(1) + mvp_js + ";", src)
+        src = mvp_pattern.sub(lambda m: m.group(1) + "null;", src)
 
     # 5. Replace HUDDLE_BRIEF constant
     huddle_js = json.dumps(huddle_brief or None, ensure_ascii=False)
     huddle_pattern = re.compile(r"(const HUDDLE_BRIEF = )(.*?);", re.DOTALL)
     if huddle_pattern.search(src):
         src = huddle_pattern.sub(lambda m: m.group(1) + huddle_js + ";", src)
+
+    # 6. Replace TOP_5_REGIONAL constant
+    top5_js = json.dumps(top_5_regional or [], ensure_ascii=False)
+    top5_pattern = re.compile(r"(const TOP_5_REGIONAL = )(.*?);", re.DOTALL)
+    if top5_pattern.search(src):
+        src = top5_pattern.sub(lambda m: m.group(1) + top5_js + ";", src)
 
     # 5. Update / insert LAST_UPDATED HTML comment near the top
     last_updated_marker = re.compile(r"<!--\s*LAST_UPDATED:.*?-->", re.IGNORECASE)
@@ -1260,17 +1297,20 @@ def main() -> int:
         print("::error::No teammates picked. Refusing to overwrite index.html.", file=sys.stderr)
         return 4
 
-    # Coach Rick picks today's regional MVP for recognition (the headline pick).
-    mvp = generate_mvp_pick(top_records)
+    # Coach Rick writes today's motivational message.
+    motivational = generate_motivational_message(all_records, top_records)
     # Coach Rick writes the morning huddle brief based on the full team picture.
     huddle = generate_huddle_brief(all_records, top_records)
+    # Top 5 regional performers (across all franchises). AJS is the tiebreaker.
+    top_5_regional = pick_top_5_regional(roster_records)
 
     updated_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     update_index_html(
         all_records, updated_iso,
         top_performers=top_records,
-        mvp_pick=mvp,
+        motivational_message=motivational,
         huddle_brief=huddle,
+        top_5_regional=top_5_regional,
     )
     # Write the full roster as a separate JSON the chat view loads at runtime.
     # Sorted worst-first so leaders see who needs help when scrolling the sidebar.

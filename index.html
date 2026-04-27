@@ -243,6 +243,163 @@
   .mvp-pick-hero .mvp-pick-headline { font-size: 26px; }
   .mvp-pick-hero .mvp-pick-rationale { font-size: 15px; max-width: 80ch; }
 
+  /* ===== MOTIVATIONAL MESSAGE OF THE DAY ===== */
+  .motiv-card {
+    margin: 0 auto 16px auto;
+    padding: 22px 26px;
+    background:
+      radial-gradient(120% 200% at 0% 0%, rgba(245, 179, 66, 0.18), transparent 55%),
+      radial-gradient(120% 200% at 100% 100%, rgba(167, 139, 250, 0.12), transparent 55%),
+      linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid rgba(245, 179, 66, 0.32);
+    border-radius: 16px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 0 24px -10px var(--accent-glow);
+    position: relative;
+    overflow: hidden;
+  }
+  .motiv-card[hidden] { display: none; }
+  .motiv-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(180deg, var(--accent-bright), var(--violet));
+  }
+  .motiv-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--accent);
+    background: rgba(245,179,66,0.14);
+    border: 1px solid rgba(245,179,66,0.35);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .motiv-headline {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.25;
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+  }
+  .motiv-body {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 80ch;
+  }
+
+  /* ===== TOP 5 REGIONAL ===== */
+  .top5-region {
+    margin: 0 auto 22px auto;
+    padding: 16px 20px 20px 20px;
+    background: linear-gradient(180deg, rgba(52, 211, 153, 0.06), rgba(52, 211, 153, 0.02));
+    border: 1px solid rgba(52, 211, 153, 0.25);
+    border-radius: 14px;
+  }
+  .top5-region[hidden] { display: none; }
+  .top5-region-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .top5-region-badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--done);
+  }
+  .top5-region-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .top5-region-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .top5-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(52, 211, 153, 0.15);
+    border-radius: 10px;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+  .top5-row:hover {
+    background: rgba(52, 211, 153, 0.06);
+    border-color: rgba(52, 211, 153, 0.35);
+    transform: translateY(-1px);
+  }
+  .top5-rank {
+    font-family: var(--display);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--done);
+    text-align: center;
+    line-height: 1;
+  }
+  .top5-row:nth-child(1) .top5-rank { color: var(--accent-bright); }
+  .top5-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .top5-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 2px;
+  }
+  .top5-stats {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .top5-score {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--done);
+    line-height: 1;
+  }
+  .top5-score-suffix {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-left: 1px;
+  }
+  .top5-ajs {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.4px;
+  }
+  @media (max-width: 720px) {
+    .motiv-headline { font-size: 22px; }
+    .top5-row { grid-template-columns: 30px 1fr auto; padding: 9px 12px; gap: 10px; }
+    .top5-rank { font-size: 22px; }
+    .top5-stats { gap: 10px; }
+    .top5-score { font-size: 18px; }
+  }
+
   /* ===== HUDDLE BRIEF ===== */
   .huddle-brief {
     margin: 0 auto 22px auto;
@@ -2310,10 +2467,18 @@
     </div>
   </section>
 
-  <section class="mvp-pick mvp-pick-hero" id="mvp-pick" hidden>
-    <div class="mvp-pick-badge">🏆 Coach Rick's Pick of the Day · Regional Top Performer</div>
-    <div class="mvp-pick-headline" id="mvp-pick-headline"></div>
-    <div class="mvp-pick-rationale" id="mvp-pick-rationale"></div>
+  <section class="motiv-card" id="motiv-card" hidden>
+    <div class="motiv-badge">📣 Coach Rick's Motivational Message of the Day</div>
+    <div class="motiv-headline" id="motiv-headline"></div>
+    <div class="motiv-body" id="motiv-body"></div>
+  </section>
+
+  <section class="top5-region" id="top5-region" hidden>
+    <div class="top5-region-head">
+      <div class="top5-region-badge">🏆 Top 5 Regional Performers · This Month</div>
+      <div class="top5-region-sub">Composite score. AJS is the tiebreaker.</div>
+    </div>
+    <ol class="top5-region-list" id="top5-region-list"></ol>
   </section>
 
   <details class="huddle-brief" id="huddle-brief" hidden>
@@ -2535,6 +2700,10 @@
   const MVP_PICK = {"tmName": "Andrew Burnett", "franchiseCode": "bso", "headline": "Andrew Burnett's 97 jobs in one day sets the regional standard.", "rationale": "Andrew crushed volume today with 97 residential jobs while maintaining a perfect 0.00% complaint rate and 100/100 score. That's not just the highest job count on the board by a significant margin, it's proof that scale and quality aren't tradeoffs when you've got the right system. This is what peak efficiency looks like."};       // headline pick: regional top performer to recognize
   const TOP_PERFORMERS = [{"id": "top-bno-Rafael-Caminero", "franchiseCode": "bno", "name": "Rafael Caminero", "role": "CEL", "score": 100, "resiJobs": 33, "highlights": ["AJS $1,051", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-bno-Deandre-Lebron", "franchiseCode": "bno", "name": "Deandre Lebron", "role": "CEL", "score": 100, "resiJobs": 18, "highlights": ["AJS $913", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-bno-Demitrius-Fremming", "franchiseCode": "bno", "name": "Demitrius Fremming", "role": "CEL", "score": 100, "resiJobs": 57, "highlights": ["AJS $873", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-bno-Dylan-Darisse", "franchiseCode": "bno", "name": "Dylan Darisse", "role": "CEL", "score": 100, "resiJobs": 10, "highlights": ["AJS $851", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-bno-Albert-Ventura", "franchiseCode": "bno", "name": "Albert Ventura", "role": "CEL", "score": 100, "resiJobs": 44, "highlights": ["AJS $844", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-bso-Trevor-Cintron", "franchiseCode": "bso", "name": "Trevor Cintron", "role": "CEL", "score": 100, "resiJobs": 52, "highlights": ["AJS $988", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-bso-Andrew-Burnett", "franchiseCode": "bso", "name": "Andrew Burnett", "role": "CEL", "score": 100, "resiJobs": 97, "highlights": ["AJS $920", "Complaints 0.00%", "NPS 90%"]}, {"id": "top-bso-Fernando-Ayala", "franchiseCode": "bso", "name": "Fernando Ayala", "role": "CSL", "score": 100, "resiJobs": 70, "highlights": ["AJS $814", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-bso-Ian-Clayton", "franchiseCode": "bso", "name": "Ian Clayton", "role": "CSL", "score": 100, "resiJobs": 41, "highlights": ["AJS $773", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-bso-Tyler-Hancock-Mendonca", "franchiseCode": "bso", "name": "Tyler Hancock-Mendonca", "role": "CEL", "score": 100, "resiJobs": 102, "highlights": ["AJS $755", "Complaints 0.90%", "NPS 100%"]}, {"id": "top-cp-Sebastian-Lugo", "franchiseCode": "cp", "name": "Sebastian Lugo", "role": "CSL", "score": 100, "resiJobs": 26, "highlights": ["AJS $727", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-cp-Darien-Koziarski", "franchiseCode": "cp", "name": "Darien Koziarski", "role": "CSL", "score": 100, "resiJobs": 41, "highlights": ["AJS $694", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-cp-Jonathan-Meserve", "franchiseCode": "cp", "name": "Jonathan Meserve", "role": "CEL", "score": 99, "resiJobs": 52, "highlights": ["Complaints 0.00%", "NPS 100%", "Reviews 26.9%"]}, {"id": "top-cp-Jason-Trostle", "franchiseCode": "cp", "name": "Jason Trostle", "role": "CEL", "score": 97, "resiJobs": 56, "highlights": ["Complaints 0.00%", "NPS 100%", "Reviews 44.6%"]}, {"id": "top-cp-Derek-Lee", "franchiseCode": "cp", "name": "Derek Lee", "role": "CSL", "score": 96, "resiJobs": 64, "highlights": ["AJS $737", "Complaints 1.50%", "NPS 100%"]}, {"id": "top-ct-Byron-Goforth", "franchiseCode": "ct", "name": "Byron Goforth", "role": "CSL", "score": 100, "resiJobs": 52, "highlights": ["AJS $947", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-ct-Jonathan-Escobar", "franchiseCode": "ct", "name": "Jonathan Escobar", "role": "CEL", "score": 100, "resiJobs": 23, "highlights": ["AJS $907", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-ct-Jermaine-Higgs", "franchiseCode": "ct", "name": "Jermaine Higgs", "role": "CEL", "score": 100, "resiJobs": 51, "highlights": ["AJS $871", "Complaints 0.00%", "NPS 100%"]}, {"id": "top-ct-William-Cruz", "franchiseCode": "ct", "name": "William Cruz", "role": "CSL", "score": 100, "resiJobs": 51, "highlights": ["AJS $851", "Complaints 0.00%", "NPS 93%"]}, {"id": "top-ct-RaeQuan-Barber", "franchiseCode": "ct", "name": "RaeQuan Barber", "role": "CSL", "score": 100, "resiJobs": 69, "highlights": ["AJS $838", "Complaints 0.00%", "NPS 90%"]}];   // top 3-5 per franchise
   const HUDDLE_BRIEF = {"headline": "Perfect scores and zero complaints. That's the standard. Let's match it.", "whatsWorking": "Rafael, Demitrius, Andrew, Byron, and our Connecticut crew are showing us what 100 looks like. Zero complaints, perfect NPS, and they're moving volume every single day. That's the blueprint.", "whereFocus": "Boston North and Connecticut have some talented people sitting in the 63-83 range. Kenneth, Deven, Nathan, Armani—we know you can do better. The gap between our best and middle is coachable, and today we close it.", "todaysChallenge": "Every CSL today: deliver your assumptive ask within 3 seconds of stating the bid. No hesitation, no filler. Confidence sells. Let's go."};   // morning huddle script (90 sec)
+
+  // ===== NEW DAILY OUTPUTS =====
+  const MOTIVATIONAL_MESSAGE = null;   // {headline, body} - Coach Rick's message of the day
+  const TOP_5_REGIONAL = [];           // top 5 across all franchises (MTD; AJS as tiebreaker)
 
   // ===== FRANCHISE STRUCTURE =====
   const FRANCHISES = [
@@ -3424,13 +3593,43 @@
 
   // ===== MVP RENDER =====
   function renderMvpPick() {
+    // Legacy. Always hide; replaced by Motivational Message + Top 5 Regional.
     const block = document.getElementById('mvp-pick');
-    if (!MVP_PICK || !MVP_PICK.tmName) { block.hidden = true; return; }
-    block.hidden = false;
-    const fr = FRANCHISES.find(f => f.code === MVP_PICK.franchiseCode);
-    document.getElementById('mvp-pick-headline').textContent =
-      `${MVP_PICK.headline} (${MVP_PICK.tmName}${fr ? ' · ' + fr.name : ''})`;
-    document.getElementById('mvp-pick-rationale').textContent = MVP_PICK.rationale;
+    if (block) block.hidden = true;
+  }
+
+  function renderMotivationalMessage() {
+    const card = document.getElementById('motiv-card');
+    if (!card) return;
+    if (!MOTIVATIONAL_MESSAGE || !MOTIVATIONAL_MESSAGE.headline) { card.hidden = true; return; }
+    card.hidden = false;
+    document.getElementById('motiv-headline').textContent = MOTIVATIONAL_MESSAGE.headline;
+    document.getElementById('motiv-body').textContent = MOTIVATIONAL_MESSAGE.body || '';
+  }
+
+  function renderTop5Regional() {
+    const wrap = document.getElementById('top5-region');
+    const list = document.getElementById('top5-region-list');
+    if (!wrap || !list) return;
+    if (!TOP_5_REGIONAL || TOP_5_REGIONAL.length === 0) { wrap.hidden = true; return; }
+    wrap.hidden = false;
+    list.innerHTML = TOP_5_REGIONAL.map((t, idx) => {
+      const fr = FRANCHISES.find(f => f.code === t.franchiseCode);
+      const ajs = t.ajs ? `$${Math.round(t.ajs).toLocaleString()}` : '';
+      return `
+        <li class="top5-row tier-${escapeHtml(t.tier || '')}">
+          <div class="top5-rank">${idx + 1}</div>
+          <div class="top5-main">
+            <div class="top5-name">${escapeHtml(t.name)}</div>
+            <div class="top5-meta">${escapeHtml(t.role)} · ${escapeHtml(fr ? fr.name : t.franchiseCode)} · ${t.resiJobs} jobs</div>
+          </div>
+          <div class="top5-stats">
+            <div class="top5-score">${t.score}<span class="top5-score-suffix">/100</span></div>
+            ${ajs ? `<div class="top5-ajs">${ajs} AJS</div>` : ''}
+          </div>
+        </li>
+      `;
+    }).join('');
   }
 
   // ===== TOP PERFORMERS HELPERS =====
@@ -3950,6 +4149,8 @@
   setTodayDate();
   render();
   renderMvpPick();
+  renderMotivationalMessage();
+  renderTop5Regional();
   renderHuddleBrief();
   initChatView();
   applyRoute();
