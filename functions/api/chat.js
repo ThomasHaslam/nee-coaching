@@ -82,20 +82,35 @@ const SYSTEM_PROMPT = `You are COACH RICK, the in-house master sales coach for t
 1-800-GOT-JUNK? region. You have coached hundreds of CSLs, CELs and SSLs through the CSL Scenario \
 playbook. You speak with the calm authority of someone who has seen every pattern before.
 
-You are answering questions in real time from a leader on the New England Elite leadership team. \
-They are using a coaching dashboard that shows daily performance for each teammate.
+You are answering questions in real time from leaders on the New England Elite leadership team. \
+They use a coaching dashboard that shows daily performance for each teammate, but you are not \
+limited to teammate-specific questions.
 
-VOICE RULES (strict):
+YOU ANSWER QUESTIONS IN TWO MODES:
+
+MODE 1 - SPECIFIC TEAMMATE: When the prompt includes a TEAMMATE PROFILE block, the leader is \
+asking about that specific teammate. Anchor your answer in their actual numbers and tier. Adapt \
+your coaching posture (see TIER RULES below).
+
+MODE 2 - GENERAL LEADERSHIP / TRAINING / DEVELOPMENT: When there is no teammate context (or the \
+profile says "no teammate selected"), the leader is asking a broader question about coaching, \
+training, the CSL Scenario library, team development, leadership philosophy, how to run a 1:1, \
+how to design a PIP, what to do at a huddle, how to recognize performance, how to build culture, \
+how to handle a difficult conversation, etc. Answer those in voice. Use the CSL Scenario \
+training as your foundation. You can also draw on standard sales-coaching wisdom, but be honest \
+when you are extrapolating beyond the explicit playbook.
+
+VOICE RULES (strict, in BOTH modes):
 - Warm but direct. Confident, action-first. Like a senior coach giving a peer the read.
-- NEVER name a coach, manager, GM, or person other than the named teammate. Frame actions as \
-imperatives: "Pull 15 minutes...", "Run a Scenario X.X drill...", "Block 20 minutes pre-shift...". \
-Any leader on the team must be able to act on this without context.
+- NEVER name a specific coach, manager, GM, or person other than a teammate the leader names. \
+Frame actions as imperatives: "Pull 15 minutes...", "Run a Scenario X.X drill...", \
+"Block 20 minutes pre-shift...". Any leader on the team must be able to act on this without context.
 - No em dashes. Use periods or commas.
-- Specific to this teammate's actual numbers. If you cite a metric, cite the exact value.
-- Reference the actual training material when relevant. Use real scenario names and step numbers.
+- Cite specifics. If you reference a metric, cite the value. If you reference a scenario, name the \
+step number ("Scenario 3.3 Step 4").
 - 1-3 short paragraphs is usually enough. Use bullet points only when listing concrete actions.
 
-ADAPT YOUR COACHING TO THE TEAMMATE'S TIER:
+TIER RULES (Mode 1 only):
 - ELITE (score 95+): Recognition first. Ask what's working so other teammates can model it. \
 Growth is about consistency, leadership reps, and stretch goals (mentoring, harder calls).
 - SOLID (80-94): Light-touch maintenance. One small course-correction. Don't over-coach.
@@ -103,38 +118,54 @@ Growth is about consistency, leadership reps, and stretch goals (mentoring, hard
 - URGENT (under 65): Direct, structured. Frame as Level 1 PIP territory if AJS is the driver. \
 Pair shadow + scripted practice. 15-day target back to standard.
 
-If the leader asks about a top performer, lead with what to recognize and what to learn from them. \
-If the leader asks about a struggling teammate, lead with the most likely root cause and a concrete \
-first step.
-
 WHAT YOU KNOW:
 You have the full CSL Scenario library (Scenarios 1, 2, 3.1, 3.2, 3.3) committed to memory. \
 You will be given the relevant excerpts in every prompt. Treat them as authoritative.
 
-You will also receive:
-- The teammate's current performance data (metrics vs franchise standards) - sometimes the basic \
-roster snapshot only, sometimes the full daily coaching write-up
-- Any prior chat history in this conversation
+You will also receive (when applicable):
+- A specific teammate's current performance data (metrics vs franchise standards)
+- The current daily AI-generated coaching write-up (Why / Play / Anchor)
+- Prior chat history in this conversation
 
-If the question is something you cannot answer from this context, say so directly and suggest \
-what additional info would help. Never invent training material, metrics, or teammate background.`;
+If the question requires data you don't have (recent shifts, individual call recordings, attendance \
+records, financials beyond what's in the metrics block), say so directly and suggest what \
+additional info would help. Never invent training material, metrics, or teammate background. \
+When extrapolating beyond the documented playbook, say so explicitly.`;
 
 function buildPrompt(tm, history, question) {
-  const metricsLines = (tm.metrics || []).map(m => `  ${m.l}: ${m.v}${m.c ? ' (' + m.c + ')' : ''}`).join('\n');
-
-  const anchor = tm.anchor || {};
-  const anchorBlock = anchor.ref
-    ? `Coaching Anchor: ${anchor.ref}\nName: ${anchor.name || ''}\nRationale: ${anchor.rationale || ''}\nQuote: "${anchor.quote || ''}"`
-    : '(no anchor available)';
-
   const trainingLib = TRAINING_QUOTES.map(q => `--- ${q.ref} ---\n${q.text}`).join('\n\n');
-
   const histBlock = (history && history.length)
     ? '\n\nPRIOR EXCHANGES IN THIS CONVERSATION:\n' +
       history.slice(-8).map(m => `[${(m.role || 'user').toUpperCase()}] ${m.text}`).join('\n\n')
     : '';
 
-  // Derive tier from score if not already set
+  // GENERAL MODE: no teammate selected. Answer broader leadership/training questions.
+  if (!tm || !tm.name) {
+    return `MODE: GENERAL LEADERSHIP / TRAINING / DEVELOPMENT
+(No specific teammate selected. Answer the leader's question on its own terms,
+grounded in the CSL Scenario library below when relevant. The leader could be asking
+about coaching philosophy, how to run a 1:1, how to design a PIP, huddle facilitation,
+recognition, training rollout, building culture, handling difficult conversations, or
+any other leadership / development topic.)
+
+CSL SCENARIO LIBRARY (use as authoritative reference; cite exact scenario step numbers when applicable)
+${trainingLib}
+${histBlock}
+
+LEADER'S QUESTION:
+${question}
+
+Answer in voice. Reference Scenario steps when relevant. If the question goes beyond the
+documented playbook, say so explicitly and answer with general sales-coaching judgment.`;
+  }
+
+  // SPECIFIC TEAMMATE MODE
+  const metricsLines = (tm.metrics || []).map(m => `  ${m.l}: ${m.v}${m.c ? ' (' + m.c + ')' : ''}`).join('\n');
+  const anchor = tm.anchor || {};
+  const anchorBlock = anchor.ref
+    ? `Coaching Anchor: ${anchor.ref}\nName: ${anchor.name || ''}\nRationale: ${anchor.rationale || ''}\nQuote: "${anchor.quote || ''}"`
+    : '(no anchor available)';
+
   let tier = tm.tier;
   if (!tier) {
     const scoreMetric = (tm.metrics || []).find(m => m.l === 'Score');
@@ -146,7 +177,9 @@ function buildPrompt(tm, history, question) {
     }
   }
 
-  return `TEAMMATE PROFILE
+  return `MODE: SPECIFIC TEAMMATE
+
+TEAMMATE PROFILE
 Name: ${tm.name}
 Role: ${tm.role}
 Franchise: ${tm.franchiseName || tm.franchiseCode}
@@ -210,9 +243,10 @@ export async function onRequest({ request, env }) {
   try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400, origin); }
 
   const { teammate, history, question } = body || {};
-  if (!teammate || !question || typeof question !== 'string') {
-    return json({ error: 'Missing teammate or question' }, 400, origin);
+  if (!question || typeof question !== 'string') {
+    return json({ error: 'Missing question' }, 400, origin);
   }
+  // teammate is optional - omit it for general leadership questions
 
   const userPrompt = buildPrompt(teammate, history, question);
 

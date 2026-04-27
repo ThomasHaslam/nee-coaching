@@ -590,6 +590,41 @@
     border-color: rgba(167,139,250,0.5);
     box-shadow: 0 0 12px -4px var(--violet-glow);
   }
+  .roster-row-general {
+    background: linear-gradient(90deg, rgba(245,179,66,0.10), rgba(167,139,250,0.08));
+    border: 1px solid rgba(245,179,66,0.30);
+    margin-bottom: 8px;
+  }
+  .roster-row-general:hover {
+    background: linear-gradient(90deg, rgba(245,179,66,0.16), rgba(167,139,250,0.14));
+    border-color: rgba(245,179,66,0.55);
+  }
+  .roster-row-general.selected {
+    background: linear-gradient(90deg, rgba(245,179,66,0.20), rgba(167,139,250,0.18));
+    border-color: rgba(245,179,66,0.70);
+    box-shadow: 0 0 14px -4px var(--accent-glow);
+  }
+  .chat-main-mode-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--accent);
+    background: rgba(245,179,66,0.12);
+    border: 1px solid rgba(245,179,66,0.30);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .chat-main-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+    align-self: flex-start;
+    max-width: 100%;
+  }
   .roster-row-main {
     flex: 1;
     min-width: 0;
@@ -2373,6 +2408,12 @@
         <button class="roster-filter" data-fr="ct">CT</button>
       </div>
       <div class="chat-sidebar-list" id="roster-list">
+        <button class="roster-row roster-row-general" id="roster-row-general" data-id="__general__">
+          <div class="roster-row-main">
+            <div class="roster-row-name">🌐 General Coaching</div>
+            <div class="roster-row-meta">Leadership · Training · Development</div>
+          </div>
+        </button>
         <div class="roster-empty">Loading roster...</div>
       </div>
       <div class="chat-sidebar-foot" id="roster-foot"></div>
@@ -2380,10 +2421,10 @@
 
     <main class="chat-main">
       <div class="chat-main-head" id="chat-main-head">
-        <div class="chat-main-empty-state">
-          <div class="chat-main-empty-icon">💬</div>
-          <div class="chat-main-empty-title">Ready when you are.</div>
-          <div class="chat-main-empty-sub">Pick a teammate from the left, or use Cmd+K to search the whole region.</div>
+        <div class="chat-main-mode-tag" id="chat-main-mode-tag">🌐 General Coaching · Leadership, Training, Development</div>
+        <div class="chat-main-tm-name" id="chat-main-headline">Ask Coach Rick anything.</div>
+        <div class="chat-main-tm-meta">
+          <span>Coaching philosophy · 1:1 prep · PIP design · huddle facilitation · CSL Scenarios · recognition · culture · difficult conversations</span>
         </div>
       </div>
       <div class="chat-main-thread" id="chat-main-thread"></div>
@@ -2391,12 +2432,11 @@
         <textarea
           class="chat-main-input"
           id="chat-main-input"
-          placeholder="Ask Coach Rick anything about the selected teammate..."
-          rows="2"
-          disabled></textarea>
-        <button type="submit" class="chat-main-send" id="chat-main-send" disabled>Send</button>
+          placeholder="Ask anything. e.g. 'How do I run a great Monday huddle?' or pick a teammate first for specific coaching."
+          rows="2"></textarea>
+        <button type="submit" class="chat-main-send" id="chat-main-send">Send</button>
       </form>
-      <div class="chat-main-foot" id="chat-main-foot">Powered by Claude. Coach Rick has the full CSL Scenario library and this teammate's data.</div>
+      <div class="chat-main-foot" id="chat-main-foot">Powered by Claude. Coach Rick has the full CSL Scenario library + your roster context.</div>
     </main>
   </section>
 
@@ -3484,8 +3524,9 @@
   let ROSTER = [];                  // [{id, franchiseCode, name, role, score, tier, resiJobs, metrics}]
   let ROSTER_FILTER = 'all';
   let ROSTER_QUERY = '';
-  let CHAT_MAIN_TM = null;          // currently selected TM in dedicated chat
+  let CHAT_MAIN_TM = null;          // currently selected TM (null = general mode)
   let CHAT_MAIN_HISTORY = [];
+  const CHAT_GENERAL_KEY = '__general__';   // localStorage key for general-mode chat history
 
   async function loadRoster() {
     try {
@@ -3513,22 +3554,70 @@
       if (q && !t.name.toLowerCase().includes(q) && !t.role.toLowerCase().includes(q)) return false;
       return true;
     });
-    if (!filtered.length) {
-      list.innerHTML = `<div class="roster-empty">No teammates match.</div>`;
-      return;
-    }
-    list.innerHTML = filtered.map(t => `
-      <button class="roster-row ${CHAT_MAIN_TM && CHAT_MAIN_TM.id === t.id ? 'selected' : ''}" data-id="${t.id}">
+
+    const generalSelected = !CHAT_MAIN_TM;
+    const generalRow = `
+      <button class="roster-row roster-row-general ${generalSelected ? 'selected' : ''}" data-id="__general__">
         <div class="roster-row-main">
-          <div class="roster-row-name">${escapeHtml(t.name)}</div>
-          <div class="roster-row-meta">${escapeHtml(t.role)} · ${escapeHtml(t.franchiseName || t.franchiseCode)} · ${t.resiJobs} jobs</div>
+          <div class="roster-row-name">🌐 General Coaching</div>
+          <div class="roster-row-meta">Leadership · Training · Development</div>
         </div>
-        <div class="roster-row-score tier-${t.tier}">${t.score}</div>
       </button>
-    `).join('');
+    `;
+
+    const tmRows = filtered.length
+      ? filtered.map(t => `
+          <button class="roster-row ${CHAT_MAIN_TM && CHAT_MAIN_TM.id === t.id ? 'selected' : ''}" data-id="${t.id}">
+            <div class="roster-row-main">
+              <div class="roster-row-name">${escapeHtml(t.name)}</div>
+              <div class="roster-row-meta">${escapeHtml(t.role)} · ${escapeHtml(t.franchiseName || t.franchiseCode)} · ${t.resiJobs} jobs</div>
+            </div>
+            <div class="roster-row-score tier-${t.tier}">${t.score}</div>
+          </button>
+        `).join('')
+      : `<div class="roster-empty">No teammates match.</div>`;
+
+    list.innerHTML = generalRow + tmRows;
     list.querySelectorAll('.roster-row').forEach(b => {
-      b.onclick = () => selectChatTm(b.dataset.id);
+      b.onclick = () => {
+        if (b.dataset.id === '__general__') selectGeneralMode();
+        else selectChatTm(b.dataset.id);
+      };
     });
+  }
+
+  async function selectGeneralMode() {
+    CHAT_MAIN_TM = null;
+    CHAT_MAIN_HISTORY = loadChatHistory(CHAT_GENERAL_KEY);
+
+    const head = document.getElementById('chat-main-head');
+    head.innerHTML = `
+      <div class="chat-main-mode-tag">🌐 General Coaching · Leadership, Training, Development</div>
+      <div class="chat-main-tm-name">Ask Coach Rick anything.</div>
+      <div class="chat-main-tm-meta">
+        <span>Coaching philosophy · 1:1 prep · PIP design · huddle facilitation · CSL Scenarios · recognition · culture · difficult conversations</span>
+      </div>
+    `;
+
+    const input = document.getElementById('chat-main-input');
+    const send = document.getElementById('chat-main-send');
+    input.disabled = false;
+    send.disabled = false;
+    input.placeholder = "Ask anything. e.g. 'How do I run a great Monday huddle?' or 'Walk me through Scenario 3.3.'";
+    input.focus();
+
+    renderRoster();
+    renderChatMainThread();
+
+    const ok = await detectChatApi();
+    const foot = document.getElementById('chat-main-foot');
+    if (ok) {
+      foot.textContent = 'Powered by Claude. Coach Rick has the full CSL Scenario library + your roster context.';
+    } else {
+      foot.textContent = 'Free-form chat needs Cloudflare Pages deployment. See worker/DEPLOY.md.';
+      input.disabled = true;
+      send.disabled = true;
+    }
   }
 
   async function selectChatTm(rosterId) {
@@ -3574,20 +3663,47 @@
     }
   }
 
+  const GENERAL_PROMPT_CHIPS = [
+    "How do I run a great Monday huddle?",
+    "Walk me through Scenario 3.3 step by step.",
+    "How should I structure a 1:1 with a struggling CSL?",
+    "Build me a 30-day onboarding plan for a brand-new CEL.",
+    "What's the right way to recognize an elite performer?",
+    "How do I have a hard conversation about complaint rate?",
+    "What are the most common Scenario 1 mistakes?",
+    "Give me a culture-building idea I can run this week.",
+  ];
+
   function renderChatMainThread() {
     const thread = document.getElementById('chat-main-thread');
-    if (!CHAT_MAIN_TM) { thread.innerHTML = ''; return; }
 
     if (CHAT_MAIN_HISTORY.length === 0) {
-      const tier = CHAT_MAIN_TM.tier;
-      const tierLine = tier === 'elite'
-        ? `${CHAT_MAIN_TM.name} is in the elite tier (${CHAT_MAIN_TM.score}/100). Ask what's working so the team can model it.`
-        : tier === 'urgent'
-          ? `${CHAT_MAIN_TM.name} is at the urgent tier (${CHAT_MAIN_TM.score}/100). Ask for the root cause and a 7-day plan.`
-          : `${CHAT_MAIN_TM.name} is at the ${tier} tier (${CHAT_MAIN_TM.score}/100). Ask anything.`;
-      thread.innerHTML = `
-        <div class="chat-msg chat-msg-bot">${escapeHtml(tierLine)}</div>
-      `;
+      // Intro state - different copy for general vs specific TM
+      let intro;
+      if (!CHAT_MAIN_TM) {
+        intro = `Hi. I'm Coach Rick. Ask me anything about coaching, training, or leadership. I have the full CSL Scenario library memorized and your team's daily picture in front of me. Try one of the prompts below to start.`;
+      } else {
+        const tier = CHAT_MAIN_TM.tier;
+        intro = tier === 'elite'
+          ? `${CHAT_MAIN_TM.name} is in the elite tier (${CHAT_MAIN_TM.score}/100). Ask what's working so the team can model it.`
+          : tier === 'urgent'
+            ? `${CHAT_MAIN_TM.name} is at the urgent tier (${CHAT_MAIN_TM.score}/100). Ask for the root cause and a 7-day plan.`
+            : `${CHAT_MAIN_TM.name} is at the ${tier} tier (${CHAT_MAIN_TM.score}/100). Ask anything.`;
+      }
+      let html = `<div class="chat-msg chat-msg-bot">${escapeHtml(intro)}</div>`;
+      if (!CHAT_MAIN_TM) {
+        html += `<div class="chat-main-chips">
+          ${GENERAL_PROMPT_CHIPS.map(p => `<button class="chat-chip" data-prompt="${p.replace(/"/g, '&quot;')}">${escapeHtml(p)}</button>`).join('')}
+        </div>`;
+      }
+      thread.innerHTML = html;
+      thread.querySelectorAll('.chat-chip').forEach(b => {
+        b.onclick = () => {
+          const input = document.getElementById('chat-main-input');
+          input.value = b.dataset.prompt;
+          input.focus();
+        };
+      });
       return;
     }
 
@@ -3598,7 +3714,6 @@
   }
 
   async function sendChatMain(question) {
-    if (!CHAT_MAIN_TM) return;
     const q = (question || '').trim();
     if (!q) return;
 
@@ -3608,15 +3723,18 @@
     renderChatMainThread();
     send.disabled = true;
 
+    const histKey = CHAT_MAIN_TM ? CHAT_MAIN_TM.id : CHAT_GENERAL_KEY;
+    const payload = {
+      history: CHAT_MAIN_HISTORY.slice(0, -2),
+      question: q,
+    };
+    if (CHAT_MAIN_TM) payload.teammate = CHAT_MAIN_TM;
+
     try {
       const r = await fetch(CHAT_API_PATH, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          teammate: CHAT_MAIN_TM,
-          history: CHAT_MAIN_HISTORY.slice(0, -2),
-          question: q,
-        }),
+        body: JSON.stringify(payload),
       });
       const data = await r.json();
       CHAT_MAIN_HISTORY.pop();
@@ -3630,7 +3748,7 @@
       CHAT_MAIN_HISTORY.push({ role: 'error', text: 'Network error: ' + (e && e.message ? e.message : 'unknown') });
     } finally {
       send.disabled = false;
-      saveChatHistory(CHAT_MAIN_TM.id, CHAT_MAIN_HISTORY);
+      saveChatHistory(histKey, CHAT_MAIN_HISTORY);
       renderChatMainThread();
     }
   }
@@ -3686,7 +3804,14 @@
       // If a TM was opened from the modal previously, focus them
       if (CHAT_TM && !CHAT_MAIN_TM) {
         const rosterMatch = ROSTER.find(r => r.name === CHAT_TM.name && r.franchiseCode === CHAT_TM.franchiseCode);
-        if (rosterMatch) selectChatTm(rosterMatch.id);
+        if (rosterMatch) {
+          selectChatTm(rosterMatch.id);
+          return;
+        }
+      }
+      // Otherwise default to General Coaching mode (chat works with no TM selected)
+      if (!CHAT_MAIN_TM && CHAT_MAIN_HISTORY.length === 0) {
+        selectGeneralMode();
       }
     }
   }
