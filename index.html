@@ -3182,8 +3182,20 @@
   let CHAT_TM = null;          // current teammate object
   let CHAT_HISTORY = [];       // [{role, text}, ...]
   let CHAT_BUSY = false;
-  // Per-leader, per-TM chat history persists across sessions (only on this device)
+  // Per-TM chat history. Auto-cleared on every page refresh so each session starts fresh.
   const CHAT_HIST_PREFIX = 'nee-coaching:chat:';
+
+  // Wipe all chat threads at page load so refresh = clean slate.
+  (function clearAllChatHistory() {
+    try {
+      const toRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(CHAT_HIST_PREFIX)) toRemove.push(k);
+      }
+      toRemove.forEach(k => localStorage.removeItem(k));
+    } catch {}
+  })();
   // Auto-detected once: does this deployment have the /api/chat function?
   // null = unknown, true = yes (Cloudflare Pages), false = no (GitHub Pages)
   let CHAT_API_AVAILABLE = null;
