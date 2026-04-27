@@ -67,12 +67,8 @@ _RAW_WEIGHTS = {"ajs": 50.0, "complaint": 30.0, "nps": 15.0, "gr": 15.0}
 _W_TOTAL = sum(_RAW_WEIGHTS.values())
 WEIGHTS = {k: v / _W_TOTAL for k, v in _RAW_WEIGHTS.items()}
 
-COACHES = {
-    "bno": ["Richard", "Tyler"],
-    "bso": ["Tommy", "Kendall"],
-    "cp":  ["Pat"],
-    "ct":  ["Larry", "Jakarie", "Tim"],
-}
+# Coach mapping intentionally removed. Coaching language is now leader-agnostic
+# so any team leader can pick up the dashboard and act on it without context.
 
 # Min residential jobs for a TM to be eligible for coaching priority
 # (small samples are noisy and not actionable)
@@ -345,12 +341,6 @@ def fmt_pct(v: Optional[float], digits: int = 1) -> str:
     return f"{v:.{digits}f}%" if v is not None else "n/a"
 
 
-def pick_coach(code: str, idx: int) -> str:
-    """Rotate through coaches by priority slot so the same coach isn't named 5 times."""
-    coaches = COACHES[code]
-    return coaches[idx % len(coaches)]
-
-
 def _today_salt() -> int:
     """Date-based salt so narratives rotate daily (keeps the dashboard feeling fresh)."""
     today = datetime.now(timezone.utc).strftime("%Y%m%d")
@@ -479,56 +469,55 @@ def make_why(tm: TM) -> str:
     return " ".join(parts)
 
 
-def make_play(tm: TM, slot_idx: int) -> str:
+def make_play(tm: TM, slot_idx: int = 0) -> str:
     """
-    Build a play action in coaching voice. Frame as suggestions and approaches,
-    not commands. Coach rotates per slot.
+    Build a play action in leader-agnostic coaching voice. Direct, action-first.
+    slot_idx kept for signature compatibility but unused now that coach names are gone.
     """
     std = STANDARDS[tm.franchise_code]
-    coach = pick_coach(tm.franchise_code, slot_idx)
     primary = tm.primary_issue
 
     if tm.cancel_conv_pct is not None and tm.cancel_conv_pct >= 99.5:
         actions = [
-            f"<strong>Worth {coach} pulling 15 minutes with him on Scenario 3.3.</strong> Take one real cancel from this week and walk through it together, line by line. Have him script the SC Save in his own words before the next shift, so it sounds natural rather than rehearsed.",
-            f"<strong>{coach} could pair him with a strong closer for two shifts.</strong> Sometimes seeing the save attempt happen up close shifts the mindset more than another conversation does. The goal is one documented attempt per cancel, even if it doesn't land.",
+            "<strong>Pull 15 minutes for a Scenario 3.3 walkthrough.</strong> Take one real cancel from this week and run through it line by line. Have him script the SC Save in his own words before next shift so it lands naturally instead of memorized.",
+            "<strong>Pair him with a strong closer for two shifts.</strong> Watching a save attempt happen up close shifts the mindset faster than another conversation. Goal: one documented attempt per cancel, even if it doesn't land.",
         ]
         return _stable_pick(actions, tm)
 
     if primary == "complaint":
         actions = [
-            f"<strong>Worth {coach} sitting down with him before next shift.</strong> Pull the recent detractors and read them together, less as accountability and more as curiosity. The pattern tends to surface on its own. Pick one thing to focus on for the week, not three.",
-            f"<strong>{coach} could ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service usually starts costing. Watch Punctual, Etiquette, Memorable in real time and debrief same-day. Fresh signal lands better than next-morning notes.",
-            f"<strong>Worth a short conversation with {coach} about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
+            "<strong>Sit down with him before next shift.</strong> Pull the recent detractors together. Read them with curiosity, not accountability. The pattern usually surfaces on its own. Pick one thing to focus on for the week, not three.",
+            "<strong>Ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service starts costing. Watch Punctual, Etiquette, Memorable in real time. Debrief same-day so the signal stays fresh.",
+            "<strong>Open with what he's hearing from customers.</strong> The gap between intent and impact is invisible from inside the truck. The ask: what would he change if he could rerun the last shift?",
         ]
         return _stable_pick(actions, tm)
 
     if primary == "nps":
         actions = [
-            f"<strong>Worth {coach} listening to 2-3 recent calls with him this week.</strong> Not for blame, just to hear what the customer heard. CUSTOMER framework gives a clean lens: Memorable, WOW Factor, Positive Ending. Pick one to commit to per shift.",
-            f"<strong>{coach} could block 30 minutes for a service review.</strong> Replay the worst couple of NPS responses together. Where did the experience break? One concrete change per job, not a list of five.",
+            "<strong>Listen to 2-3 recent calls with him this week.</strong> Not for blame, just to hear what the customer heard. CUSTOMER lens: Memorable, WOW Factor, Positive Ending. Commit to one per shift.",
+            "<strong>Block 30 minutes for a service review.</strong> Replay the worst couple of NPS responses together. Where did the experience break? One concrete change per job, not a list of five.",
         ]
         return _stable_pick(actions, tm)
 
     if primary == "gr":
         actions = [
-            f"<strong>Worth a 15-minute huddle with {coach} on the review ask itself.</strong> Practice the words out loud, in his voice. Most people drop the ask because the script feels stiff, not because they don't want to. Track on paper for a week to see what shifts.",
-            f"<strong>{coach} could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
+            "<strong>Run a 15-minute huddle on the review ask.</strong> Practice the words out loud, in his voice. Most people drop the ask because the script feels stiff, not because they don't want to. Track on paper for one week.",
+            "<strong>Ride along and focus on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coach the words in the moment, not after the shift.",
         ]
         return _stable_pick(actions, tm)
 
     # AJS-led (or fallback)
     if tm.resi_ajs is not None and (std["ajs"] - tm.resi_ajs) > 100:
         actions = [
-            f"<strong>Worth {coach} carving out a 1:1 today.</strong> Walk through 3 recent shifts together, less as a PIP framing and more as 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to {fmt_money(std['ajs'])}.",
-            f"<strong>{coach} pre-shift today, then a shadow tomorrow.</strong> Listen specifically for whether the assumptive ask is still landing. AJS dips at this scale almost always live in the close, not in effort or knowledge.",
+            f"<strong>Carve out a 1:1 today.</strong> Walk through 3 recent shifts together. Less PIP framing, more 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to {fmt_money(std['ajs'])}.",
+            "<strong>Pre-shift today, then a shadow tomorrow.</strong> Listen specifically for whether the assumptive ask is still landing. AJS dips at this scale almost always live in the close, not in effort or knowledge.",
         ]
         return _stable_pick(actions, tm)
 
     actions = [
-        f"<strong>Worth {coach} catching him in a morning huddle.</strong> Explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD, not as a scorecard, more as a 'what did we learn' conversation.",
-        f"<strong>{coach} could do a mid-shift check-in.</strong> Pull one job apart together: was Priority Items delivered? Was Truck+ pitched? Adjust on the next call. Small in-the-moment coaching tends to compound faster than end-of-week reviews.",
-        f"<strong>Worth a 20-minute Scenario 3.1 refresher with {coach}.</strong> Specifically the Priority Items step. The ask: one Truck+ pitch per job tomorrow, with him keeping his own count.",
+        "<strong>Catch him in the morning huddle.</strong> Set an explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD as a 'what did we learn' conversation, not a scorecard.",
+        "<strong>Do a mid-shift check-in.</strong> Pull one job apart together: was Priority Items delivered? Was Truck+ pitched? Adjust on the next call. In-the-moment coaching compounds faster than end-of-week reviews.",
+        "<strong>Run a 20-minute Scenario 3.1 refresher.</strong> Priority Items step specifically. The ask: one Truck+ pitch per job tomorrow, with him keeping his own count.",
     ]
     return _stable_pick(actions, tm)
 
@@ -601,40 +590,44 @@ def _ai_client():
     return _AI_CLIENT
 
 
-_AI_SYSTEM = """You are an expert sales coach for 1-800-GOT-JUNK?, writing daily \
-coaching guidance for franchise leaders to use in 1:1 conversations with their teammates \
-(CSLs, CELs, SSLs).
+_AI_SYSTEM = """You are an expert sales coach for 1-800-GOT-JUNK? franchises, \
+writing daily coaching guidance that ANY team leader can pick up and use in a 1:1 \
+or huddle with the named teammate.
 
-Voice rules (strict):
-- Warm, genuine, observational. Never robotic, never lecturing.
-- No em dashes. Use periods or commas instead.
-- Coach-style: frame as suggestions and observations, not commands.
+VOICE RULES (strict):
+- Warm but direct. Confident, action-first. Like a senior coach giving a peer the read.
+- NEVER name a specific coach, manager, GM, or person other than the teammate. \
+Frame actions as "Pull 15 minutes with him..." or "Worth a ride-along this week...", \
+not "Tyler should..." or "Have Tommy pull...". Any leader on the team must be able \
+to act on this without context.
+- No em dashes. Use periods or commas.
 - Specific to this teammate's actual numbers. No generic platitudes.
 - Reference the actual training material when relevant. Use the real scenario names \
-and step numbers from the context provided.
-- Brief but substantive. 3-5 sentences per section.
+and step numbers from the context.
+- 3-5 sentences per section. Tight. No filler.
 
 You will be given:
-- The teammate's performance vs their franchise's standards
+- The teammate's performance vs their franchise standards
 - The dominant problem area
 - Excerpts from the actual CSL Scenario training material that maps to that problem
-- The franchise's coach name
 
 Return JSON with exactly these keys:
 {
-  "why":   "3-5 sentences. What the data is telling us, and what the most likely \
-underlying behavior is. Anchor on the dominant problem. Add 1-2 supporting observations.",
-  "play":  "3-5 sentences. A specific coaching action the named coach can take this week. \
-Reference the relevant training step or script when it fits. Be concrete: time, what to \
-look at, what to practice. Lead with 'Worth ...' or '<Coach> could ...' rather than commands.",
-  "rationale": "2-3 sentences. Why this specific training step is the right anchor for \
-this specific teammate's pattern."
+  "why":   "3-5 sentences. What the data shows and the most likely underlying \
+behavior. Anchor on the dominant problem. Add 1-2 supporting observations connecting \
+metrics into a single hypothesis.",
+  "play":  "3-5 sentences. A specific coaching action for this week. Concrete: time \
+block, what to look at, what to practice. Reference the relevant training step. \
+Use imperative voice ('Pull...', 'Block 20 minutes...', 'Run a Scenario X.X drill...'), \
+NOT 'Coach should...' or any named person other than the teammate.",
+  "rationale": "2-3 sentences. Why this specific training step is the right anchor \
+for this teammate's pattern."
 }
 
 Return ONLY valid JSON. No prose outside the object."""
 
 
-def _ai_prompt(tm: TM, coach: str) -> str:
+def _ai_prompt(tm: TM) -> str:
     std = STANDARDS[tm.franchise_code]
     franchise_name = FRANCHISE_NAMES[tm.franchise_code]
 
@@ -659,7 +652,6 @@ def _ai_prompt(tm: TM, coach: str) -> str:
   Name:      {tm.name}
   Role:      {tm.role}
   Franchise: {franchise_name}
-  Coach:     {coach}
 
 PERFORMANCE THIS PERIOD
 {metrics_block}
@@ -667,7 +659,7 @@ PERFORMANCE THIS PERIOD
 DOMINANT PROBLEM
   {tm.primary_issue or 'mixed'}
 
-RELEVANT TRAINING MATERIAL (use these scenario names verbatim in your output)
+RELEVANT TRAINING MATERIAL (use scenario names verbatim in your output)
 {training_block}
 
 Today's date: {datetime.now(timezone.utc).strftime('%A, %B %d')}. Vary phrasing day-to-day so this teammate doesn't see identical wording every morning.
@@ -675,22 +667,22 @@ Today's date: {datetime.now(timezone.utc).strftime('%A, %B %d')}. Vary phrasing 
 Generate the JSON object."""
 
 
-def generate_ai_coaching(tm: TM, slot_idx: int) -> Optional[dict]:
+def generate_ai_coaching(tm: TM, slot_idx: int = 0) -> Optional[dict]:
     """
     Use Claude to generate why / play / rationale for this teammate.
     Returns None if the API isn't available or the call fails.
+    slot_idx kept for signature compatibility but unused.
     """
     client = _ai_client()
     if client is None:
         return None
 
-    coach = pick_coach(tm.franchise_code, slot_idx)
     try:
         resp = client.messages.create(
             model=_AI_MODEL,
             max_tokens=1000,
             system=_AI_SYSTEM,
-            messages=[{"role": "user", "content": _ai_prompt(tm, coach)}],
+            messages=[{"role": "user", "content": _ai_prompt(tm)}],
         )
         raw = resp.content[0].text.strip()
         # Strip code fences if present

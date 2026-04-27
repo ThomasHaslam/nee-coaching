@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LAST_UPDATED: 2026-04-27T04:34:05Z -->
+<!-- LAST_UPDATED: 2026-04-27T05:10:00Z -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0e1a">
-<title>NEE Coaching · Built Different</title>
+<title>NEE Coaching</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -55,6 +55,290 @@
     margin: 0 auto;
     padding: 28px 24px 60px;
   }
+
+  /* ===== HERO ===== */
+  .hero {
+    margin: 4px auto 24px auto;
+    padding: 22px 26px;
+    background:
+      radial-gradient(120% 200% at 0% 0%, rgba(212, 162, 86, 0.10), transparent 60%),
+      radial-gradient(120% 200% at 100% 100%, rgba(96, 165, 250, 0.08), transparent 55%),
+      linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+    border: 1px solid rgba(212, 162, 86, 0.18);
+    border-radius: 16px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 28px;
+    align-items: center;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
+  }
+  .hero-greeting {
+    font-family: var(--display);
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    opacity: 0.95;
+  }
+  .hero-line {
+    font-family: var(--display);
+    font-size: 30px;
+    color: var(--text);
+    font-weight: 500;
+    letter-spacing: -0.2px;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .hero-sub {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.55;
+    max-width: 56ch;
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 10px;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+    transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  .hero-stat:hover {
+    transform: translateY(-1px);
+    border-color: var(--border-bright);
+    background: rgba(255,255,255,0.04);
+  }
+  .hero-stat-num {
+    font-family: var(--display);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1;
+  }
+  .hero-stat-suffix {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 400;
+    margin-left: 1px;
+  }
+  .hero-stat-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-top: 6px;
+  }
+  .hero-stat-urgent .hero-stat-num { color: var(--urgent); }
+  .hero-stat-high .hero-stat-num   { color: var(--high); }
+  .hero-stat-done .hero-stat-num   { color: var(--done); }
+  .hero-stat-open .hero-stat-num   { color: var(--accent-bright); }
+
+  @media (max-width: 720px) {
+    .hero { grid-template-columns: 1fr; gap: 18px; padding: 18px 18px; }
+    .hero-line { font-size: 24px; }
+  }
+
+  /* ===== ASK AI BUTTON ===== */
+  .ask-ai-btn {
+    background: linear-gradient(90deg, rgba(167,139,250,0.12), rgba(96,165,250,0.12));
+    border: 1px solid rgba(167,139,250,0.35);
+    color: #c4b5fd;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+  .ask-ai-btn:hover {
+    background: linear-gradient(90deg, rgba(167,139,250,0.22), rgba(96,165,250,0.22));
+    border-color: rgba(167,139,250,0.6);
+  }
+  .ask-ai-btn:active { transform: scale(0.97); }
+
+  /* ===== CHAT OVERLAY ===== */
+  .chat-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 12, 22, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 16px;
+    animation: chat-fade 0.18s ease;
+  }
+  @keyframes chat-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .chat-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-bright);
+    border-radius: 16px 16px 0 0;
+    width: 100%;
+    max-width: 720px;
+    max-height: 86vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 -10px 40px -10px rgba(0,0,0,0.5);
+    animation: chat-rise 0.22s ease;
+  }
+  @keyframes chat-rise {
+    from { transform: translateY(40px); opacity: 0.7; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+  @media (min-width: 720px) {
+    .chat-overlay { align-items: center; }
+    .chat-panel { border-radius: 16px; max-height: 80vh; }
+  }
+  .chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(90deg, rgba(167,139,250,0.08), rgba(96,165,250,0.08));
+  }
+  .chat-title {
+    font-family: var(--display);
+    font-size: 18px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .chat-tm {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .chat-close {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 6px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .chat-close:hover { background: var(--bg-elevated); color: var(--text); }
+
+  .chat-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-section);
+  }
+  .chat-chip {
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .chat-chip:hover {
+    background: rgba(167,139,250,0.10);
+    color: var(--text);
+    border-color: rgba(167,139,250,0.4);
+  }
+
+  .chat-thread {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chat-msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .chat-msg-user {
+    align-self: flex-end;
+    background: linear-gradient(90deg, rgba(167,139,250,0.18), rgba(96,165,250,0.18));
+    border: 1px solid rgba(167,139,250,0.35);
+    color: var(--text);
+  }
+  .chat-msg-bot {
+    align-self: flex-start;
+    background: var(--bg-section);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .chat-msg-bot.typing { color: var(--text-dim); font-style: italic; }
+  .chat-msg-error {
+    align-self: flex-start;
+    background: rgba(226,92,92,0.1);
+    border: 1px solid rgba(226,92,92,0.3);
+    color: #ffb4b4;
+    font-size: 13px;
+  }
+
+  .chat-form {
+    display: flex;
+    gap: 8px;
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .chat-input {
+    flex: 1;
+    background: var(--bg-section);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 14px;
+    padding: 10px 12px;
+    resize: none;
+    line-height: 1.45;
+    transition: border-color 0.15s ease;
+  }
+  .chat-input:focus {
+    outline: none;
+    border-color: rgba(167,139,250,0.6);
+  }
+  .chat-send {
+    background: linear-gradient(90deg, #a78bfa, #60a5fa);
+    color: #0a0e1a;
+    border: none;
+    border-radius: 8px;
+    padding: 0 18px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: transform 0.1s ease, opacity 0.15s ease;
+  }
+  .chat-send:hover { transform: translateY(-1px); }
+  .chat-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .chat-footnote {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 6px 14px 12px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .chat-footnote.config-needed { color: var(--high); }
 
   /* ===== HEADER ===== */
   .header {
@@ -502,11 +786,16 @@
   .tm-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 16px 18px;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
     position: relative;
     overflow: hidden;
+  }
+  .tm-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-bright);
+    box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.6);
   }
 
   .tm-card::before {
@@ -1084,6 +1373,17 @@
     </div>
   </header>
 
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-greeting" id="hero-greeting">Good morning.</div>
+      <h2 class="hero-line" id="hero-line">Today's coaching focus</h2>
+      <p class="hero-sub" id="hero-sub">Twenty teammates surfaced for coaching across four franchises. Start where the score is lowest, work outward.</p>
+    </div>
+    <div class="hero-stats" id="hero-stats">
+      <!-- filled by JS -->
+    </div>
+  </section>
+
   <div class="controls-row">
     <div class="filter-bar">
       <span class="filter-label">Show:</span>
@@ -1181,7 +1481,6 @@
 
   <footer class="footer">
     <div>NEE Coaching</div>
-    <div class="footer-mark">Built Different.</div>
     <div class="footer-utility">
       <button class="reset-link" id="expand-all">Expand All</button>
       <span style="color: var(--border-bright)">·</span>
@@ -1190,6 +1489,32 @@
       <button class="reset-link" id="reset-btn">Reset for new day</button>
     </div>
   </footer>
+</div>
+
+<!-- ===== AI CHAT PANEL ===== -->
+<div class="chat-overlay" id="chat-overlay" hidden>
+  <div class="chat-panel" role="dialog" aria-label="AI Coach">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-title">AI Coach</div>
+        <div class="chat-tm" id="chat-tm-name">—</div>
+      </div>
+      <button class="chat-close" id="chat-close" title="Close">×</button>
+    </div>
+    <div class="chat-suggestions" id="chat-suggestions"></div>
+    <div class="chat-thread" id="chat-thread"></div>
+    <form class="chat-form" id="chat-form">
+      <textarea
+        class="chat-input"
+        id="chat-input"
+        placeholder="Ask anything about this teammate. e.g. 'What should I open with?' or 'Give me a 60-second 1:1 script.'"
+        rows="2"></textarea>
+      <button type="submit" class="chat-send" id="chat-send">Send</button>
+    </form>
+    <div class="chat-footnote" id="chat-footnote">
+      Powered by Claude. Replies are based on this teammate's data and CSL Scenario training material.
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1223,7 +1548,7 @@
     {
       id: "tm-bno-1", priority: 1, franchiseCode: "bno", name: "Deven Okowuga", role: "CEL", severity: "urgent",
       why: "Score 63/100. Close enough to the line that one focused habit shift could move it meaningfully in two weeks. Reviews capture at 7.5%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $438 ($287 below $725). NPS at 29% adds to the customer-side signal. Signal sits on 40 resi jobs, so it's a real read.",
-      play: "<strong>Richard could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
+      play: "<strong>Ride along and focus on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coach the words in the moment, not after the shift.",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 3.1, Step 5 - Exceptional Receipt - Positive Ending", "secondaryName": "Exceptional Receipt - Positive Ending", "secondaryQuote": "A thorough receipt demonstrates professionalism and attention to detail. Include a 'Thank You' with the team's names listed, a detailed breakdown of the load size, items removed, additional fees, and discounts. NO STANDARD JUNK REMOVAL on the receipt. Transparent pricing especially matters when the spouse is not on site. Example: '1/2 Load (1) - Reclining sofa, donatable loveseat, donatable kitchen table, 4 chairs, 2 television, 2 boxes, 1 lamp. E-Waste (2) - recycling fees for 2 tube tvs. Discount (1) - $25 off - door hanger. Thank you for using our service today! Alex/Bryce.'", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       anchorSource: "template",
@@ -1232,7 +1557,7 @@
     {
       id: "tm-bno-2", priority: 2, franchiseCode: "bno", name: "Nathan Kapala", role: "CSL", severity: "high",
       why: "At 70/100. He's not far off, which is the trickiest place to coach because the natural pull is to leave it alone. Complaint rate at 5.40%, which is 3.6x our 1.50% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Worth noting AJS is also under, at $656 ($69 below $725). Reviews capture 14.6% trails the goal too. 48 resi jobs of data behind it.",
-      play: "<strong>Worth a short conversation with Tyler about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
+      play: "<strong>Open with what he's hearing from customers.</strong> The gap between intent and impact is invisible from inside the truck. The ask: what would he change if he could rerun the last shift?",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD + Power Questions", "secondaryName": "Relevant Rapport - FORD + Power Questions", "secondaryQuote": "Personal rapport: making a friend with the customer. FORD - Family, Occupation, Recreation, Dreams. Relevant rapport: identifying important information about the customer's project and goal. Specific information about the items, their time frame, quality, or reasons for needing junk removal. The purpose is to lead to more effective communication and collaboration by achieving MORE for the customer. Example questions to use on every job: 'How long has this stuff been here?' 'What are you planning on doing with the space once we get these items removed?' 'Are there any items of sentimental value or importance that we should handle with extra care?' 'What were you hoping to accomplish today?' 'What type of project are we working on today?'", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       anchorSource: "template",
@@ -1241,7 +1566,7 @@
     {
       id: "tm-bno-3", priority: 3, franchiseCode: "bno", name: "Armani Pabon", role: "CSL", severity: "high",
       why: "Score 71/100. Close enough to the line that one focused habit shift could move it meaningfully in two weeks. Complaint rate at 25.00%, which is 16.7x our 1.50% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Reviews capture 18.5% trails the goal too. Signal sits on 27 resi jobs, so it's a real read.",
-      play: "<strong>Worth Richard sitting down with him before next shift.</strong> Pull the recent detractors and read them together, less as accountability and more as curiosity. The pattern tends to surface on its own. Pick one thing to focus on for the week, not three.",
+      play: "<strong>Sit down with him before next shift.</strong> Pull the recent detractors together. Read them with curiosity, not accountability. The pattern usually surfaces on its own. Pick one thing to focus on for the week, not three.",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD + Power Questions", "secondaryName": "Relevant Rapport - FORD + Power Questions", "secondaryQuote": "Personal rapport: making a friend with the customer. FORD - Family, Occupation, Recreation, Dreams. Relevant rapport: identifying important information about the customer's project and goal. Specific information about the items, their time frame, quality, or reasons for needing junk removal. The purpose is to lead to more effective communication and collaboration by achieving MORE for the customer. Example questions to use on every job: 'How long has this stuff been here?' 'What are you planning on doing with the space once we get these items removed?' 'Are there any items of sentimental value or importance that we should handle with extra care?' 'What were you hoping to accomplish today?' 'What type of project are we working on today?'", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       anchorSource: "template",
@@ -1250,7 +1575,7 @@
     {
       id: "tm-bno-4", priority: 4, franchiseCode: "bno", name: "Jeron Feaster", role: "CSL", severity: "high",
       why: "Composite 72/100. One area is doing most of the work pulling the score down. Zeroing in there is more productive than broadening. Google Reviews capture at 8.8% (goal 25%). When the capture rate is the lagging metric, it's almost always the same root cause: the ask isn't happening on the truck, or it's happening so quietly the customer doesn't notice it. Worth noting AJS is also under, at $458 ($267 below $725). NPS at 75% adds to the customer-side signal. 34 resi jobs of data behind it.",
-      play: "<strong>Worth a 15-minute huddle with Tyler on the review ask itself.</strong> Practice the words out loud, in his voice. Most people drop the ask because the script feels stiff, not because they don't want to. Track on paper for a week to see what shifts.",
+      play: "<strong>Run a 15-minute huddle on the review ask.</strong> Practice the words out loud, in his voice. Most people drop the ask because the script feels stiff, not because they don't want to. Track on paper for one week.",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 3.1, Step 5 - Exceptional Receipt - Positive Ending", "secondaryName": "Exceptional Receipt - Positive Ending", "secondaryQuote": "A thorough receipt demonstrates professionalism and attention to detail. Include a 'Thank You' with the team's names listed, a detailed breakdown of the load size, items removed, additional fees, and discounts. NO STANDARD JUNK REMOVAL on the receipt. Transparent pricing especially matters when the spouse is not on site. Example: '1/2 Load (1) - Reclining sofa, donatable loveseat, donatable kitchen table, 4 chairs, 2 television, 2 boxes, 1 lamp. E-Waste (2) - recycling fees for 2 tube tvs. Discount (1) - $25 off - door hanger. Thank you for using our service today! Alex/Bryce.'", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       anchorSource: "template",
@@ -1259,7 +1584,7 @@
     {
       id: "tm-bno-5", priority: 5, franchiseCode: "bno", name: "Giovani Memeus", role: "CSL", severity: "high",
       why: "Composite at 72. Not a fire, more like a small leak. Worth catching now before it widens. Complaints at 8.30%, well past the 1.50% mark. The number is loud enough that the answer is probably in the actual feedback, not in another sales conversation. Worth pulling the recent ones and reading them together. Worth noting AJS is also under, at $641 ($84 below $725). This is across 57 resi jobs, not a small-sample story.",
-      play: "<strong>Richard could ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service usually starts costing. Watch Punctual, Etiquette, Memorable in real time and debrief same-day. Fresh signal lands better than next-morning notes.",
+      play: "<strong>Ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service starts costing. Watch Punctual, Etiquette, Memorable in real time. Debrief same-day so the signal stays fresh.",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD + Power Questions", "secondaryName": "Relevant Rapport - FORD + Power Questions", "secondaryQuote": "Personal rapport: making a friend with the customer. FORD - Family, Occupation, Recreation, Dreams. Relevant rapport: identifying important information about the customer's project and goal. Specific information about the items, their time frame, quality, or reasons for needing junk removal. The purpose is to lead to more effective communication and collaboration by achieving MORE for the customer. Example questions to use on every job: 'How long has this stuff been here?' 'What are you planning on doing with the space once we get these items removed?' 'Are there any items of sentimental value or importance that we should handle with extra care?' 'What were you hoping to accomplish today?' 'What type of project are we working on today?'", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       anchorSource: "template",
@@ -1270,7 +1595,7 @@
     {
       id: "tm-bso-1", priority: 1, franchiseCode: "bso", name: "Jadiel Diaz", role: "CEL", severity: "high",
       why: "Composite at 74. Not a fire, more like a small leak. Worth catching now before it widens. Reviews capture at 13.9%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $494 ($231 below $725). NPS at 57% adds to the customer-side signal. This is across 36 resi jobs, not a small-sample story.",
-      play: "<strong>Tommy could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
+      play: "<strong>Ride along and focus on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coach the words in the moment, not after the shift.",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 3.1, Step 5 - Exceptional Receipt - Positive Ending", "secondaryName": "Exceptional Receipt - Positive Ending", "secondaryQuote": "A thorough receipt demonstrates professionalism and attention to detail. Include a 'Thank You' with the team's names listed, a detailed breakdown of the load size, items removed, additional fees, and discounts. NO STANDARD JUNK REMOVAL on the receipt. Transparent pricing especially matters when the spouse is not on site. Example: '1/2 Load (1) - Reclining sofa, donatable loveseat, donatable kitchen table, 4 chairs, 2 television, 2 boxes, 1 lamp. E-Waste (2) - recycling fees for 2 tube tvs. Discount (1) - $25 off - door hanger. Thank you for using our service today! Alex/Bryce.'", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       anchorSource: "template",
@@ -1279,7 +1604,7 @@
     {
       id: "tm-bso-2", priority: 2, franchiseCode: "bso", name: "Dawson Guidetti", role: "CSL", severity: "high",
       why: "At 80/100, this is light-touch maintenance coaching. One area to nudge, nothing to redesign. Reviews capture at 10.8%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $540 ($185 below $725). NPS at 88% adds to the customer-side signal. This is across 111 resi jobs, not a small-sample story.",
-      play: "<strong>Kendall could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
+      play: "<strong>Ride along and focus on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coach the words in the moment, not after the shift.",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 3.1, Step 5 - Exceptional Receipt - Positive Ending", "secondaryName": "Exceptional Receipt - Positive Ending", "secondaryQuote": "A thorough receipt demonstrates professionalism and attention to detail. Include a 'Thank You' with the team's names listed, a detailed breakdown of the load size, items removed, additional fees, and discounts. NO STANDARD JUNK REMOVAL on the receipt. Transparent pricing especially matters when the spouse is not on site. Example: '1/2 Load (1) - Reclining sofa, donatable loveseat, donatable kitchen table, 4 chairs, 2 television, 2 boxes, 1 lamp. E-Waste (2) - recycling fees for 2 tube tvs. Discount (1) - $25 off - door hanger. Thank you for using our service today! Alex/Bryce.'", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       anchorSource: "template",
@@ -1288,7 +1613,7 @@
     {
       id: "tm-bso-3", priority: 3, franchiseCode: "bso", name: "Tyler Andrade", role: "CSL", severity: "high",
       why: "Score 80/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Reviews capture at 10.8%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $540 ($185 below $725). NPS at 88% adds to the customer-side signal. 111 resi jobs of data behind it.",
-      play: "<strong>Tommy could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
+      play: "<strong>Ride along and focus on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coach the words in the moment, not after the shift.",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 3.1, Step 5 - Exceptional Receipt - Positive Ending", "secondaryName": "Exceptional Receipt - Positive Ending", "secondaryQuote": "A thorough receipt demonstrates professionalism and attention to detail. Include a 'Thank You' with the team's names listed, a detailed breakdown of the load size, items removed, additional fees, and discounts. NO STANDARD JUNK REMOVAL on the receipt. Transparent pricing especially matters when the spouse is not on site. Example: '1/2 Load (1) - Reclining sofa, donatable loveseat, donatable kitchen table, 4 chairs, 2 television, 2 boxes, 1 lamp. E-Waste (2) - recycling fees for 2 tube tvs. Discount (1) - $25 off - door hanger. Thank you for using our service today! Alex/Bryce.'", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       anchorSource: "template",
@@ -1297,7 +1622,7 @@
     {
       id: "tm-bso-4", priority: 4, franchiseCode: "bso", name: "Logan Ballou", role: "CEL", severity: "high",
       why: "Score 82/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Adjusted Resi AJS is sitting at $481, which is roughly $244 under our $725 mark. When AJS slides this far, it's almost always something in the close softening, not effort. Worth listening for whether the assumptive ask is still happening. Reviews capture 20.0% trails the goal too. Truck+ at 8.3% (vs 10.0% std) is another thread worth pulling. 60 resi jobs of data behind it.",
-      play: "<strong>Worth Kendall carving out a 1:1 today.</strong> Walk through 3 recent shifts together, less as a PIP framing and more as 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to $725.",
+      play: "<strong>Carve out a 1:1 today.</strong> Walk through 3 recent shifts together. Less PIP framing, more 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to $725.",
       framework: "Scenario 1, Step 4 - Estimate & Price - Rules of the Range. AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
       anchor: {"ref": "Scenario 1, Step 4 - Estimate & Price - Rules of the Range", "name": "Estimate & Price - Rules of the Range", "quote": "Confidence is EVERYTHING. Believe in what you're saying, KNOW YOUR WORTH. Bring ENERGY and EXCITEMENT to the bid. Make it fun and unique for the customer. Memorizing the price list gives you credibility. Read the customer's body language - body language doesn't whisper. Never mention Minimum Charge - customers hear the price they want to hear. Only give the full truck price: 'To fill our truck all the way is $___, we do have 13 different price points to ensure you only pay for the space your items take up on the truck.' Bid the job at what it is and cut the maybes and probablys out. You are the expert. The lowest part of your range is what you think it is. The Assumptive Ask MUST come right after the range is given - no pauses. Replace pain with pleasure - paint the picture of the completed project.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. Right after the bid, it is YOUR job to lead the customer and get things started. Do NOT wait for the 'ok'. Tell them what you are about to do. Give them an estimated time of how long it will take to complete the job, and paint the picture of the completed project. Always make sure to let them know to look for other items or tasks around the house while you're working - utilize the Costco Effect. Examples: 'With everything you have shown me, you are going to be filling up 1/2 - 2/3 of a load. There are items in the basement, backyard and garage; where would you like for us to start?' Or: 'We have an empty truck in the driveway and are ready to get started for you. Would you prefer that we start downstairs or in the backyard?'", "rationale": "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work."},
       anchorSource: "template",
@@ -1306,7 +1631,7 @@
     {
       id: "tm-bso-5", priority: 5, franchiseCode: "bso", name: "Nicholas Strojny", role: "CSL", severity: "high",
       why: "Score 84/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Adjusted Resi AJS is sitting at $512, which is roughly $213 under our $725 mark. When AJS slides this far, it's almost always something in the close softening, not effort. Worth listening for whether the assumptive ask is still happening. Reviews capture 20.0% trails the goal too. Truck+ at 6.2% (vs 10.0% std) is another thread worth pulling. 65 resi jobs of data behind it.",
-      play: "<strong>Worth Tommy carving out a 1:1 today.</strong> Walk through 3 recent shifts together, less as a PIP framing and more as 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to $725.",
+      play: "<strong>Carve out a 1:1 today.</strong> Walk through 3 recent shifts together. Less PIP framing, more 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to $725.",
       framework: "Scenario 1, Step 4 - Estimate & Price - Rules of the Range. AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
       anchor: {"ref": "Scenario 1, Step 4 - Estimate & Price - Rules of the Range", "name": "Estimate & Price - Rules of the Range", "quote": "Confidence is EVERYTHING. Believe in what you're saying, KNOW YOUR WORTH. Bring ENERGY and EXCITEMENT to the bid. Make it fun and unique for the customer. Memorizing the price list gives you credibility. Read the customer's body language - body language doesn't whisper. Never mention Minimum Charge - customers hear the price they want to hear. Only give the full truck price: 'To fill our truck all the way is $___, we do have 13 different price points to ensure you only pay for the space your items take up on the truck.' Bid the job at what it is and cut the maybes and probablys out. You are the expert. The lowest part of your range is what you think it is. The Assumptive Ask MUST come right after the range is given - no pauses. Replace pain with pleasure - paint the picture of the completed project.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. Right after the bid, it is YOUR job to lead the customer and get things started. Do NOT wait for the 'ok'. Tell them what you are about to do. Give them an estimated time of how long it will take to complete the job, and paint the picture of the completed project. Always make sure to let them know to look for other items or tasks around the house while you're working - utilize the Costco Effect. Examples: 'With everything you have shown me, you are going to be filling up 1/2 - 2/3 of a load. There are items in the basement, backyard and garage; where would you like for us to start?' Or: 'We have an empty truck in the driveway and are ready to get started for you. Would you prefer that we start downstairs or in the backyard?'", "rationale": "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work."},
       anchorSource: "template",
@@ -1317,7 +1642,7 @@
     {
       id: "tm-cp-1", priority: 1, franchiseCode: "cp", name: "Joshua Meserve", role: "CSL", severity: "medium",
       why: "Composite 90/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Adj Resi AJS $485. The gap is closeable in a single shift if it's a confidence dip. Worth asking what's been on his mind. Truck+ at 3.3% (vs 12.5% std) is another thread worth pulling. Signal sits on 60 resi jobs, so it's a real read.",
-      play: "<strong>Pat pre-shift today, then a shadow tomorrow.</strong> Listen specifically for whether the assumptive ask is still landing. AJS dips at this scale almost always live in the close, not in effort or knowledge.",
+      play: "<strong>Pre-shift today, then a shadow tomorrow.</strong> Listen specifically for whether the assumptive ask is still landing. AJS dips at this scale almost always live in the close, not in effort or knowledge.",
       framework: "Scenario 3.1, Step 4 - Priority Items + Roll-Over Pricing. Truck+ rate is the canary on AJS health. If the seed isn't being planted on the Call Ahead, the load won't grow on site.",
       anchor: {"ref": "Scenario 3.1, Step 4 - Priority Items + Roll-Over Pricing", "name": "Priority Items + Roll-Over Pricing", "quote": "Many of our customers are on a strict budget and cannot pay the full amount at the time it's due. Roll-Over Pricing: the customer pays what they can now, and we take the volume equivalent to their budget. On our next visit (within 30 days), we'll start at the volume/price they finished at before, and they only pay the difference. 'Pay what you can now and pay the rest later.' It gives the customer time. It gets the ball rolling - clears space, gets rid of heavier items they can't move themselves. It saves them money vs. doing two separate jobs at full rate. Pair this with Priority Items: 'let's get something on the truck' - offer to take the bigger or heavier items that fit their budget today.", "secondaryRef": "Scenario 1, Step 5 - Costco Effect - Drive Volume On Site", "secondaryName": "Costco Effect - Drive Volume On Site", "secondaryQuote": "While we're working, ask the customer to look around for other items or tasks. They forget what's still on the list until you remind them. This is the Costco Effect - a small assumptive prompt mid-job that often turns a 1/3 load into a 1/2 or 5/8.", "rationale": "Truck+ rate is the canary on AJS health. If the seed isn't being planted on the Call Ahead, the load won't grow on site."},
       anchorSource: "template",
@@ -1326,7 +1651,7 @@
     {
       id: "tm-cp-2", priority: 2, franchiseCode: "cp", name: "Derek Lee", role: "CSL", severity: "medium",
       why: "Composite 96/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Reviews capture at 17.2%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Signal sits on 64 resi jobs, so it's a real read.",
-      play: "<strong>Pat could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
+      play: "<strong>Ride along and focus on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coach the words in the moment, not after the shift.",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 3.1, Step 5 - Exceptional Receipt - Positive Ending", "secondaryName": "Exceptional Receipt - Positive Ending", "secondaryQuote": "A thorough receipt demonstrates professionalism and attention to detail. Include a 'Thank You' with the team's names listed, a detailed breakdown of the load size, items removed, additional fees, and discounts. NO STANDARD JUNK REMOVAL on the receipt. Transparent pricing especially matters when the spouse is not on site. Example: '1/2 Load (1) - Reclining sofa, donatable loveseat, donatable kitchen table, 4 chairs, 2 television, 2 boxes, 1 lamp. E-Waste (2) - recycling fees for 2 tube tvs. Discount (1) - $25 off - door hanger. Thank you for using our service today! Alex/Bryce.'", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       anchorSource: "template",
@@ -1335,7 +1660,7 @@
     {
       id: "tm-cp-3", priority: 3, franchiseCode: "cp", name: "Jason Trostle", role: "CEL", severity: "medium",
       why: "At 97/100, this is light-touch maintenance coaching. One area to nudge, nothing to redesign. AJS at $577, about $42 short of $619. He's right at the line, which is the trickiest place to coach because the natural pull is to leave it alone. Worth a small conversation before it widens. Truck+ at 7.1% (vs 12.5% std) is another thread worth pulling. This is across 56 resi jobs, not a small-sample story.",
-      play: "<strong>Pat could do a mid-shift check-in.</strong> Pull one job apart together: was Priority Items delivered? Was Truck+ pitched? Adjust on the next call. Small in-the-moment coaching tends to compound faster than end-of-week reviews.",
+      play: "<strong>Do a mid-shift check-in.</strong> Pull one job apart together: was Priority Items delivered? Was Truck+ pitched? Adjust on the next call. In-the-moment coaching compounds faster than end-of-week reviews.",
       framework: "Scenario 1, Step 4 - Estimate & Price - Rules of the Range. AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
       anchor: {"ref": "Scenario 1, Step 4 - Estimate & Price - Rules of the Range", "name": "Estimate & Price - Rules of the Range", "quote": "Confidence is EVERYTHING. Believe in what you're saying, KNOW YOUR WORTH. Bring ENERGY and EXCITEMENT to the bid. Make it fun and unique for the customer. Memorizing the price list gives you credibility. Read the customer's body language - body language doesn't whisper. Never mention Minimum Charge - customers hear the price they want to hear. Only give the full truck price: 'To fill our truck all the way is $___, we do have 13 different price points to ensure you only pay for the space your items take up on the truck.' Bid the job at what it is and cut the maybes and probablys out. You are the expert. The lowest part of your range is what you think it is. The Assumptive Ask MUST come right after the range is given - no pauses. Replace pain with pleasure - paint the picture of the completed project.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. Right after the bid, it is YOUR job to lead the customer and get things started. Do NOT wait for the 'ok'. Tell them what you are about to do. Give them an estimated time of how long it will take to complete the job, and paint the picture of the completed project. Always make sure to let them know to look for other items or tasks around the house while you're working - utilize the Costco Effect. Examples: 'With everything you have shown me, you are going to be filling up 1/2 - 2/3 of a load. There are items in the basement, backyard and garage; where would you like for us to start?' Or: 'We have an empty truck in the driveway and are ready to get started for you. Would you prefer that we start downstairs or in the backyard?'", "rationale": "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work."},
       anchorSource: "template",
@@ -1344,7 +1669,7 @@
     {
       id: "tm-cp-4", priority: 4, franchiseCode: "cp", name: "Jonathan Meserve", role: "CEL", severity: "medium",
       why: "Composite 99/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. AJS at $608, about $11 short of $619. He's right at the line, which is the trickiest place to coach because the natural pull is to leave it alone. Worth a small conversation before it widens. Truck+ at 9.6% (vs 12.5% std) is another thread worth pulling. Signal sits on 52 resi jobs, so it's a real read.",
-      play: "<strong>Worth Pat catching him in a morning huddle.</strong> Explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD, not as a scorecard, more as a 'what did we learn' conversation.",
+      play: "<strong>Catch him in the morning huddle.</strong> Set an explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD as a 'what did we learn' conversation, not a scorecard.",
       framework: "Scenario 1, Step 4 - Estimate & Price - Rules of the Range. AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
       anchor: {"ref": "Scenario 1, Step 4 - Estimate & Price - Rules of the Range", "name": "Estimate & Price - Rules of the Range", "quote": "Confidence is EVERYTHING. Believe in what you're saying, KNOW YOUR WORTH. Bring ENERGY and EXCITEMENT to the bid. Make it fun and unique for the customer. Memorizing the price list gives you credibility. Read the customer's body language - body language doesn't whisper. Never mention Minimum Charge - customers hear the price they want to hear. Only give the full truck price: 'To fill our truck all the way is $___, we do have 13 different price points to ensure you only pay for the space your items take up on the truck.' Bid the job at what it is and cut the maybes and probablys out. You are the expert. The lowest part of your range is what you think it is. The Assumptive Ask MUST come right after the range is given - no pauses. Replace pain with pleasure - paint the picture of the completed project.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. Right after the bid, it is YOUR job to lead the customer and get things started. Do NOT wait for the 'ok'. Tell them what you are about to do. Give them an estimated time of how long it will take to complete the job, and paint the picture of the completed project. Always make sure to let them know to look for other items or tasks around the house while you're working - utilize the Costco Effect. Examples: 'With everything you have shown me, you are going to be filling up 1/2 - 2/3 of a load. There are items in the basement, backyard and garage; where would you like for us to start?' Or: 'We have an empty truck in the driveway and are ready to get started for you. Would you prefer that we start downstairs or in the backyard?'", "rationale": "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work."},
       anchorSource: "template",
@@ -1353,7 +1678,7 @@
     {
       id: "tm-cp-5", priority: 5, franchiseCode: "cp", name: "Darien Koziarski", role: "CSL", severity: "medium",
       why: "Composite 100/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Truck+ at 7.3% (vs 12.5% std) is another thread worth pulling. Signal sits on 41 resi jobs, so it's a real read.",
-      play: "<strong>Worth Pat catching him in a morning huddle.</strong> Explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD, not as a scorecard, more as a 'what did we learn' conversation.",
+      play: "<strong>Catch him in the morning huddle.</strong> Set an explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD as a 'what did we learn' conversation, not a scorecard.",
       framework: "Scenario 1, Step 4 - Estimate & Price - Rules of the Range. AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
       anchor: {"ref": "Scenario 1, Step 4 - Estimate & Price - Rules of the Range", "name": "Estimate & Price - Rules of the Range", "quote": "Confidence is EVERYTHING. Believe in what you're saying, KNOW YOUR WORTH. Bring ENERGY and EXCITEMENT to the bid. Make it fun and unique for the customer. Memorizing the price list gives you credibility. Read the customer's body language - body language doesn't whisper. Never mention Minimum Charge - customers hear the price they want to hear. Only give the full truck price: 'To fill our truck all the way is $___, we do have 13 different price points to ensure you only pay for the space your items take up on the truck.' Bid the job at what it is and cut the maybes and probablys out. You are the expert. The lowest part of your range is what you think it is. The Assumptive Ask MUST come right after the range is given - no pauses. Replace pain with pleasure - paint the picture of the completed project.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. Right after the bid, it is YOUR job to lead the customer and get things started. Do NOT wait for the 'ok'. Tell them what you are about to do. Give them an estimated time of how long it will take to complete the job, and paint the picture of the completed project. Always make sure to let them know to look for other items or tasks around the house while you're working - utilize the Costco Effect. Examples: 'With everything you have shown me, you are going to be filling up 1/2 - 2/3 of a load. There are items in the basement, backyard and garage; where would you like for us to start?' Or: 'We have an empty truck in the driveway and are ready to get started for you. Would you prefer that we start downstairs or in the backyard?'", "rationale": "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work."},
       anchorSource: "template",
@@ -1364,7 +1689,7 @@
     {
       id: "tm-ct-1", priority: 1, franchiseCode: "ct", name: "Kenneth Johnson", role: "CSL", severity: "urgent",
       why: "Composite at 67. Not a fire, more like a small leak. Worth catching now before it widens. Complaint rate at 4.20%, which is 3.2x our 1.30% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Worth noting AJS is also under, at $507 ($112 below $619). NPS at 75% adds to the customer-side signal. 38 resi jobs of data behind it.",
-      play: "<strong>Worth a short conversation with Larry about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
+      play: "<strong>Open with what he's hearing from customers.</strong> The gap between intent and impact is invisible from inside the truck. The ask: what would he change if he could rerun the last shift?",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD + Power Questions", "secondaryName": "Relevant Rapport - FORD + Power Questions", "secondaryQuote": "Personal rapport: making a friend with the customer. FORD - Family, Occupation, Recreation, Dreams. Relevant rapport: identifying important information about the customer's project and goal. Specific information about the items, their time frame, quality, or reasons for needing junk removal. The purpose is to lead to more effective communication and collaboration by achieving MORE for the customer. Example questions to use on every job: 'How long has this stuff been here?' 'What are you planning on doing with the space once we get these items removed?' 'Are there any items of sentimental value or importance that we should handle with extra care?' 'What were you hoping to accomplish today?' 'What type of project are we working on today?'", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       anchorSource: "template",
@@ -1373,7 +1698,7 @@
     {
       id: "tm-ct-2", priority: 2, franchiseCode: "ct", name: "Brendan Chicano", role: "CSL", severity: "high",
       why: "Score 74/100. Close enough to the line that one focused habit shift could move it meaningfully in two weeks. Complaints at 3.70% (standard 1.30%). At this volume, even a couple of negative experiences can move the number. Worth checking whether they cluster around a time of day or job type. Worth noting AJS is also under, at $546 ($73 below $619). NPS at 70% adds to the customer-side signal. This is across 71 resi jobs, not a small-sample story.",
-      play: "<strong>Jakarie could ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service usually starts costing. Watch Punctual, Etiquette, Memorable in real time and debrief same-day. Fresh signal lands better than next-morning notes.",
+      play: "<strong>Ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service starts costing. Watch Punctual, Etiquette, Memorable in real time. Debrief same-day so the signal stays fresh.",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD + Power Questions", "secondaryName": "Relevant Rapport - FORD + Power Questions", "secondaryQuote": "Personal rapport: making a friend with the customer. FORD - Family, Occupation, Recreation, Dreams. Relevant rapport: identifying important information about the customer's project and goal. Specific information about the items, their time frame, quality, or reasons for needing junk removal. The purpose is to lead to more effective communication and collaboration by achieving MORE for the customer. Example questions to use on every job: 'How long has this stuff been here?' 'What are you planning on doing with the space once we get these items removed?' 'Are there any items of sentimental value or importance that we should handle with extra care?' 'What were you hoping to accomplish today?' 'What type of project are we working on today?'", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       anchorSource: "template",
@@ -1382,7 +1707,7 @@
     {
       id: "tm-ct-3", priority: 3, franchiseCode: "ct", name: "Joel Azar", role: "CSL", severity: "high",
       why: "Composite at 78. Not a fire, more like a small leak. Worth catching now before it widens. Complaint rate sitting at 3.60%, about 2.8x our 1.30% standard. Not alarm-level yet, but the trend is the part to pay attention to. Sometimes it's pace, sometimes tone, sometimes the close that lands wrong. Worth noting AJS is also under, at $555 ($64 below $619). 69 resi jobs of data behind it.",
-      play: "<strong>Worth a short conversation with Tim about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
+      play: "<strong>Open with what he's hearing from customers.</strong> The gap between intent and impact is invisible from inside the truck. The ask: what would he change if he could rerun the last shift?",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD + Power Questions", "secondaryName": "Relevant Rapport - FORD + Power Questions", "secondaryQuote": "Personal rapport: making a friend with the customer. FORD - Family, Occupation, Recreation, Dreams. Relevant rapport: identifying important information about the customer's project and goal. Specific information about the items, their time frame, quality, or reasons for needing junk removal. The purpose is to lead to more effective communication and collaboration by achieving MORE for the customer. Example questions to use on every job: 'How long has this stuff been here?' 'What are you planning on doing with the space once we get these items removed?' 'Are there any items of sentimental value or importance that we should handle with extra care?' 'What were you hoping to accomplish today?' 'What type of project are we working on today?'", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       anchorSource: "template",
@@ -1391,7 +1716,7 @@
     {
       id: "tm-ct-4", priority: 4, franchiseCode: "ct", name: "Martin Dinkins", role: "CSL", severity: "high",
       why: "Composite 82/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Reviews capture at 7.1%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $513 ($106 below $619). Truck+ at 3.6% (vs 10.0% std) is another thread worth pulling. Signal sits on 28 resi jobs, so it's a real read.",
-      play: "<strong>Larry could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
+      play: "<strong>Ride along and focus on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coach the words in the moment, not after the shift.",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 3.1, Step 5 - Exceptional Receipt - Positive Ending", "secondaryName": "Exceptional Receipt - Positive Ending", "secondaryQuote": "A thorough receipt demonstrates professionalism and attention to detail. Include a 'Thank You' with the team's names listed, a detailed breakdown of the load size, items removed, additional fees, and discounts. NO STANDARD JUNK REMOVAL on the receipt. Transparent pricing especially matters when the spouse is not on site. Example: '1/2 Load (1) - Reclining sofa, donatable loveseat, donatable kitchen table, 4 chairs, 2 television, 2 boxes, 1 lamp. E-Waste (2) - recycling fees for 2 tube tvs. Discount (1) - $25 off - door hanger. Thank you for using our service today! Alex/Bryce.'", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       anchorSource: "template",
@@ -1400,7 +1725,7 @@
     {
       id: "tm-ct-5", priority: 5, franchiseCode: "ct", name: "Robin Bissoon", role: "CEL", severity: "high",
       why: "Score 83/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Complaints at 3.20% (standard 1.30%). At this volume, even a couple of negative experiences can move the number. Worth checking whether they cluster around a time of day or job type. NPS at 82% adds to the customer-side signal. 29 resi jobs of data behind it.",
-      play: "<strong>Worth a short conversation with Jakarie about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
+      play: "<strong>Open with what he's hearing from customers.</strong> The gap between intent and impact is invisible from inside the truck. The ask: what would he change if he could rerun the last shift?",
       framework: "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
       anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda - Dedication Script", "name": "5 Star Service Agenda - Dedication Script", "quote": "This should be presented naturally and NOT sound robotic. 'Good morning Mr. or Ms. Last Name, my name is ____, this is my partner ____ and we would like to thank you for providing us the opportunity to serve you today! If it is ok with you, we would love to walk you through our Dedication to 5 Star Service Agenda. First, we will start by doing a WALK THROUGH of your property... We will then complete a THOROUGH EVALUATION of the items to assess the load size... We will then provide you with a FREE NO OBLIGATION ESTIMATE. As soon as we receive your blessing of APPROVAL, we have an empty truck parked out front and we are fully equipped and READY to get the job done for you TODAY! The last thing we want to guarantee you is that we are dedicated to providing you with a 5 star experience. If at any time you feel as if you are receiving anything less than a 5 star experience, please DO NOT hesitate to pull me aside. My name is ____ and I will be the lead representative on behalf of our company today.' Roll straight into Relevant Rapport.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD + Power Questions", "secondaryName": "Relevant Rapport - FORD + Power Questions", "secondaryQuote": "Personal rapport: making a friend with the customer. FORD - Family, Occupation, Recreation, Dreams. Relevant rapport: identifying important information about the customer's project and goal. Specific information about the items, their time frame, quality, or reasons for needing junk removal. The purpose is to lead to more effective communication and collaboration by achieving MORE for the customer. Example questions to use on every job: 'How long has this stuff been here?' 'What are you planning on doing with the space once we get these items removed?' 'Are there any items of sentimental value or importance that we should handle with extra care?' 'What were you hoping to accomplish today?' 'What type of project are we working on today?'", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       anchorSource: "template",
@@ -1438,11 +1763,77 @@
     catch (e) { return false; }
   }
 
-  // ===== DATE DISPLAY =====
+  // ===== DATE & HERO =====
   function setTodayDate() {
     const today = new Date();
     const opts = { weekday: 'long', month: 'long', day: 'numeric' };
     document.getElementById('today-date').textContent = today.toLocaleDateString('en-US', opts);
+
+    const hour = today.getHours();
+    let greet = 'Good evening.';
+    if (hour < 12) greet = 'Good morning.';
+    else if (hour < 17) greet = 'Good afternoon.';
+    document.getElementById('hero-greeting').textContent = greet;
+  }
+
+  function renderHeroStats() {
+    const total = TEAMMATES.length;
+    const urgent = TEAMMATES.filter(t => t.severity === 'urgent').length;
+    const high   = TEAMMATES.filter(t => t.severity === 'high').length;
+    let coached = 0;
+    for (const c of TEAMMATES) {
+      const s = safeGet(c.id);
+      if (s && s.completed) coached++;
+    }
+    const remaining = total - coached;
+    const scores = TEAMMATES.map(c => {
+      const m = (c.metrics || []).find(x => x.l === 'Score');
+      if (!m) return null;
+      const n = parseInt(String(m.v).split('/')[0], 10);
+      return Number.isFinite(n) ? n : null;
+    }).filter(v => v !== null);
+    const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+    const lowest = scores.length ? Math.min(...scores) : null;
+
+    const stats = document.getElementById('hero-stats');
+    stats.innerHTML = `
+      <div class="hero-stat hero-stat-${remaining > 0 ? 'open' : 'done'}">
+        <div class="hero-stat-num">${remaining}</div>
+        <div class="hero-stat-label">left to coach</div>
+      </div>
+      <div class="hero-stat hero-stat-urgent">
+        <div class="hero-stat-num">${urgent}</div>
+        <div class="hero-stat-label">urgent</div>
+      </div>
+      <div class="hero-stat hero-stat-high">
+        <div class="hero-stat-num">${high}</div>
+        <div class="hero-stat-label">high</div>
+      </div>
+      ${lowest !== null ? `
+      <div class="hero-stat hero-stat-score">
+        <div class="hero-stat-num">${lowest}<span class="hero-stat-suffix">/100</span></div>
+        <div class="hero-stat-label">lowest score</div>
+      </div>` : ''}
+      ${avg !== null ? `
+      <div class="hero-stat hero-stat-score">
+        <div class="hero-stat-num">${avg}<span class="hero-stat-suffix">/100</span></div>
+        <div class="hero-stat-label">avg score</div>
+      </div>` : ''}
+    `;
+
+    // Update the headline copy based on state
+    const line = document.getElementById('hero-line');
+    const sub  = document.getElementById('hero-sub');
+    if (remaining === 0) {
+      line.textContent = 'You did it.';
+      sub.textContent = `All ${total} teammates coached today. Take the win, regroup tomorrow.`;
+    } else if (urgent > 0) {
+      line.textContent = `${urgent} urgent ${urgent === 1 ? 'teammate needs' : 'teammates need'} attention today.`;
+      sub.textContent = 'Start with the lowest scores. The data shows what to look at, the training shows what to say.';
+    } else {
+      line.textContent = `${remaining} ${remaining === 1 ? 'conversation' : 'conversations'} to have.`;
+      sub.textContent = 'No urgent fires today. Use the time for the smaller course-corrections that compound.';
+    }
   }
 
   // ===== RENDER =====
@@ -1523,6 +1914,7 @@
           <div class="action-row">
             <span class="save-status" id="save-${c.id}">Saved</span>
             <span class="meta-info">${state.completed ? `Coached · ${state.completedAt || ''}` : 'Mark complete after the conversation'}</span>
+            <button class="ask-ai-btn" data-id="${c.id}" title="Open AI Coach for this teammate">💬 Ask AI Coach</button>
             <button class="complete-btn ${state.completed ? 'completed' : ''}" data-id="${c.id}">
               ${state.completed ? '✓ Completed' : 'Mark Coached'}
             </button>
@@ -1620,6 +2012,7 @@
     document.getElementById('global-progress-text').textContent = `${allDone} of ${TEAMMATES.length} coached`;
     document.getElementById('global-progress-fill').style.width = `${(allDone / TEAMMATES.length) * 100}%`;
 
+    renderHeroStats();
     bindEvents();
   }
 
@@ -1657,9 +2050,16 @@
       });
     });
 
+    document.querySelectorAll('.ask-ai-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openChat(btn.dataset.id);
+      });
+    });
+
     document.querySelectorAll('.franchise-header').forEach(header => {
       header.addEventListener('click', (e) => {
-        if (e.target.closest('.complete-btn') || e.target.closest('.notes-area')) return;
+        if (e.target.closest('.complete-btn') || e.target.closest('.ask-ai-btn') || e.target.closest('.notes-area')) return;
         const code = header.dataset.toggle;
         if (currentFilter === 'all') {
           if (expandedInAll.has(code)) expandedInAll.delete(code);
@@ -1705,6 +2105,160 @@
     if (!confirm('Reset all coaching for today? Clears completion + notes for all 20 teammates on this device.')) return;
     for (const c of TEAMMATES) safeDelete(c.id);
     render();
+  });
+
+  // ===== AI CHAT =====
+  // Paste your deployed Cloudflare Worker URL here once you deploy it.
+  // See worker/DEPLOY.md for the 5-minute walkthrough.
+  const CHAT_WORKER_URL = "";
+
+  const SUGGESTED_PROMPTS = [
+    "Give me a 60-second 1:1 script.",
+    "What's the single biggest leverage point for this teammate?",
+    "Write 3 questions I can ask to surface what's behind the numbers.",
+    "Compare this to a typical TM at this score. What's different?",
+    "If I only have 5 minutes today, what should I focus on?",
+  ];
+
+  let CHAT_TM = null;          // current teammate object
+  let CHAT_HISTORY = [];       // [{role, text}, ...]
+  let CHAT_BUSY = false;
+
+  function franchiseNameByCode(code) {
+    const f = FRANCHISES.find(x => x.code === code);
+    return f ? f.name : code;
+  }
+
+  function openChat(tmId) {
+    const tm = TEAMMATES.find(t => t.id === tmId);
+    if (!tm) return;
+    CHAT_TM = { ...tm, franchiseName: franchiseNameByCode(tm.franchiseCode) };
+    CHAT_HISTORY = [];
+
+    document.getElementById('chat-tm-name').textContent =
+      `${CHAT_TM.name} · ${CHAT_TM.role} · ${CHAT_TM.franchiseName}`;
+    renderSuggestions();
+    renderThread();
+    const overlay = document.getElementById('chat-overlay');
+    overlay.hidden = false;
+
+    const fn = document.getElementById('chat-footnote');
+    if (!CHAT_WORKER_URL) {
+      fn.classList.add('config-needed');
+      fn.textContent = 'Chat is not configured yet. Deploy the worker (see worker/DEPLOY.md) and paste its URL into CHAT_WORKER_URL near the bottom of index.html.';
+    } else {
+      fn.classList.remove('config-needed');
+      fn.textContent = 'Powered by Claude. Replies are based on this teammate\'s data and CSL Scenario training material.';
+    }
+    setTimeout(() => document.getElementById('chat-input').focus(), 80);
+  }
+
+  function closeChat() {
+    document.getElementById('chat-overlay').hidden = true;
+    CHAT_TM = null;
+    CHAT_HISTORY = [];
+  }
+
+  function renderSuggestions() {
+    const wrap = document.getElementById('chat-suggestions');
+    wrap.innerHTML = SUGGESTED_PROMPTS
+      .map(p => `<button class="chat-chip" data-prompt="${p.replace(/"/g, '&quot;')}">${p}</button>`)
+      .join('');
+    wrap.querySelectorAll('.chat-chip').forEach(b => {
+      b.addEventListener('click', () => {
+        document.getElementById('chat-input').value = b.dataset.prompt;
+        document.getElementById('chat-input').focus();
+      });
+    });
+  }
+
+  function renderThread() {
+    const t = document.getElementById('chat-thread');
+    if (CHAT_HISTORY.length === 0) {
+      t.innerHTML = `
+        <div class="chat-msg chat-msg-bot">
+Hi. Ask anything about ${CHAT_TM ? CHAT_TM.name : 'this teammate'} and I'll answer using their performance data plus the CSL Scenario training material.
+
+Try one of the prompts above, or write your own.
+        </div>`;
+      return;
+    }
+    t.innerHTML = CHAT_HISTORY
+      .map(m => `<div class="chat-msg chat-msg-${m.role === 'user' ? 'user' : (m.role === 'error' ? 'error' : 'bot')}">${escapeHtml(m.text)}</div>`)
+      .join('');
+    t.scrollTop = t.scrollHeight;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  async function sendChat(question) {
+    if (CHAT_BUSY || !CHAT_TM) return;
+    if (!question.trim()) return;
+
+    CHAT_HISTORY.push({ role: 'user', text: question.trim() });
+    CHAT_HISTORY.push({ role: 'bot', text: 'Thinking...' });
+    renderThread();
+
+    if (!CHAT_WORKER_URL) {
+      CHAT_HISTORY.pop();
+      CHAT_HISTORY.push({ role: 'error', text: 'Chat worker not configured. See worker/DEPLOY.md to deploy the proxy and paste the URL into CHAT_WORKER_URL in index.html.' });
+      renderThread();
+      return;
+    }
+
+    CHAT_BUSY = true;
+    document.getElementById('chat-send').disabled = true;
+
+    try {
+      const r = await fetch(CHAT_WORKER_URL, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          teammate: CHAT_TM,
+          history: CHAT_HISTORY.slice(0, -1),  // exclude the "Thinking..." placeholder
+          question: question.trim(),
+        }),
+      });
+      const data = await r.json();
+      CHAT_HISTORY.pop();   // remove "Thinking..."
+      if (!r.ok || data.error) {
+        CHAT_HISTORY.push({ role: 'error', text: data.error || `Request failed (${r.status}).` });
+      } else {
+        CHAT_HISTORY.push({ role: 'bot', text: data.reply || '(no reply)' });
+      }
+    } catch (e) {
+      CHAT_HISTORY.pop();
+      CHAT_HISTORY.push({ role: 'error', text: 'Network error: ' + e.message });
+    } finally {
+      CHAT_BUSY = false;
+      document.getElementById('chat-send').disabled = false;
+      renderThread();
+    }
+  }
+
+  document.getElementById('chat-close').addEventListener('click', closeChat);
+  document.getElementById('chat-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'chat-overlay') closeChat();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !document.getElementById('chat-overlay').hidden) closeChat();
+  });
+  document.getElementById('chat-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const inp = document.getElementById('chat-input');
+    const q = inp.value;
+    inp.value = '';
+    sendChat(q);
+  });
+  document.getElementById('chat-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      document.getElementById('chat-form').requestSubmit();
+    }
   });
 
   // ===== INIT =====
