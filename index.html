@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LAST_UPDATED: 2026-04-27T04:09:40Z -->
+<!-- LAST_UPDATED: 2026-04-27T04:21:45Z -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -677,6 +677,76 @@
     margin-bottom: 3px;
   }
 
+  /* ===== ANCHOR BLOCK (training-grounded) ===== */
+  .anchor-block {
+    background: linear-gradient(180deg, rgba(96,165,250,0.08), rgba(96,165,250,0.04));
+    border: 1px solid rgba(96,165,250,0.25);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .anchor-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .anchor-label {
+    font-size: 9px;
+    color: #60a5fa;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .anchor-ref {
+    font-size: 11px;
+    color: var(--text);
+    font-weight: 600;
+    background: rgba(96,165,250,0.12);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .anchor-rationale {
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .anchor-quote {
+    background: var(--bg-section);
+    border-left: 3px solid #60a5fa;
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+  }
+  .anchor-quote-name {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .anchor-quote-text {
+    color: var(--text);
+    font-style: italic;
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  .anchor-secondary {
+    margin-top: 8px;
+  }
+  .anchor-secondary summary {
+    cursor: pointer;
+    font-size: 11px;
+    color: #60a5fa;
+    list-style: none;
+    user-select: none;
+  }
+  .anchor-secondary summary::-webkit-details-marker { display: none; }
+  .anchor-secondary[open] summary { margin-bottom: 6px; }
+
   .card-actions {
     border-top: 1px solid var(--border);
     padding-top: 12px;
@@ -1107,35 +1177,40 @@
       id: "tm-bno-1", priority: 1, franchiseCode: "bno", name: "Deven Okowuga", role: "CEL", severity: "urgent",
       why: "Score 63/100. Close enough to the line that one focused habit shift could move it meaningfully in two weeks. Reviews capture at 7.5%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $438 ($287 below $725). NPS at 29% adds to the customer-side signal. Signal sits on 40 resi jobs, so it's a real read.",
       play: "<strong>Richard could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
-      framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       metrics: [{ l: "Score", v: "63/100", c: "bad", tip: "Adj AJS: 60/100 \u00d7 45% = 27.5\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 32/100 \u00d7 14% = 4.3\nReviews: 30/100 \u00d7 14% = 4.1\nComposite: 63/100" }, { l: "Adj AJS", v: "$438", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "29%", c: "bad" }, { l: "Reviews", v: "7.5%", c: "bad" }]
     },
     {
       id: "tm-bno-2", priority: 2, franchiseCode: "bno", name: "Nathan Kapala", role: "CSL", severity: "high",
       why: "At 70/100. He's not far off, which is the trickiest place to coach because the natural pull is to leave it alone. Complaint rate at 5.40%, which is 3.6x our 1.50% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Worth noting AJS is also under, at $656 ($69 below $725). Reviews capture 14.6% trails the goal too. 48 resi jobs of data behind it.",
       play: "<strong>Worth a short conversation with Tyler about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
-      framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD", "secondaryName": "Relevant Rapport - FORD", "secondaryQuote": "Personal rapport with FORD: Family, Occupation, Recreation, Dreams. Relevant rapport about the project: how long has this been here, what are you planning for the space, what were you hoping to accomplish today?", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       metrics: [{ l: "Score", v: "70/100", c: "bad", tip: "Adj AJS: 91/100 \u00d7 45% = 41.1\nComplaints: 28/100 \u00d7 27% = 7.6\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 58/100 \u00d7 14% = 8.0\nComposite: 70/100" }, { l: "Adj AJS", v: "$656", c: "bad" }, { l: "Complaints", v: "5.40%", c: "bad" }, { l: "NPS", v: "91%", c: "good" }, { l: "Reviews", v: "14.6%", c: "bad" }]
     },
     {
       id: "tm-bno-3", priority: 3, franchiseCode: "bno", name: "Armani Pabon", role: "CSL", severity: "high",
       why: "Score 71/100. Close enough to the line that one focused habit shift could move it meaningfully in two weeks. Complaint rate at 25.00%, which is 16.7x our 1.50% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Reviews capture 18.5% trails the goal too. Signal sits on 27 resi jobs, so it's a real read.",
       play: "<strong>Worth Richard sitting down with him before next shift.</strong> Pull the recent detractors and read them together, less as accountability and more as curiosity. The pattern tends to surface on its own. Pick one thing to focus on for the week, not three.",
-      framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD", "secondaryName": "Relevant Rapport - FORD", "secondaryQuote": "Personal rapport with FORD: Family, Occupation, Recreation, Dreams. Relevant rapport about the project: how long has this been here, what are you planning for the space, what were you hoping to accomplish today?", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       metrics: [{ l: "Score", v: "71/100", c: "bad", tip: "Adj AJS: 100/100 \u00d7 45% = 45.5\nComplaints: 6/100 \u00d7 27% = 1.6\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 74/100 \u00d7 14% = 10.1\nComposite: 71/100" }, { l: "Adj AJS", v: "$1,315", c: "good" }, { l: "Complaints", v: "25.00%", c: "bad" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "18.5%", c: "bad" }]
     },
     {
       id: "tm-bno-4", priority: 4, franchiseCode: "bno", name: "Jeron Feaster", role: "CSL", severity: "high",
       why: "Composite 72/100. One area is doing most of the work pulling the score down. Zeroing in there is more productive than broadening. Google Reviews capture at 8.8% (goal 25%). When the capture rate is the lagging metric, it's almost always the same root cause: the ask isn't happening on the truck, or it's happening so quietly the customer doesn't notice it. Worth noting AJS is also under, at $458 ($267 below $725). NPS at 75% adds to the customer-side signal. 34 resi jobs of data behind it.",
       play: "<strong>Worth a 15-minute huddle with Tyler on the review ask itself.</strong> Practice the words out loud, in his voice. Most people drop the ask because the script feels stiff, not because they don't want to. Track on paper for a week to see what shifts.",
-      framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       metrics: [{ l: "Score", v: "72/100", c: "bad", tip: "Adj AJS: 63/100 \u00d7 45% = 28.7\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 83/100 \u00d7 14% = 11.4\nReviews: 35/100 \u00d7 14% = 4.8\nComposite: 72/100" }, { l: "Adj AJS", v: "$458", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "75%", c: "bad" }, { l: "Reviews", v: "8.8%", c: "bad" }]
     },
     {
       id: "tm-bno-5", priority: 5, franchiseCode: "bno", name: "Giovani Memeus", role: "CSL", severity: "high",
       why: "Composite at 72. Not a fire, more like a small leak. Worth catching now before it widens. Complaints at 8.30%, well past the 1.50% mark. The number is loud enough that the answer is probably in the actual feedback, not in another sales conversation. Worth pulling the recent ones and reading them together. Worth noting AJS is also under, at $641 ($84 below $725). This is across 57 resi jobs, not a small-sample story.",
       play: "<strong>Richard could ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service usually starts costing. Watch Punctual, Etiquette, Memorable in real time and debrief same-day. Fresh signal lands better than next-morning notes.",
-      framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD", "secondaryName": "Relevant Rapport - FORD", "secondaryQuote": "Personal rapport with FORD: Family, Occupation, Recreation, Dreams. Relevant rapport about the project: how long has this been here, what are you planning for the space, what were you hoping to accomplish today?", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       metrics: [{ l: "Score", v: "72/100", c: "bad", tip: "Adj AJS: 88/100 \u00d7 45% = 40.2\nComplaints: 18/100 \u00d7 27% = 4.9\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 72/100" }, { l: "Adj AJS", v: "$641", c: "bad" }, { l: "Complaints", v: "8.30%", c: "bad" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "42.1%", c: "good" }]
     },
 
@@ -1144,35 +1219,40 @@
       id: "tm-bso-1", priority: 1, franchiseCode: "bso", name: "Jadiel Diaz", role: "CEL", severity: "high",
       why: "Composite at 74. Not a fire, more like a small leak. Worth catching now before it widens. Reviews capture at 13.9%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $494 ($231 below $725). NPS at 57% adds to the customer-side signal. This is across 36 resi jobs, not a small-sample story.",
       play: "<strong>Tommy could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
-      framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       metrics: [{ l: "Score", v: "74/100", c: "bad", tip: "Adj AJS: 68/100 \u00d7 45% = 31.0\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 63/100 \u00d7 14% = 8.7\nReviews: 56/100 \u00d7 14% = 7.6\nComposite: 74/100" }, { l: "Adj AJS", v: "$494", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "57%", c: "bad" }, { l: "Reviews", v: "13.9%", c: "bad" }]
     },
     {
       id: "tm-bso-2", priority: 2, franchiseCode: "bso", name: "Dawson Guidetti", role: "CSL", severity: "high",
       why: "At 80/100, this is light-touch maintenance coaching. One area to nudge, nothing to redesign. Reviews capture at 10.8%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $540 ($185 below $725). NPS at 88% adds to the customer-side signal. This is across 111 resi jobs, not a small-sample story.",
       play: "<strong>Kendall could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
-      framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       metrics: [{ l: "Score", v: "80/100", tip: "Adj AJS: 75/100 \u00d7 45% = 33.9\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 98/100 \u00d7 14% = 13.4\nReviews: 43/100 \u00d7 14% = 5.9\nComposite: 80/100" }, { l: "Adj AJS", v: "$540", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "88%", c: "bad" }, { l: "Reviews", v: "10.8%", c: "bad" }]
     },
     {
       id: "tm-bso-3", priority: 3, franchiseCode: "bso", name: "Tyler Andrade", role: "CSL", severity: "high",
       why: "Score 80/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Reviews capture at 10.8%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $540 ($185 below $725). NPS at 88% adds to the customer-side signal. 111 resi jobs of data behind it.",
       play: "<strong>Tommy could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
-      framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       metrics: [{ l: "Score", v: "80/100", tip: "Adj AJS: 75/100 \u00d7 45% = 33.9\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 98/100 \u00d7 14% = 13.4\nReviews: 43/100 \u00d7 14% = 5.9\nComposite: 80/100" }, { l: "Adj AJS", v: "$540", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "88%", c: "bad" }, { l: "Reviews", v: "10.8%", c: "bad" }]
     },
     {
       id: "tm-bso-4", priority: 4, franchiseCode: "bso", name: "Logan Ballou", role: "CEL", severity: "high",
       why: "Score 82/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Adjusted Resi AJS is sitting at $481, which is roughly $244 under our $725 mark. When AJS slides this far, it's almost always something in the close softening, not effort. Worth listening for whether the assumptive ask is still happening. Reviews capture 20.0% trails the goal too. Truck+ at 8.3% (vs 10.0% std) is another thread worth pulling. 60 resi jobs of data behind it.",
       play: "<strong>Worth Kendall carving out a 1:1 today.</strong> Walk through 3 recent shifts together, less as a PIP framing and more as 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to $725.",
-      framework: "CSL Performance Accountability: Level 1 PIP territory. Below 66% Resi AJS for one month triggers a documented 30-day plan, but worth a coaching conversation first.",
+      framework: "Scenario 1, Step 4 - Estimate & Price - Rules of the Range. AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
+      anchor: {"ref": "Scenario 1, Step 4 - Estimate & Price - Rules of the Range", "name": "Estimate & Price - Rules of the Range", "quote": "Confidence is EVERYTHING. Memorize the price list. Bid the job at what it is and cut the maybes and probablys out. The lowest part of your range is what you think it is. Never mention Min Charge. Only give the full truck price.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work."},
       metrics: [{ l: "Score", v: "82/100", tip: "Adj AJS: 66/100 \u00d7 45% = 30.1\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 80/100 \u00d7 14% = 10.9\nComposite: 82/100" }, { l: "Adj AJS", v: "$481", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "20.0%", c: "bad" }]
     },
     {
       id: "tm-bso-5", priority: 5, franchiseCode: "bso", name: "Nicholas Strojny", role: "CSL", severity: "high",
       why: "Score 84/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Adjusted Resi AJS is sitting at $512, which is roughly $213 under our $725 mark. When AJS slides this far, it's almost always something in the close softening, not effort. Worth listening for whether the assumptive ask is still happening. Reviews capture 20.0% trails the goal too. Truck+ at 6.2% (vs 10.0% std) is another thread worth pulling. 65 resi jobs of data behind it.",
       play: "<strong>Worth Tommy carving out a 1:1 today.</strong> Walk through 3 recent shifts together, less as a PIP framing and more as 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to $725.",
-      framework: "CSL Performance Accountability: Level 1 PIP territory. Below 66% Resi AJS for one month triggers a documented 30-day plan, but worth a coaching conversation first.",
+      framework: "Scenario 1, Step 4 - Estimate & Price - Rules of the Range. AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
+      anchor: {"ref": "Scenario 1, Step 4 - Estimate & Price - Rules of the Range", "name": "Estimate & Price - Rules of the Range", "quote": "Confidence is EVERYTHING. Memorize the price list. Bid the job at what it is and cut the maybes and probablys out. The lowest part of your range is what you think it is. Never mention Min Charge. Only give the full truck price.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work."},
       metrics: [{ l: "Score", v: "84/100", tip: "Adj AJS: 71/100 \u00d7 45% = 32.1\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 80/100 \u00d7 14% = 10.9\nComposite: 84/100" }, { l: "Adj AJS", v: "$512", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "92%", c: "good" }, { l: "Reviews", v: "20.0%", c: "bad" }]
     },
 
@@ -1181,35 +1261,40 @@
       id: "tm-cp-1", priority: 1, franchiseCode: "cp", name: "Joshua Meserve", role: "CSL", severity: "medium",
       why: "Composite 90/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Adj Resi AJS $485. The gap is closeable in a single shift if it's a confidence dip. Worth asking what's been on his mind. Truck+ at 3.3% (vs 12.5% std) is another thread worth pulling. Signal sits on 60 resi jobs, so it's a real read.",
       play: "<strong>Pat pre-shift today, then a shadow tomorrow.</strong> Listen specifically for whether the assumptive ask is still landing. AJS dips at this scale almost always live in the close, not in effort or knowledge.",
-      framework: "CSL Performance Accountability: Level 1 PIP territory. Below 66% Resi AJS for one month triggers a documented 30-day plan, but worth a coaching conversation first.",
+      framework: "Scenario 3.1, Step 4 - Priority Items + Roll-Over Pricing. Truck+ rate is the canary on AJS health. If the seed isn't being planted on the Call Ahead, the load won't grow on site.",
+      anchor: {"ref": "Scenario 3.1, Step 4 - Priority Items + Roll-Over Pricing", "name": "Priority Items + Roll-Over Pricing", "quote": "When budget is the constraint, get something on the truck now. Customer pays what they can today for a partial load. Within 30 days they finish at the same volume mark.", "secondaryRef": "Scenario 1, Step 5 - Costco Effect", "secondaryName": "Costco Effect", "secondaryQuote": "While we're working, ask the customer to look around for other items or tasks. They forget what's still on the list until you remind them.", "rationale": "Truck+ rate is the canary on AJS health. If the seed isn't being planted on the Call Ahead, the load won't grow on site."},
       metrics: [{ l: "Score", v: "90/100", tip: "Adj AJS: 78/100 \u00d7 45% = 35.6\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 90/100" }, { l: "Adj AJS", v: "$485", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "48.3%", c: "good" }]
     },
     {
       id: "tm-cp-2", priority: 2, franchiseCode: "cp", name: "Derek Lee", role: "CSL", severity: "medium",
       why: "Composite 96/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Reviews capture at 17.2%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Signal sits on 64 resi jobs, so it's a real read.",
       play: "<strong>Pat could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
-      framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       metrics: [{ l: "Score", v: "96/100", c: "good", tip: "Adj AJS: 100/100 \u00d7 45% = 45.5\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 69/100 \u00d7 14% = 9.4\nComposite: 96/100" }, { l: "Adj AJS", v: "$737", c: "good" }, { l: "Complaints", v: "1.50%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "17.2%", c: "bad" }]
     },
     {
       id: "tm-cp-3", priority: 3, franchiseCode: "cp", name: "Jason Trostle", role: "CEL", severity: "medium",
       why: "At 97/100, this is light-touch maintenance coaching. One area to nudge, nothing to redesign. AJS at $577, about $42 short of $619. He's right at the line, which is the trickiest place to coach because the natural pull is to leave it alone. Worth a small conversation before it widens. Truck+ at 7.1% (vs 12.5% std) is another thread worth pulling. This is across 56 resi jobs, not a small-sample story.",
       play: "<strong>Pat could do a mid-shift check-in.</strong> Pull one job apart together: was Priority Items delivered? Was Truck+ pitched? Adjust on the next call. Small in-the-moment coaching tends to compound faster than end-of-week reviews.",
-      framework: "CSL Scenario 3.1: Priority Items + Estimate & Price. AJS dips at this scale usually live in the close, not in the work itself.",
+      framework: "Scenario 1, Step 4 - Estimate & Price - Rules of the Range. AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
+      anchor: {"ref": "Scenario 1, Step 4 - Estimate & Price - Rules of the Range", "name": "Estimate & Price - Rules of the Range", "quote": "Confidence is EVERYTHING. Memorize the price list. Bid the job at what it is and cut the maybes and probablys out. The lowest part of your range is what you think it is. Never mention Min Charge. Only give the full truck price.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work."},
       metrics: [{ l: "Score", v: "97/100", c: "good", tip: "Adj AJS: 93/100 \u00d7 45% = 42.4\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 97/100" }, { l: "Adj AJS", v: "$577", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "44.6%", c: "good" }]
     },
     {
       id: "tm-cp-4", priority: 4, franchiseCode: "cp", name: "Jonathan Meserve", role: "CEL", severity: "medium",
       why: "Composite 99/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. AJS at $608, about $11 short of $619. He's right at the line, which is the trickiest place to coach because the natural pull is to leave it alone. Worth a small conversation before it widens. Truck+ at 9.6% (vs 12.5% std) is another thread worth pulling. Signal sits on 52 resi jobs, so it's a real read.",
       play: "<strong>Worth Pat catching him in a morning huddle.</strong> Explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD, not as a scorecard, more as a 'what did we learn' conversation.",
-      framework: "CSL Scenario 3.1: Priority Items + Estimate & Price. AJS dips at this scale usually live in the close, not in the work itself.",
+      framework: "Scenario 1, Step 4 - Estimate & Price - Rules of the Range. AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
+      anchor: {"ref": "Scenario 1, Step 4 - Estimate & Price - Rules of the Range", "name": "Estimate & Price - Rules of the Range", "quote": "Confidence is EVERYTHING. Memorize the price list. Bid the job at what it is and cut the maybes and probablys out. The lowest part of your range is what you think it is. Never mention Min Charge. Only give the full truck price.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work."},
       metrics: [{ l: "Score", v: "99/100", c: "good", tip: "Adj AJS: 98/100 \u00d7 45% = 44.7\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 99/100" }, { l: "Adj AJS", v: "$608", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "26.9%", c: "good" }]
     },
     {
       id: "tm-cp-5", priority: 5, franchiseCode: "cp", name: "Darien Koziarski", role: "CSL", severity: "medium",
       why: "Composite 100/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Truck+ at 7.3% (vs 12.5% std) is another thread worth pulling. Signal sits on 41 resi jobs, so it's a real read.",
       play: "<strong>Worth Pat catching him in a morning huddle.</strong> Explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD, not as a scorecard, more as a 'what did we learn' conversation.",
-      framework: "CSL Scenario 3.2: Estimate & Price + Assumptive Ask. Maintenance coaching, focused on consistency rather than correction.",
+      framework: "Scenario 1, Step 4 - Estimate & Price - Rules of the Range. AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
+      anchor: {"ref": "Scenario 1, Step 4 - Estimate & Price - Rules of the Range", "name": "Estimate & Price - Rules of the Range", "quote": "Confidence is EVERYTHING. Memorize the price list. Bid the job at what it is and cut the maybes and probablys out. The lowest part of your range is what you think it is. Never mention Min Charge. Only give the full truck price.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work."},
       metrics: [{ l: "Score", v: "100/100", c: "good", tip: "Adj AJS: 100/100 \u00d7 45% = 45.5\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 100/100" }, { l: "Adj AJS", v: "$694", c: "good" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "26.8%", c: "good" }]
     },
 
@@ -1218,35 +1303,40 @@
       id: "tm-ct-1", priority: 1, franchiseCode: "ct", name: "Kenneth Johnson", role: "CSL", severity: "urgent",
       why: "Composite at 67. Not a fire, more like a small leak. Worth catching now before it widens. Complaint rate at 4.20%, which is 3.2x our 1.30% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Worth noting AJS is also under, at $507 ($112 below $619). NPS at 75% adds to the customer-side signal. 38 resi jobs of data behind it.",
       play: "<strong>Worth a short conversation with Larry about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
-      framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD", "secondaryName": "Relevant Rapport - FORD", "secondaryQuote": "Personal rapport with FORD: Family, Occupation, Recreation, Dreams. Relevant rapport about the project: how long has this been here, what are you planning for the space, what were you hoping to accomplish today?", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       metrics: [{ l: "Score", v: "67/100", c: "bad", tip: "Adj AJS: 82/100 \u00d7 45% = 37.3\nComplaints: 31/100 \u00d7 27% = 8.4\nNPS: 83/100 \u00d7 14% = 11.4\nReviews: 74/100 \u00d7 14% = 10.0\nComposite: 67/100" }, { l: "Adj AJS", v: "$507", c: "bad" }, { l: "Complaints", v: "4.20%", c: "bad" }, { l: "NPS", v: "75%", c: "bad" }, { l: "Reviews", v: "18.4%", c: "bad" }]
     },
     {
       id: "tm-ct-2", priority: 2, franchiseCode: "ct", name: "Brendan Chicano", role: "CSL", severity: "high",
       why: "Score 74/100. Close enough to the line that one focused habit shift could move it meaningfully in two weeks. Complaints at 3.70% (standard 1.30%). At this volume, even a couple of negative experiences can move the number. Worth checking whether they cluster around a time of day or job type. Worth noting AJS is also under, at $546 ($73 below $619). NPS at 70% adds to the customer-side signal. This is across 71 resi jobs, not a small-sample story.",
       play: "<strong>Jakarie could ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service usually starts costing. Watch Punctual, Etiquette, Memorable in real time and debrief same-day. Fresh signal lands better than next-morning notes.",
-      framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD", "secondaryName": "Relevant Rapport - FORD", "secondaryQuote": "Personal rapport with FORD: Family, Occupation, Recreation, Dreams. Relevant rapport about the project: how long has this been here, what are you planning for the space, what were you hoping to accomplish today?", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       metrics: [{ l: "Score", v: "74/100", c: "bad", tip: "Adj AJS: 88/100 \u00d7 45% = 40.1\nComplaints: 35/100 \u00d7 27% = 9.6\nNPS: 78/100 \u00d7 14% = 10.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 74/100" }, { l: "Adj AJS", v: "$546", c: "bad" }, { l: "Complaints", v: "3.70%", c: "bad" }, { l: "NPS", v: "70%", c: "bad" }, { l: "Reviews", v: "25.4%", c: "good" }]
     },
     {
       id: "tm-ct-3", priority: 3, franchiseCode: "ct", name: "Joel Azar", role: "CSL", severity: "high",
       why: "Composite at 78. Not a fire, more like a small leak. Worth catching now before it widens. Complaint rate sitting at 3.60%, about 2.8x our 1.30% standard. Not alarm-level yet, but the trend is the part to pay attention to. Sometimes it's pace, sometimes tone, sometimes the close that lands wrong. Worth noting AJS is also under, at $555 ($64 below $619). 69 resi jobs of data behind it.",
       play: "<strong>Worth a short conversation with Tim about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
-      framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD", "secondaryName": "Relevant Rapport - FORD", "secondaryQuote": "Personal rapport with FORD: Family, Occupation, Recreation, Dreams. Relevant rapport about the project: how long has this been here, what are you planning for the space, what were you hoping to accomplish today?", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       metrics: [{ l: "Score", v: "78/100", tip: "Adj AJS: 90/100 \u00d7 45% = 40.8\nComplaints: 36/100 \u00d7 27% = 9.8\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 78/100" }, { l: "Adj AJS", v: "$555", c: "bad" }, { l: "Complaints", v: "3.60%", c: "bad" }, { l: "NPS", v: "91%", c: "good" }, { l: "Reviews", v: "39.1%", c: "good" }]
     },
     {
       id: "tm-ct-4", priority: 4, franchiseCode: "ct", name: "Martin Dinkins", role: "CSL", severity: "high",
       why: "Composite 82/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Reviews capture at 7.1%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $513 ($106 below $619). Truck+ at 3.6% (vs 10.0% std) is another thread worth pulling. Signal sits on 28 resi jobs, so it's a real read.",
       play: "<strong>Larry could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
-      framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 5 - Assumptive Ask", "secondaryName": "Assumptive Ask", "secondaryQuote": "The Assumptive Ask should be immediately paired with the estimate and price. No pause. Lead the job - tell them what you are about to do, give an ETA, paint the picture of the completed project.", "rationale": "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it."},
       metrics: [{ l: "Score", v: "82/100", tip: "Adj AJS: 83/100 \u00d7 45% = 37.7\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 29/100 \u00d7 14% = 3.9\nComposite: 82/100" }, { l: "Adj AJS", v: "$513", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "7.1%", c: "bad" }]
     },
     {
       id: "tm-ct-5", priority: 5, franchiseCode: "ct", name: "Robin Bissoon", role: "CEL", severity: "high",
       why: "Score 83/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Complaints at 3.20% (standard 1.30%). At this volume, even a couple of negative experiences can move the number. Worth checking whether they cluster around a time of day or job type. NPS at 82% adds to the customer-side signal. 29 resi jobs of data behind it.",
       play: "<strong>Worth a short conversation with Jakarie about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
-      framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
+      framework: "Scenario 1, Step 1B - 5 Star Service Agenda. Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
+      anchor: {"ref": "Scenario 1, Step 1B - 5 Star Service Agenda", "name": "5 Star Service Agenda", "quote": "Thank you for the opportunity. Walk-through. Thorough evaluation. Free no-obligation estimate. Empty truck out front. Lead representative dedication.", "secondaryRef": "Scenario 1, Step 2 - Relevant Rapport - FORD", "secondaryName": "Relevant Rapport - FORD", "secondaryQuote": "Personal rapport with FORD: Family, Occupation, Recreation, Dreams. Relevant rapport about the project: how long has this been here, what are you planning for the space, what were you hoping to accomplish today?", "rationale": "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed."},
       metrics: [{ l: "Score", v: "83/100", tip: "Adj AJS: 100/100 \u00d7 45% = 45.5\nComplaints: 41/100 \u00d7 27% = 11.1\nNPS: 91/100 \u00d7 14% = 12.4\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 83/100" }, { l: "Adj AJS", v: "$701", c: "good" }, { l: "Complaints", v: "3.20%", c: "bad" }, { l: "NPS", v: "82%", c: "bad" }, { l: "Reviews", v: "34.5%", c: "good" }]
     }
   ];
@@ -1326,12 +1416,35 @@
           </div>
         </div>
 
-        ${c.framework ? `
+        ${c.anchor ? `
+          <div class="anchor-block">
+            <div class="anchor-header">
+              <div class="anchor-label">Coaching Anchor · From Training</div>
+              <div class="anchor-ref">${c.anchor.ref || ''}</div>
+            </div>
+            <div class="anchor-rationale">${c.anchor.rationale || ''}</div>
+            ${c.anchor.quote ? `
+              <div class="anchor-quote">
+                <div class="anchor-quote-name">${c.anchor.name || ''}</div>
+                <div class="anchor-quote-text">"${c.anchor.quote}"</div>
+              </div>
+            ` : ''}
+            ${c.anchor.secondaryQuote ? `
+              <details class="anchor-secondary">
+                <summary>+ secondary anchor: ${c.anchor.secondaryRef || ''}</summary>
+                <div class="anchor-quote">
+                  <div class="anchor-quote-name">${c.anchor.secondaryName || ''}</div>
+                  <div class="anchor-quote-text">"${c.anchor.secondaryQuote}"</div>
+                </div>
+              </details>
+            ` : ''}
+          </div>
+        ` : (c.framework ? `
           <div class="framework-ref">
             <div class="framework-ref-label">Coaching Anchor</div>
             ${c.framework}
           </div>
-        ` : ''}
+        ` : '')}
 
         <div class="card-actions">
           <textarea class="notes-area" data-id="${c.id}" placeholder="Coaching notes — what did you discuss, what's the follow-up?">${state.notes || ''}</textarea>

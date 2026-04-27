@@ -21,6 +21,10 @@ from typing import Optional
 import gspread
 from google.oauth2.service_account import Credentials
 
+# Allow importing sibling modules whether the script is run from repo root or scripts/
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from training_kb import QUOTES, METRIC_ANCHORS, quote_for, scenario_label  # noqa: E402
+
 
 # ---------- config ----------
 
@@ -522,23 +526,58 @@ def make_play(tm: TM, slot_idx: int) -> str:
     return _stable_pick(actions, tm)
 
 
-def make_framework(tm: TM) -> str:
-    primary = tm.primary_issue
-
+def _resolve_anchor_key(tm: TM) -> str:
+    """Map this TM's situation to the right anchor key in training_kb.METRIC_ANCHORS."""
     if tm.cancel_conv_pct is not None and tm.cancel_conv_pct >= 99.5:
-        return "CSL Scenario 3.3: REEAP Negotiation Protocol. A 100% conversion-to-cancel rate usually means the save isn't being attempted, not that it's being attempted badly."
-    if primary == "complaint":
-        return "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which."
-    if primary == "nps":
-        return "CEL CUSTOMER framework, focused on the back half: Memorable, Genuine, Positive Ending. Customers leaving lukewarm tend to mean the experience peaked too early."
-    if primary == "gr":
-        return "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever."
-    if primary == "ajs":
-        std = STANDARDS[tm.franchise_code]
-        if tm.resi_ajs is not None and tm.resi_ajs < std["ajs"] - 100:
-            return "CSL Performance Accountability: Level 1 PIP territory. Below 66% Resi AJS for one month triggers a documented 30-day plan, but worth a coaching conversation first."
-        return "CSL Scenario 3.1: Priority Items + Estimate & Price. AJS dips at this scale usually live in the close, not in the work itself."
-    return "CSL Scenario 3.2: Estimate & Price + Assumptive Ask. Maintenance coaching, focused on consistency rather than correction."
+        return "cancel_save"
+    primary = tm.primary_issue or "ajs"
+    # Truck+ is its own anchor when it's the dominant secondary signal
+    std = STANDARDS[tm.franchise_code]
+    if (primary == "ajs" and tm.truck_pct is not None and tm.truck_pct < std["truck"] / 2):
+        return "truck_plus"
+    return primary
+
+
+def make_anchor(tm: TM) -> dict:
+    """
+    Returns the primary coaching anchor for this TM as a structured object:
+      {
+        "ref":   "Scenario 1, Step 4 - Estimate & Price",
+        "name":  "Estimate & Price - Rules of the Range",
+        "quote": "Confidence is EVERYTHING. Memorize the price list...",
+        "rationale": "AJS dips at this scale usually live in the close..."
+      }
+    Used by the dashboard's Coaching Anchor block.
+    """
+    key = _resolve_anchor_key(tm)
+    primary_quote = quote_for(key, secondary=False)
+    secondary_quote = quote_for(key, secondary=True)
+
+    rationale_map = {
+        "ajs":         "AJS dips at this scale almost always live in the close, not in effort or knowledge. The fix is in the words, not the work.",
+        "complaint":   "Complaint patterns usually trace back to either the agenda not landing or the experience feeling rushed.",
+        "nps":         "Customers leaving lukewarm usually mean the experience peaked too early or the rapport stayed surface-level.",
+        "gr":          "Reviews are won at the closeout. The 5 Star Service Agenda promises it; the closeout has to ask for it.",
+        "cancel_save": "A 100% conversion-to-cancel almost always means the save isn't being attempted, not that it's being attempted badly.",
+        "truck_plus":  "Truck+ rate is the canary on AJS health. If the seed isn't being planted on the Call Ahead, the load won't grow on site.",
+    }
+
+    return {
+        "ref":          scenario_label(primary_quote),
+        "name":         primary_quote["name"],
+        "quote":        primary_quote["text"],
+        "secondaryRef": scenario_label(secondary_quote) if secondary_quote != primary_quote else "",
+        "secondaryName": secondary_quote["name"] if secondary_quote != primary_quote else "",
+        "secondaryQuote": secondary_quote["text"] if secondary_quote != primary_quote else "",
+        "rationale":    rationale_map.get(key, rationale_map["ajs"]),
+    }
+
+
+def make_framework(tm: TM) -> str:
+    """Backwards-compatible single-line framework string. Kept for the dashboard's
+    legacy framework field; the richer block is delivered via make_anchor()."""
+    a = make_anchor(tm)
+    return f"{a['ref']}. {a['rationale']}"
 
 
 def make_score_breakdown(tm: TM) -> str:
@@ -634,6 +673,7 @@ def render_teammates(records: list[dict]) -> str:
                     pairs.append("tip: " + json.dumps(m["tip"]))
                 return "{ " + ", ".join(pairs) + " }"
             metrics_js = ", ".join(_metric_js(m) for m in tm["metrics"])
+            anchor_js = json.dumps(tm.get("anchor", {}), ensure_ascii=False)
             chunks.append(
                 "    {\n"
                 f"      id: {json.dumps(tm['id'])}, priority: {tm['priority']}, "
@@ -643,6 +683,7 @@ def render_teammates(records: list[dict]) -> str:
                 f"      why: {json.dumps(tm['why'])},\n"
                 f"      play: {json.dumps(tm['play'])},\n"
                 f"      framework: {json.dumps(tm['framework'])},\n"
+                f"      anchor: {anchor_js},\n"
                 f"      metrics: [{metrics_js}]\n"
                 "    },"
             )
@@ -703,6 +744,7 @@ def main() -> int:
                 "why": make_why(tm),
                 "play": make_play(tm, slot_idx=i - 1),
                 "framework": make_framework(tm),
+                "anchor": make_anchor(tm),
                 "metrics": make_metrics(tm),
             })
         print(f"  {code.upper()}: {len(tms)} TMs read, picked {len(worst)} for coaching "
