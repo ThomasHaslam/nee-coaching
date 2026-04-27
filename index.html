@@ -2540,34 +2540,34 @@
     </summary>
     <div class="scoring-body">
       <div class="scoring-intro">
-        Each teammate gets a single composite score from <strong>0 to 100</strong>, weighted across four metrics.
-        Hitting standard on a metric earns a clean 100 for that slot. Missing standard reduces it proportionally.
-        No bonus credit for going above standard, no double-counting.
+        Each teammate gets a single composite score from <strong>0 to 100</strong>, built from four metrics.
+        For every metric, you either hit the standard or you don't. Hit it, you earn the full weight. Miss it, you earn zero.
+        No partial credit for being below the line.
       </div>
 
       <div class="scoring-grid">
         <div class="scoring-metric">
           <div class="scoring-metric-weight">50%</div>
           <div class="scoring-metric-name">Adjusted Resi AJS</div>
-          <div class="scoring-metric-desc">Average job size on residential. The biggest sales lever, weighted accordingly.</div>
+          <div class="scoring-metric-desc">Average job size on residential. The biggest sales lever.</div>
         </div>
         <div class="scoring-metric">
-          <div class="scoring-metric-weight">27%</div>
+          <div class="scoring-metric-weight">20%</div>
           <div class="scoring-metric-name">TTM Complaints</div>
           <div class="scoring-metric-desc">Customer-reported complaints rate. The most direct quality signal.</div>
         </div>
         <div class="scoring-metric">
-          <div class="scoring-metric-weight">14%</div>
+          <div class="scoring-metric-weight">15%</div>
           <div class="scoring-metric-name">NPS</div>
-          <div class="scoring-metric-desc">Net promoter signal from post-job surveys. How customers feel about the experience.</div>
+          <div class="scoring-metric-desc">Net promoter signal from post-job surveys.</div>
         </div>
         <div class="scoring-metric">
-          <div class="scoring-metric-weight">14%</div>
+          <div class="scoring-metric-weight">15%</div>
           <div class="scoring-metric-name">Google Reviews capture</div>
-          <div class="scoring-metric-desc">Share of jobs that turn into a public review. The ask happening on the truck.</div>
+          <div class="scoring-metric-desc">Share of jobs that turn into a public review. The ask on the truck.</div>
         </div>
       </div>
-      <div class="scoring-note">Raw spec was 50 / 30 / 15 / 15 (sums to 110). Normalized to land on 100.</div>
+      <div class="scoring-note">Weights sum to exactly 100.</div>
 
       <div class="scoring-section-title">Standards by franchise</div>
       <div class="scoring-table">
@@ -2580,27 +2580,25 @@
         <div class="scoring-table-row"><div>Connecticut</div><div>$619</div><div>≤ 1.30%</div><div>≥ 90%</div><div>≥ 25%</div></div>
       </div>
 
-      <div class="scoring-section-title">How a sub-score is calculated</div>
+      <div class="scoring-section-title">How a metric scores</div>
       <div class="scoring-formula-block">
         <div class="scoring-formula-row">
-          <strong>Higher-is-better</strong> (AJS, NPS, Reviews):
-          <code>min(100, value ÷ standard × 100)</code>
+          <strong>Hit the standard:</strong> <code>full weight (50, 20, 15, or 15)</code>
         </div>
         <div class="scoring-formula-row">
-          <strong>Lower-is-better</strong> (Complaints):
-          <code>min(100, standard ÷ value × 100)</code>
+          <strong>Miss the standard:</strong> <code>0</code>
         </div>
         <div class="scoring-example">
-          <em>Example.</em> A BNO TM with AJS $580 (standard $725):
-          580 ÷ 725 × 100 = <strong>80</strong>. That sub-score then weighs 50% in the composite.
+          <em>Example.</em> A BNO TM hits AJS, hits NPS, hits Reviews, misses Complaints:
+          50 + 0 + 15 + 15 = <strong>80</strong>.
         </div>
       </div>
 
       <div class="scoring-section-title">Severity buckets</div>
       <div class="scoring-buckets">
-        <span class="bucket bucket-urgent">Urgent · score &lt; 70</span>
-        <span class="bucket bucket-high">High · 70–89</span>
-        <span class="bucket bucket-medium">Medium · 90+</span>
+        <span class="bucket bucket-urgent">Urgent · score &lt; 65 (missing AJS or 2+ standards)</span>
+        <span class="bucket bucket-high">High · 65–79 (hits AJS but missing 1-2 secondaries)</span>
+        <span class="bucket bucket-medium">Medium · 80+ (hits 3+ of 4 standards)</span>
       </div>
 
       <div class="scoring-section-title">Eligibility</div>

@@ -62,10 +62,10 @@ STANDARDS = {
     "ct":  {"ajs": 619, "loss": 35.0, "truck": 10.0, "complaint": 1.30, "nps": 90.0, "gr": 25.0},
 }
 
-# Raw weights as specified by leadership: 50 / 30 / 15 / 15 (sums to 110).
-# Normalized internally so composite score is always 0-100.
-_RAW_WEIGHTS = {"ajs": 50.0, "complaint": 30.0, "nps": 15.0, "gr": 15.0}
-_W_TOTAL = sum(_RAW_WEIGHTS.values())
+# Weights per leadership spec: AJS 50%, Complaints 20%, NPS 15%, Reviews 15% (sum = 100).
+# Sub-scoring is BINARY: full weight if at/above standard, 0 if below.
+_RAW_WEIGHTS = {"ajs": 50.0, "complaint": 20.0, "nps": 15.0, "gr": 15.0}
+_W_TOTAL = sum(_RAW_WEIGHTS.values())  # 100
 WEIGHTS = {k: v / _W_TOTAL for k, v in _RAW_WEIGHTS.items()}
 
 # Coach mapping intentionally removed. Coaching language is now leader-agnostic
@@ -279,28 +279,21 @@ def fetch_franchise(gc: gspread.Client, code: str) -> list[TM]:
 
 def _sub_score_higher_better(value: Optional[float], standard: float) -> Optional[float]:
     """
-    Score where higher = better (AJS, NPS, Reviews).
-    At-or-above standard = 100 (capped, no extra credit).
-    Below standard = proportional fraction of 100.
+    Binary scoring (higher = better). At-or-above standard = 100. Below = 0.
+    No partial credit for being below the line.
     """
     if value is None or standard <= 0:
         return None
-    if value >= standard:
-        return 100.0
-    return max(0.0, (value / standard) * 100.0)
+    return 100.0 if value >= standard else 0.0
 
 
 def _sub_score_lower_better(value: Optional[float], standard: float) -> Optional[float]:
     """
-    Score where lower = better (Complaints).
-    At-or-below standard = 100 (capped, no extra credit).
-    Above standard = proportional drop.
+    Binary scoring (lower = better, e.g. Complaints). At-or-below = 100. Above = 0.
     """
     if value is None or standard <= 0:
         return None
-    if value <= standard:
-        return 100.0
-    return max(0.0, (standard / value) * 100.0)
+    return 100.0 if value <= standard else 0.0
 
 
 def score_tm(tm: TM) -> None:
@@ -329,10 +322,15 @@ def score_tm(tm: TM) -> None:
     below = {k: v for k, v in tm.sub_scores.items() if v < 100}
     tm.primary_issue = min(below, key=below.get) if below else ""
 
-    # Severity bucket
-    if tm.weighted_score < 70:
+    # Severity bucket - calibrated to the binary score grid (0, 15, 20, 30, 35,
+    # 50, 65, 70, 80, 85, 100). Hits-out-of-4 maps cleanly:
+    #   100        = elite (4/4 standards met)
+    #   80-85      = solid (3/4 met)
+    #   65-70      = watch (2/4 met, including AJS)
+    #   below 65   = urgent (missing AJS or 2+ standards)
+    if tm.weighted_score < 65:
         tm.severity = "urgent"
-    elif tm.weighted_score < 90:
+    elif tm.weighted_score < 80:
         tm.severity = "high"
     else:
         tm.severity = "medium"
@@ -383,8 +381,8 @@ def render_roster_entry(tm: TM) -> dict:
         cls = "bad" if tm.gr_pct < std["gr"] else "good"
         metrics.append({"l": "Reviews", "v": f"{tm.gr_pct:.1f}%", "c": cls})
 
-    # Tier classification for adaptive coaching
-    if tm.weighted_score >= 95:
+    # Tier classification (binary scoring grid: only 100 hits all standards)
+    if tm.weighted_score >= 100:
         tier = "elite"
     elif tm.weighted_score >= 80:
         tier = "solid"
