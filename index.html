@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LAST_UPDATED: 2026-04-27T03:47:56Z -->
+<!-- LAST_UPDATED: 2026-04-27T04:09:40Z -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -277,6 +277,210 @@
     letter-spacing: 1px;
     margin-top: 2px;
   }
+
+  .franchise-stat-value.stat-bad { color: #ef4444; }
+  .franchise-stat-value.stat-good { color: #22c55e; }
+
+  .franchise-sev-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .sev-pill {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .sev-pill.sev-urgent { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+  .sev-pill.sev-high { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+
+  /* ===== SCORING PANEL ===== */
+  .scoring-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 0 auto 20px auto;
+    max-width: 1280px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+  .scoring-panel[open] { border-color: var(--border-bright); }
+  .scoring-panel summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+  }
+  .scoring-panel summary::-webkit-details-marker { display: none; }
+  .scoring-summary-text {
+    font-family: var(--display);
+    font-weight: 500;
+    color: var(--text);
+    font-size: 16px;
+    letter-spacing: 0.3px;
+  }
+  .scoring-summary-text::before {
+    content: "▸ ";
+    display: inline-block;
+    color: var(--text-dim);
+    transition: transform 0.2s ease;
+    margin-right: 4px;
+  }
+  .scoring-panel[open] .scoring-summary-text::before {
+    content: "▾ ";
+  }
+  .scoring-summary-hint {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .scoring-panel[open] .scoring-summary-hint { opacity: 0; }
+
+  .scoring-body {
+    padding: 0 18px 22px 18px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+  }
+  .scoring-intro {
+    padding: 16px 0 14px 0;
+    color: var(--text-soft, var(--text));
+    line-height: 1.55;
+    font-size: 14px;
+  }
+  .scoring-intro strong { color: var(--text); font-weight: 600; }
+
+  .scoring-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .scoring-metric {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .scoring-metric-weight {
+    font-family: var(--display);
+    font-size: 22px;
+    color: #60a5fa;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .scoring-metric-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 6px;
+    margin-bottom: 4px;
+  }
+  .scoring-metric-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .scoring-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-bottom: 14px;
+  }
+  .scoring-note-block {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    background: var(--bg-section);
+    border-left: 3px solid var(--border-bright);
+    padding: 10px 14px;
+    border-radius: 4px;
+  }
+  .scoring-note-block strong { color: var(--text); }
+
+  .scoring-section-title {
+    font-family: var(--display);
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 600;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .scoring-table {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 12px;
+  }
+  .scoring-table-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+    padding: 8px 12px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+  }
+  .scoring-table-row:first-child { border-top: none; }
+  .scoring-table-head {
+    background: var(--bg-elevated);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .scoring-formula-block {
+    background: var(--bg-section);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .scoring-formula-row { color: var(--text-dim); }
+  .scoring-formula-row strong { color: var(--text); margin-right: 4px; }
+  .scoring-formula-row code {
+    background: var(--bg-card);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #93c5fd;
+  }
+  .scoring-example {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .scoring-example em { color: var(--text); font-style: normal; font-weight: 600; }
+  .scoring-example strong { color: #22c55e; }
+
+  .scoring-buckets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .bucket {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .bucket-urgent { background: rgba(239,68,68,0.1); color: #ef4444; border-color: rgba(239,68,68,0.3); }
+  .bucket-high { background: rgba(245,158,11,0.1); color: #f59e0b; border-color: rgba(245,158,11,0.3); }
+  .bucket-medium { background: rgba(34,197,94,0.1); color: #22c55e; border-color: rgba(34,197,94,0.3); }
+
+  .metric-has-tip { cursor: help; }
+  .metric-info { font-size: 9px; color: var(--text-dim); margin-left: 2px; opacity: 0.7; }
 
   .collapse-icon {
     font-size: 14px;
@@ -778,10 +982,88 @@
     </div>
   </div>
 
+  <details class="scoring-panel">
+    <summary>
+      <span class="scoring-summary-text">How the score works</span>
+      <span class="scoring-summary-hint">click to expand</span>
+    </summary>
+    <div class="scoring-body">
+      <div class="scoring-intro">
+        Each teammate gets a single composite score from <strong>0 to 100</strong>, weighted across four metrics.
+        Hitting standard on a metric earns a clean 100 for that slot. Missing standard reduces it proportionally.
+        No bonus credit for going above standard, no double-counting.
+      </div>
+
+      <div class="scoring-grid">
+        <div class="scoring-metric">
+          <div class="scoring-metric-weight">50%</div>
+          <div class="scoring-metric-name">Adjusted Resi AJS</div>
+          <div class="scoring-metric-desc">Average job size on residential. The biggest sales lever, weighted accordingly.</div>
+        </div>
+        <div class="scoring-metric">
+          <div class="scoring-metric-weight">27%</div>
+          <div class="scoring-metric-name">TTM Complaints</div>
+          <div class="scoring-metric-desc">Customer-reported complaints rate. The most direct quality signal.</div>
+        </div>
+        <div class="scoring-metric">
+          <div class="scoring-metric-weight">14%</div>
+          <div class="scoring-metric-name">NPS</div>
+          <div class="scoring-metric-desc">Net promoter signal from post-job surveys. How customers feel about the experience.</div>
+        </div>
+        <div class="scoring-metric">
+          <div class="scoring-metric-weight">14%</div>
+          <div class="scoring-metric-name">Google Reviews capture</div>
+          <div class="scoring-metric-desc">Share of jobs that turn into a public review. The ask happening on the truck.</div>
+        </div>
+      </div>
+      <div class="scoring-note">Raw spec was 50 / 30 / 15 / 15 (sums to 110). Normalized to land on 100.</div>
+
+      <div class="scoring-section-title">Standards by franchise</div>
+      <div class="scoring-table">
+        <div class="scoring-table-row scoring-table-head">
+          <div>Franchise</div><div>Adj AJS</div><div>Complaints</div><div>NPS</div><div>Reviews</div>
+        </div>
+        <div class="scoring-table-row"><div>Boston North</div><div>$725</div><div>≤ 1.50%</div><div>≥ 90%</div><div>≥ 25%</div></div>
+        <div class="scoring-table-row"><div>Boston South</div><div>$725</div><div>≤ 1.50%</div><div>≥ 90%</div><div>≥ 25%</div></div>
+        <div class="scoring-table-row"><div>Coastal Ports</div><div>$619</div><div>≤ 1.50%</div><div>≥ 90%</div><div>≥ 25%</div></div>
+        <div class="scoring-table-row"><div>Connecticut</div><div>$619</div><div>≤ 1.30%</div><div>≥ 90%</div><div>≥ 25%</div></div>
+      </div>
+
+      <div class="scoring-section-title">How a sub-score is calculated</div>
+      <div class="scoring-formula-block">
+        <div class="scoring-formula-row">
+          <strong>Higher-is-better</strong> (AJS, NPS, Reviews):
+          <code>min(100, value ÷ standard × 100)</code>
+        </div>
+        <div class="scoring-formula-row">
+          <strong>Lower-is-better</strong> (Complaints):
+          <code>min(100, standard ÷ value × 100)</code>
+        </div>
+        <div class="scoring-example">
+          <em>Example.</em> A BNO TM with AJS $580 (standard $725):
+          580 ÷ 725 × 100 = <strong>80</strong>. That sub-score then weighs 50% in the composite.
+        </div>
+      </div>
+
+      <div class="scoring-section-title">Severity buckets</div>
+      <div class="scoring-buckets">
+        <span class="bucket bucket-urgent">Urgent · score &lt; 70</span>
+        <span class="bucket bucket-high">High · 70–89</span>
+        <span class="bucket bucket-medium">Medium · 90+</span>
+      </div>
+
+      <div class="scoring-section-title">Eligibility</div>
+      <div class="scoring-note-block">
+        Only teammates with at least <strong>10 residential jobs</strong> in the period are scored.
+        Smaller samples are too noisy to coach against.
+      </div>
+    </div>
+  </details>
+
   <div id="dashboard"></div>
 
   <footer class="footer">
-    <div>NEE Teammate Coaching · Built for Thomas Haslam, VP</div>
+    <div>NEE Coaching</div>
     <div class="footer-mark">Built Different.</div>
     <div class="footer-utility">
       <button class="reset-link" id="expand-all">Expand All</button>
@@ -823,156 +1105,160 @@
     // BOSTON NORTH
     {
       id: "tm-bno-1", priority: 1, franchiseCode: "bno", name: "Deven Okowuga", role: "CEL", severity: "urgent",
-      why: "At 63/100. The headline number isn't a crisis, but there's a pattern that's consistent enough to be worth a conversation. Reviews capture at 7.5%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $438 ($287 below $725). NPS at 29% adds to the customer-side signal. Signal sits on 40 resi jobs, so it's a real read.",
+      why: "Score 63/100. Close enough to the line that one focused habit shift could move it meaningfully in two weeks. Reviews capture at 7.5%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $438 ($287 below $725). NPS at 29% adds to the customer-side signal. Signal sits on 40 resi jobs, so it's a real read.",
       play: "<strong>Richard could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
       framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
-      metrics: [{ l: "Score", v: "63/100", c: "bad" }, { l: "Adj AJS", v: "$438", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "29%", c: "bad" }, { l: "Reviews", v: "7.5%", c: "bad" }]
+      metrics: [{ l: "Score", v: "63/100", c: "bad", tip: "Adj AJS: 60/100 \u00d7 45% = 27.5\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 32/100 \u00d7 14% = 4.3\nReviews: 30/100 \u00d7 14% = 4.1\nComposite: 63/100" }, { l: "Adj AJS", v: "$438", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "29%", c: "bad" }, { l: "Reviews", v: "7.5%", c: "bad" }]
     },
     {
       id: "tm-bno-2", priority: 2, franchiseCode: "bno", name: "Nathan Kapala", role: "CSL", severity: "high",
-      why: "Composite 70/100. One area is doing most of the work pulling the score down. Worth zeroing in on that before broadening. Complaint rate at 5.40%, which is 3.6x our 1.50% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Worth noting AJS is also under, at $656 ($69 below $725). Reviews capture 14.6% trails the goal too. 48 resi jobs of data behind it.",
+      why: "At 70/100. He's not far off, which is the trickiest place to coach because the natural pull is to leave it alone. Complaint rate at 5.40%, which is 3.6x our 1.50% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Worth noting AJS is also under, at $656 ($69 below $725). Reviews capture 14.6% trails the goal too. 48 resi jobs of data behind it.",
       play: "<strong>Worth a short conversation with Tyler about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
       framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
-      metrics: [{ l: "Score", v: "70/100", c: "bad" }, { l: "Adj AJS", v: "$656", c: "bad" }, { l: "Complaints", v: "5.40%", c: "bad" }, { l: "NPS", v: "91%", c: "good" }, { l: "Reviews", v: "14.6%", c: "bad" }]
+      metrics: [{ l: "Score", v: "70/100", c: "bad", tip: "Adj AJS: 91/100 \u00d7 45% = 41.1\nComplaints: 28/100 \u00d7 27% = 7.6\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 58/100 \u00d7 14% = 8.0\nComposite: 70/100" }, { l: "Adj AJS", v: "$656", c: "bad" }, { l: "Complaints", v: "5.40%", c: "bad" }, { l: "NPS", v: "91%", c: "good" }, { l: "Reviews", v: "14.6%", c: "bad" }]
     },
     {
       id: "tm-bno-3", priority: 3, franchiseCode: "bno", name: "Armani Pabon", role: "CSL", severity: "high",
-      why: "Composite 71/100. One area is doing most of the work pulling the score down. Worth zeroing in on that before broadening. Complaint rate at 25.00%, which is 16.7x our 1.50% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Reviews capture 18.5% trails the goal too. Signal sits on 27 resi jobs, so it's a real read.",
+      why: "Score 71/100. Close enough to the line that one focused habit shift could move it meaningfully in two weeks. Complaint rate at 25.00%, which is 16.7x our 1.50% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Reviews capture 18.5% trails the goal too. Signal sits on 27 resi jobs, so it's a real read.",
       play: "<strong>Worth Richard sitting down with him before next shift.</strong> Pull the recent detractors and read them together, less as accountability and more as curiosity. The pattern tends to surface on its own. Pick one thing to focus on for the week, not three.",
       framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
-      metrics: [{ l: "Score", v: "71/100", c: "bad" }, { l: "Adj AJS", v: "$1,315", c: "good" }, { l: "Complaints", v: "25.00%", c: "bad" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "18.5%", c: "bad" }]
+      metrics: [{ l: "Score", v: "71/100", c: "bad", tip: "Adj AJS: 100/100 \u00d7 45% = 45.5\nComplaints: 6/100 \u00d7 27% = 1.6\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 74/100 \u00d7 14% = 10.1\nComposite: 71/100" }, { l: "Adj AJS", v: "$1,315", c: "good" }, { l: "Complaints", v: "25.00%", c: "bad" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "18.5%", c: "bad" }]
     },
     {
       id: "tm-bno-4", priority: 4, franchiseCode: "bno", name: "Jeron Feaster", role: "CSL", severity: "high",
-      why: "Composite 72/100. One area is doing most of the work pulling the score down. Worth zeroing in on that before broadening. Google Reviews capture at 8.8% (goal 25%). When the capture rate is the lagging metric, it's almost always the same root cause: the ask isn't happening on the truck, or it's happening so quietly the customer doesn't notice it. Worth noting AJS is also under, at $458 ($267 below $725). NPS at 75% adds to the customer-side signal. 34 resi jobs of data behind it.",
+      why: "Composite 72/100. One area is doing most of the work pulling the score down. Zeroing in there is more productive than broadening. Google Reviews capture at 8.8% (goal 25%). When the capture rate is the lagging metric, it's almost always the same root cause: the ask isn't happening on the truck, or it's happening so quietly the customer doesn't notice it. Worth noting AJS is also under, at $458 ($267 below $725). NPS at 75% adds to the customer-side signal. 34 resi jobs of data behind it.",
       play: "<strong>Worth a 15-minute huddle with Tyler on the review ask itself.</strong> Practice the words out loud, in his voice. Most people drop the ask because the script feels stiff, not because they don't want to. Track on paper for a week to see what shifts.",
       framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
-      metrics: [{ l: "Score", v: "72/100", c: "bad" }, { l: "Adj AJS", v: "$458", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "75%", c: "bad" }, { l: "Reviews", v: "8.8%", c: "bad" }]
+      metrics: [{ l: "Score", v: "72/100", c: "bad", tip: "Adj AJS: 63/100 \u00d7 45% = 28.7\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 83/100 \u00d7 14% = 11.4\nReviews: 35/100 \u00d7 14% = 4.8\nComposite: 72/100" }, { l: "Adj AJS", v: "$458", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "75%", c: "bad" }, { l: "Reviews", v: "8.8%", c: "bad" }]
     },
     {
       id: "tm-bno-5", priority: 5, franchiseCode: "bno", name: "Giovani Memeus", role: "CSL", severity: "high",
-      why: "At 72/100. The headline number isn't a crisis, but there's a pattern that's consistent enough to be worth a conversation. Complaints at 8.30%, well past the 1.50% mark. The number is loud enough that the answer is probably in the actual feedback, not in another sales conversation. Worth pulling the recent ones and reading them together. Worth noting AJS is also under, at $641 ($84 below $725). This is across 57 resi jobs, not a small-sample story.",
+      why: "Composite at 72. Not a fire, more like a small leak. Worth catching now before it widens. Complaints at 8.30%, well past the 1.50% mark. The number is loud enough that the answer is probably in the actual feedback, not in another sales conversation. Worth pulling the recent ones and reading them together. Worth noting AJS is also under, at $641 ($84 below $725). This is across 57 resi jobs, not a small-sample story.",
       play: "<strong>Richard could ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service usually starts costing. Watch Punctual, Etiquette, Memorable in real time and debrief same-day. Fresh signal lands better than next-morning notes.",
       framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
-      metrics: [{ l: "Score", v: "72/100", c: "bad" }, { l: "Adj AJS", v: "$641", c: "bad" }, { l: "Complaints", v: "8.30%", c: "bad" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "42.1%", c: "good" }]
+      metrics: [{ l: "Score", v: "72/100", c: "bad", tip: "Adj AJS: 88/100 \u00d7 45% = 40.2\nComplaints: 18/100 \u00d7 27% = 4.9\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 72/100" }, { l: "Adj AJS", v: "$641", c: "bad" }, { l: "Complaints", v: "8.30%", c: "bad" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "42.1%", c: "good" }]
     },
 
     // BOSTON SOUTH
     {
       id: "tm-bso-1", priority: 1, franchiseCode: "bso", name: "Jadiel Diaz", role: "CEL", severity: "high",
-      why: "At 74/100. The headline number isn't a crisis, but there's a pattern that's consistent enough to be worth a conversation. Reviews capture at 13.9%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $494 ($231 below $725). NPS at 57% adds to the customer-side signal. This is across 36 resi jobs, not a small-sample story.",
+      why: "Composite at 74. Not a fire, more like a small leak. Worth catching now before it widens. Reviews capture at 13.9%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $494 ($231 below $725). NPS at 57% adds to the customer-side signal. This is across 36 resi jobs, not a small-sample story.",
       play: "<strong>Tommy could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
       framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
-      metrics: [{ l: "Score", v: "74/100", c: "bad" }, { l: "Adj AJS", v: "$494", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "57%", c: "bad" }, { l: "Reviews", v: "13.9%", c: "bad" }]
+      metrics: [{ l: "Score", v: "74/100", c: "bad", tip: "Adj AJS: 68/100 \u00d7 45% = 31.0\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 63/100 \u00d7 14% = 8.7\nReviews: 56/100 \u00d7 14% = 7.6\nComposite: 74/100" }, { l: "Adj AJS", v: "$494", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "57%", c: "bad" }, { l: "Reviews", v: "13.9%", c: "bad" }]
     },
     {
       id: "tm-bso-2", priority: 2, franchiseCode: "bso", name: "Dawson Guidetti", role: "CSL", severity: "high",
-      why: "Composite 80/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. Reviews capture at 10.8%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $540 ($185 below $725). NPS at 88% adds to the customer-side signal. This is across 111 resi jobs, not a small-sample story.",
+      why: "At 80/100, this is light-touch maintenance coaching. One area to nudge, nothing to redesign. Reviews capture at 10.8%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $540 ($185 below $725). NPS at 88% adds to the customer-side signal. This is across 111 resi jobs, not a small-sample story.",
       play: "<strong>Kendall could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
       framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
-      metrics: [{ l: "Score", v: "80/100" }, { l: "Adj AJS", v: "$540", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "88%", c: "bad" }, { l: "Reviews", v: "10.8%", c: "bad" }]
+      metrics: [{ l: "Score", v: "80/100", tip: "Adj AJS: 75/100 \u00d7 45% = 33.9\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 98/100 \u00d7 14% = 13.4\nReviews: 43/100 \u00d7 14% = 5.9\nComposite: 80/100" }, { l: "Adj AJS", v: "$540", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "88%", c: "bad" }, { l: "Reviews", v: "10.8%", c: "bad" }]
     },
     {
       id: "tm-bso-3", priority: 3, franchiseCode: "bso", name: "Tyler Andrade", role: "CSL", severity: "high",
-      why: "Composite 80/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. Reviews capture at 10.8%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $540 ($185 below $725). NPS at 88% adds to the customer-side signal. 111 resi jobs of data behind it.",
+      why: "Score 80/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Reviews capture at 10.8%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $540 ($185 below $725). NPS at 88% adds to the customer-side signal. 111 resi jobs of data behind it.",
       play: "<strong>Tommy could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
       framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
-      metrics: [{ l: "Score", v: "80/100" }, { l: "Adj AJS", v: "$540", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "88%", c: "bad" }, { l: "Reviews", v: "10.8%", c: "bad" }]
+      metrics: [{ l: "Score", v: "80/100", tip: "Adj AJS: 75/100 \u00d7 45% = 33.9\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 98/100 \u00d7 14% = 13.4\nReviews: 43/100 \u00d7 14% = 5.9\nComposite: 80/100" }, { l: "Adj AJS", v: "$540", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "88%", c: "bad" }, { l: "Reviews", v: "10.8%", c: "bad" }]
     },
     {
       id: "tm-bso-4", priority: 4, franchiseCode: "bso", name: "Logan Ballou", role: "CEL", severity: "high",
-      why: "Composite 82/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. Adjusted Resi AJS is sitting at $481, which is roughly $244 under our $725 mark. When AJS slides this far, it's almost always something in the close softening, not effort. Worth listening for whether the assumptive ask is still happening. Reviews capture 20.0% trails the goal too. Truck+ at 8.3% (vs 10.0% std) is another thread worth pulling. 60 resi jobs of data behind it.",
+      why: "Score 82/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Adjusted Resi AJS is sitting at $481, which is roughly $244 under our $725 mark. When AJS slides this far, it's almost always something in the close softening, not effort. Worth listening for whether the assumptive ask is still happening. Reviews capture 20.0% trails the goal too. Truck+ at 8.3% (vs 10.0% std) is another thread worth pulling. 60 resi jobs of data behind it.",
       play: "<strong>Worth Kendall carving out a 1:1 today.</strong> Walk through 3 recent shifts together, less as a PIP framing and more as 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to $725.",
       framework: "CSL Performance Accountability: Level 1 PIP territory. Below 66% Resi AJS for one month triggers a documented 30-day plan, but worth a coaching conversation first.",
-      metrics: [{ l: "Score", v: "82/100" }, { l: "Adj AJS", v: "$481", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "20.0%", c: "bad" }]
+      metrics: [{ l: "Score", v: "82/100", tip: "Adj AJS: 66/100 \u00d7 45% = 30.1\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 80/100 \u00d7 14% = 10.9\nComposite: 82/100" }, { l: "Adj AJS", v: "$481", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "20.0%", c: "bad" }]
     },
     {
       id: "tm-bso-5", priority: 5, franchiseCode: "bso", name: "Nicholas Strojny", role: "CSL", severity: "high",
-      why: "Composite 84/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. Adjusted Resi AJS is sitting at $512, which is roughly $213 under our $725 mark. When AJS slides this far, it's almost always something in the close softening, not effort. Worth listening for whether the assumptive ask is still happening. Reviews capture 20.0% trails the goal too. Truck+ at 6.2% (vs 10.0% std) is another thread worth pulling. 65 resi jobs of data behind it.",
+      why: "Score 84/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Adjusted Resi AJS is sitting at $512, which is roughly $213 under our $725 mark. When AJS slides this far, it's almost always something in the close softening, not effort. Worth listening for whether the assumptive ask is still happening. Reviews capture 20.0% trails the goal too. Truck+ at 6.2% (vs 10.0% std) is another thread worth pulling. 65 resi jobs of data behind it.",
       play: "<strong>Worth Tommy carving out a 1:1 today.</strong> Walk through 3 recent shifts together, less as a PIP framing and more as 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to $725.",
       framework: "CSL Performance Accountability: Level 1 PIP territory. Below 66% Resi AJS for one month triggers a documented 30-day plan, but worth a coaching conversation first.",
-      metrics: [{ l: "Score", v: "84/100" }, { l: "Adj AJS", v: "$512", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "92%", c: "good" }, { l: "Reviews", v: "20.0%", c: "bad" }]
+      metrics: [{ l: "Score", v: "84/100", tip: "Adj AJS: 71/100 \u00d7 45% = 32.1\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 80/100 \u00d7 14% = 10.9\nComposite: 84/100" }, { l: "Adj AJS", v: "$512", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "92%", c: "good" }, { l: "Reviews", v: "20.0%", c: "bad" }]
     },
 
     // COASTAL PORTS
     {
       id: "tm-cp-1", priority: 1, franchiseCode: "cp", name: "Joshua Meserve", role: "CSL", severity: "medium",
-      why: "Composite 90/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. Adj Resi AJS $485. The gap is closeable in a single shift if it's a confidence dip. Worth asking what's been on his mind. Truck+ at 3.3% (vs 12.5% std) is another thread worth pulling. Signal sits on 60 resi jobs, so it's a real read.",
+      why: "Composite 90/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Adj Resi AJS $485. The gap is closeable in a single shift if it's a confidence dip. Worth asking what's been on his mind. Truck+ at 3.3% (vs 12.5% std) is another thread worth pulling. Signal sits on 60 resi jobs, so it's a real read.",
       play: "<strong>Pat pre-shift today, then a shadow tomorrow.</strong> Listen specifically for whether the assumptive ask is still landing. AJS dips at this scale almost always live in the close, not in effort or knowledge.",
       framework: "CSL Performance Accountability: Level 1 PIP territory. Below 66% Resi AJS for one month triggers a documented 30-day plan, but worth a coaching conversation first.",
-      metrics: [{ l: "Score", v: "90/100" }, { l: "Adj AJS", v: "$485", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "48.3%", c: "good" }]
+      metrics: [{ l: "Score", v: "90/100", tip: "Adj AJS: 78/100 \u00d7 45% = 35.6\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 90/100" }, { l: "Adj AJS", v: "$485", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "48.3%", c: "good" }]
     },
     {
       id: "tm-cp-2", priority: 2, franchiseCode: "cp", name: "Derek Lee", role: "CSL", severity: "medium",
-      why: "Composite 96/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. Reviews capture at 17.2%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Signal sits on 64 resi jobs, so it's a real read.",
+      why: "Composite 96/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Reviews capture at 17.2%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Signal sits on 64 resi jobs, so it's a real read.",
       play: "<strong>Pat could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
       framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
-      metrics: [{ l: "Score", v: "96/100", c: "good" }, { l: "Adj AJS", v: "$737", c: "good" }, { l: "Complaints", v: "1.50%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "17.2%", c: "bad" }]
+      metrics: [{ l: "Score", v: "96/100", c: "good", tip: "Adj AJS: 100/100 \u00d7 45% = 45.5\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 69/100 \u00d7 14% = 9.4\nComposite: 96/100" }, { l: "Adj AJS", v: "$737", c: "good" }, { l: "Complaints", v: "1.50%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "17.2%", c: "bad" }]
     },
     {
       id: "tm-cp-3", priority: 3, franchiseCode: "cp", name: "Jason Trostle", role: "CEL", severity: "medium",
-      why: "Composite 97/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. AJS at $577, about $42 short of $619. He's right at the line, which is the trickiest place to coach because the natural pull is to leave it alone. Worth a small conversation before it widens. Truck+ at 7.1% (vs 12.5% std) is another thread worth pulling. This is across 56 resi jobs, not a small-sample story.",
+      why: "At 97/100, this is light-touch maintenance coaching. One area to nudge, nothing to redesign. AJS at $577, about $42 short of $619. He's right at the line, which is the trickiest place to coach because the natural pull is to leave it alone. Worth a small conversation before it widens. Truck+ at 7.1% (vs 12.5% std) is another thread worth pulling. This is across 56 resi jobs, not a small-sample story.",
       play: "<strong>Pat could do a mid-shift check-in.</strong> Pull one job apart together: was Priority Items delivered? Was Truck+ pitched? Adjust on the next call. Small in-the-moment coaching tends to compound faster than end-of-week reviews.",
       framework: "CSL Scenario 3.1: Priority Items + Estimate & Price. AJS dips at this scale usually live in the close, not in the work itself.",
-      metrics: [{ l: "Score", v: "97/100", c: "good" }, { l: "Adj AJS", v: "$577", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "44.6%", c: "good" }]
+      metrics: [{ l: "Score", v: "97/100", c: "good", tip: "Adj AJS: 93/100 \u00d7 45% = 42.4\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 97/100" }, { l: "Adj AJS", v: "$577", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "44.6%", c: "good" }]
     },
     {
       id: "tm-cp-4", priority: 4, franchiseCode: "cp", name: "Jonathan Meserve", role: "CEL", severity: "medium",
-      why: "Composite 99/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. AJS at $608, about $11 short of $619. He's right at the line, which is the trickiest place to coach because the natural pull is to leave it alone. Worth a small conversation before it widens. Truck+ at 9.6% (vs 12.5% std) is another thread worth pulling. Signal sits on 52 resi jobs, so it's a real read.",
+      why: "Composite 99/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. AJS at $608, about $11 short of $619. He's right at the line, which is the trickiest place to coach because the natural pull is to leave it alone. Worth a small conversation before it widens. Truck+ at 9.6% (vs 12.5% std) is another thread worth pulling. Signal sits on 52 resi jobs, so it's a real read.",
       play: "<strong>Worth Pat catching him in a morning huddle.</strong> Explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD, not as a scorecard, more as a 'what did we learn' conversation.",
       framework: "CSL Scenario 3.1: Priority Items + Estimate & Price. AJS dips at this scale usually live in the close, not in the work itself.",
-      metrics: [{ l: "Score", v: "99/100", c: "good" }, { l: "Adj AJS", v: "$608", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "26.9%", c: "good" }]
+      metrics: [{ l: "Score", v: "99/100", c: "good", tip: "Adj AJS: 98/100 \u00d7 45% = 44.7\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 99/100" }, { l: "Adj AJS", v: "$608", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "26.9%", c: "good" }]
     },
     {
       id: "tm-cp-5", priority: 5, franchiseCode: "cp", name: "Darien Koziarski", role: "CSL", severity: "medium",
-      why: "Composite 100/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. Truck+ at 7.3% (vs 12.5% std) is another thread worth pulling. Signal sits on 41 resi jobs, so it's a real read.",
+      why: "Composite 100/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Truck+ at 7.3% (vs 12.5% std) is another thread worth pulling. Signal sits on 41 resi jobs, so it's a real read.",
       play: "<strong>Worth Pat catching him in a morning huddle.</strong> Explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD, not as a scorecard, more as a 'what did we learn' conversation.",
       framework: "CSL Scenario 3.2: Estimate & Price + Assumptive Ask. Maintenance coaching, focused on consistency rather than correction.",
-      metrics: [{ l: "Score", v: "100/100", c: "good" }, { l: "Adj AJS", v: "$694", c: "good" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "26.8%", c: "good" }]
+      metrics: [{ l: "Score", v: "100/100", c: "good", tip: "Adj AJS: 100/100 \u00d7 45% = 45.5\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 100/100" }, { l: "Adj AJS", v: "$694", c: "good" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "26.8%", c: "good" }]
     },
 
     // CONNECTICUT
     {
       id: "tm-ct-1", priority: 1, franchiseCode: "ct", name: "Kenneth Johnson", role: "CSL", severity: "urgent",
-      why: "Composite 67/100. One area is doing most of the work pulling the score down. Worth zeroing in on that before broadening. Complaint rate at 4.20%, which is 3.2x our 1.30% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Worth noting AJS is also under, at $507 ($112 below $619). NPS at 75% adds to the customer-side signal. 38 resi jobs of data behind it.",
+      why: "Composite at 67. Not a fire, more like a small leak. Worth catching now before it widens. Complaint rate at 4.20%, which is 3.2x our 1.30% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically. Worth noting AJS is also under, at $507 ($112 below $619). NPS at 75% adds to the customer-side signal. 38 resi jobs of data behind it.",
       play: "<strong>Worth a short conversation with Larry about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
       framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
-      metrics: [{ l: "Score", v: "67/100", c: "bad" }, { l: "Adj AJS", v: "$507", c: "bad" }, { l: "Complaints", v: "4.20%", c: "bad" }, { l: "NPS", v: "75%", c: "bad" }, { l: "Reviews", v: "18.4%", c: "bad" }]
+      metrics: [{ l: "Score", v: "67/100", c: "bad", tip: "Adj AJS: 82/100 \u00d7 45% = 37.3\nComplaints: 31/100 \u00d7 27% = 8.4\nNPS: 83/100 \u00d7 14% = 11.4\nReviews: 74/100 \u00d7 14% = 10.0\nComposite: 67/100" }, { l: "Adj AJS", v: "$507", c: "bad" }, { l: "Complaints", v: "4.20%", c: "bad" }, { l: "NPS", v: "75%", c: "bad" }, { l: "Reviews", v: "18.4%", c: "bad" }]
     },
     {
       id: "tm-ct-2", priority: 2, franchiseCode: "ct", name: "Brendan Chicano", role: "CSL", severity: "high",
-      why: "At 74/100. The headline number isn't a crisis, but there's a pattern that's consistent enough to be worth a conversation. Complaints at 3.70% (standard 1.30%). At this volume, even a couple of negative experiences can move the number. Worth checking whether they cluster around a time of day or job type. Worth noting AJS is also under, at $546 ($73 below $619). NPS at 70% adds to the customer-side signal. This is across 71 resi jobs, not a small-sample story.",
+      why: "Score 74/100. Close enough to the line that one focused habit shift could move it meaningfully in two weeks. Complaints at 3.70% (standard 1.30%). At this volume, even a couple of negative experiences can move the number. Worth checking whether they cluster around a time of day or job type. Worth noting AJS is also under, at $546 ($73 below $619). NPS at 70% adds to the customer-side signal. This is across 71 resi jobs, not a small-sample story.",
       play: "<strong>Jakarie could ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service usually starts costing. Watch Punctual, Etiquette, Memorable in real time and debrief same-day. Fresh signal lands better than next-morning notes.",
       framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
-      metrics: [{ l: "Score", v: "74/100", c: "bad" }, { l: "Adj AJS", v: "$546", c: "bad" }, { l: "Complaints", v: "3.70%", c: "bad" }, { l: "NPS", v: "70%", c: "bad" }, { l: "Reviews", v: "25.4%", c: "good" }]
+      metrics: [{ l: "Score", v: "74/100", c: "bad", tip: "Adj AJS: 88/100 \u00d7 45% = 40.1\nComplaints: 35/100 \u00d7 27% = 9.6\nNPS: 78/100 \u00d7 14% = 10.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 74/100" }, { l: "Adj AJS", v: "$546", c: "bad" }, { l: "Complaints", v: "3.70%", c: "bad" }, { l: "NPS", v: "70%", c: "bad" }, { l: "Reviews", v: "25.4%", c: "good" }]
     },
     {
       id: "tm-ct-3", priority: 3, franchiseCode: "ct", name: "Joel Azar", role: "CSL", severity: "high",
-      why: "Composite 78/100. One area is doing most of the work pulling the score down. Worth zeroing in on that before broadening. Complaint rate sitting at 3.60%, about 2.8x our 1.30% standard. Not alarm-level yet, but the trend is the part to pay attention to. Sometimes it's pace, sometimes tone, sometimes the close that lands wrong. Worth noting AJS is also under, at $555 ($64 below $619). 69 resi jobs of data behind it.",
+      why: "Composite at 78. Not a fire, more like a small leak. Worth catching now before it widens. Complaint rate sitting at 3.60%, about 2.8x our 1.30% standard. Not alarm-level yet, but the trend is the part to pay attention to. Sometimes it's pace, sometimes tone, sometimes the close that lands wrong. Worth noting AJS is also under, at $555 ($64 below $619). 69 resi jobs of data behind it.",
       play: "<strong>Worth a short conversation with Tim about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
       framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
-      metrics: [{ l: "Score", v: "78/100" }, { l: "Adj AJS", v: "$555", c: "bad" }, { l: "Complaints", v: "3.60%", c: "bad" }, { l: "NPS", v: "91%", c: "good" }, { l: "Reviews", v: "39.1%", c: "good" }]
+      metrics: [{ l: "Score", v: "78/100", tip: "Adj AJS: 90/100 \u00d7 45% = 40.8\nComplaints: 36/100 \u00d7 27% = 9.8\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 78/100" }, { l: "Adj AJS", v: "$555", c: "bad" }, { l: "Complaints", v: "3.60%", c: "bad" }, { l: "NPS", v: "91%", c: "good" }, { l: "Reviews", v: "39.1%", c: "good" }]
     },
     {
       id: "tm-ct-4", priority: 4, franchiseCode: "ct", name: "Martin Dinkins", role: "CSL", severity: "high",
-      why: "Composite 82/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. Reviews capture at 7.1%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $513 ($106 below $619). Truck+ at 3.6% (vs 10.0% std) is another thread worth pulling. Signal sits on 28 resi jobs, so it's a real read.",
+      why: "Composite 82/100. Close to the line on most things, slightly under on one. A small course-correction kind of week. Reviews capture at 7.1%, well under our 25% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice. Worth noting AJS is also under, at $513 ($106 below $619). Truck+ at 3.6% (vs 10.0% std) is another thread worth pulling. Signal sits on 28 resi jobs, so it's a real read.",
       play: "<strong>Larry could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
       framework: "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever.",
-      metrics: [{ l: "Score", v: "82/100" }, { l: "Adj AJS", v: "$513", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "7.1%", c: "bad" }]
+      metrics: [{ l: "Score", v: "82/100", tip: "Adj AJS: 83/100 \u00d7 45% = 37.7\nComplaints: 100/100 \u00d7 27% = 27.3\nNPS: 100/100 \u00d7 14% = 13.6\nReviews: 29/100 \u00d7 14% = 3.9\nComposite: 82/100" }, { l: "Adj AJS", v: "$513", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "7.1%", c: "bad" }]
     },
     {
       id: "tm-ct-5", priority: 5, franchiseCode: "ct", name: "Robin Bissoon", role: "CEL", severity: "high",
-      why: "Composite 83/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week. Complaints at 3.20% (standard 1.30%). At this volume, even a couple of negative experiences can move the number. Worth checking whether they cluster around a time of day or job type. NPS at 82% adds to the customer-side signal. 29 resi jobs of data behind it.",
+      why: "Score 83/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention. Complaints at 3.20% (standard 1.30%). At this volume, even a couple of negative experiences can move the number. Worth checking whether they cluster around a time of day or job type. NPS at 82% adds to the customer-side signal. 29 resi jobs of data behind it.",
       play: "<strong>Worth a short conversation with Jakarie about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
       framework: "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which.",
-      metrics: [{ l: "Score", v: "83/100" }, { l: "Adj AJS", v: "$701", c: "good" }, { l: "Complaints", v: "3.20%", c: "bad" }, { l: "NPS", v: "82%", c: "bad" }, { l: "Reviews", v: "34.5%", c: "good" }]
+      metrics: [{ l: "Score", v: "83/100", tip: "Adj AJS: 100/100 \u00d7 45% = 45.5\nComplaints: 41/100 \u00d7 27% = 11.1\nNPS: 91/100 \u00d7 14% = 12.4\nReviews: 100/100 \u00d7 14% = 13.6\nComposite: 83/100" }, { l: "Adj AJS", v: "$701", c: "good" }, { l: "Complaints", v: "3.20%", c: "bad" }, { l: "NPS", v: "82%", c: "bad" }, { l: "Reviews", v: "34.5%", c: "good" }]
     }
   ];
 
   // ===== STATE =====
   let currentFilter = 'all';
   const TODAY_KEY = new Date().toISOString().split('T')[0]; // auto-rolls daily
+  // In single-franchise view, this tracks franchises the user has manually collapsed.
+  // In 'all' view, the default is collapsed (summary cards) and this set tracks
+  // franchises the user has manually expanded.
   const collapsedFranchises = new Set();
+  const expandedInAll = new Set();
   const STORAGE_PREFIX = 'nee-coaching:' + TODAY_KEY + ':';
 
   // ===== STORAGE (localStorage — works on any host) =====
@@ -1022,8 +1308,8 @@
 
         <div class="tm-metrics">
           ${c.metrics.map(m => `
-            <div class="metric">
-              <div class="metric-label">${m.l}</div>
+            <div class="metric ${m.tip ? 'metric-has-tip' : ''}" ${m.tip ? `title="${m.tip.replace(/"/g, '&quot;')}"` : ''}>
+              <div class="metric-label">${m.l}${m.tip ? ' <span class="metric-info">ⓘ</span>' : ''}</div>
               <div class="metric-value ${m.c || ''}">${m.v}</div>
             </div>
           `).join('')}
@@ -1081,7 +1367,26 @@
 
       const fDone = cardsWithState.filter(x => x.state.completed).length;
       const fTotal = cardsWithState.length;
-      const isCollapsed = collapsedFranchises.has(f.code);
+      const isCollapsed = currentFilter === 'all'
+        ? !expandedInAll.has(f.code)
+        : collapsedFranchises.has(f.code);
+
+      // Summary stats for the collapsed/all view
+      const urgentCount = cards.filter(c => c.severity === 'urgent').length;
+      const highCount = cards.filter(c => c.severity === 'high').length;
+      const scores = cards.map(c => {
+        const m = (c.metrics || []).find(x => x.l === 'Score');
+        if (!m) return null;
+        const n = parseInt(String(m.v).split('/')[0], 10);
+        return Number.isFinite(n) ? n : null;
+      }).filter(v => v !== null);
+      const lowestScore = scores.length ? Math.min(...scores) : null;
+      const avgScore = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0) / scores.length) : null;
+
+      const sevPills = `
+        ${urgentCount ? `<span class="sev-pill sev-urgent">${urgentCount} urgent</span>` : ''}
+        ${highCount ? `<span class="sev-pill sev-high">${highCount} high</span>` : ''}
+      `.trim();
 
       html += `
         <div class="franchise-group ${isCollapsed ? 'collapsed' : ''}" data-franchise="${f.code}">
@@ -1091,10 +1396,20 @@
               <div class="franchise-title-block">
                 <div class="franchise-title">${f.name}</div>
                 <div class="franchise-context">${f.context}</div>
+                ${sevPills ? `<div class="franchise-sev-row">${sevPills}</div>` : ''}
               </div>
             </div>
             <div class="franchise-stats">
               <div class="standards-badge">${f.standards}</div>
+              ${lowestScore !== null ? `
+              <div class="franchise-stat">
+                <div class="franchise-stat-value ${lowestScore < 70 ? 'stat-bad' : (lowestScore >= 90 ? 'stat-good' : '')}">${lowestScore}</div>
+                <div class="franchise-stat-label">Lowest</div>
+              </div>
+              <div class="franchise-stat">
+                <div class="franchise-stat-value">${avgScore}</div>
+                <div class="franchise-stat-label">Avg</div>
+              </div>` : ''}
               <div class="franchise-stat">
                 <div class="franchise-stat-value">${fDone}/${fTotal}</div>
                 <div class="franchise-stat-label">Coached</div>
@@ -1161,8 +1476,13 @@
       header.addEventListener('click', (e) => {
         if (e.target.closest('.complete-btn') || e.target.closest('.notes-area')) return;
         const code = header.dataset.toggle;
-        if (collapsedFranchises.has(code)) collapsedFranchises.delete(code);
-        else collapsedFranchises.add(code);
+        if (currentFilter === 'all') {
+          if (expandedInAll.has(code)) expandedInAll.delete(code);
+          else expandedInAll.add(code);
+        } else {
+          if (collapsedFranchises.has(code)) collapsedFranchises.delete(code);
+          else collapsedFranchises.add(code);
+        }
         header.parentElement.classList.toggle('collapsed');
       });
     });
@@ -1179,12 +1499,20 @@
   });
 
   document.getElementById('expand-all').addEventListener('click', () => {
-    collapsedFranchises.clear();
+    if (currentFilter === 'all') {
+      FRANCHISES.forEach(f => expandedInAll.add(f.code));
+    } else {
+      collapsedFranchises.clear();
+    }
     render();
   });
 
   document.getElementById('collapse-all').addEventListener('click', () => {
-    FRANCHISES.forEach(f => collapsedFranchises.add(f.code));
+    if (currentFilter === 'all') {
+      expandedInAll.clear();
+    } else {
+      FRANCHISES.forEach(f => collapsedFranchises.add(f.code));
+    }
     render();
   });
 

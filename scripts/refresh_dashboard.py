@@ -340,9 +340,19 @@ def pick_coach(code: str, idx: int) -> str:
     return coaches[idx % len(coaches)]
 
 
+def _today_salt() -> int:
+    """Date-based salt so narratives rotate daily (keeps the dashboard feeling fresh)."""
+    today = datetime.now(timezone.utc).strftime("%Y%m%d")
+    return sum(ord(c) * (i + 1) for i, c in enumerate(today))
+
+
 def _stable_pick(seq: list[str], tm: TM) -> str:
-    """Stable per-TM choice from a list of phrasings (deterministic, varies by name)."""
-    h = sum(ord(c) for c in tm.name)
+    """
+    Per-TM choice from a list of phrasings. Rotates daily so the same TM doesn't
+    see the same wording every morning. Deterministic within a day so re-runs
+    on the same date produce identical output.
+    """
+    h = sum(ord(c) for c in tm.name) + _today_salt()
     return seq[h % len(seq)]
 
 
@@ -356,22 +366,30 @@ def make_why(tm: TM) -> str:
     score = tm.weighted_score
     parts: list[str] = []
 
-    # Lead with composite framing
+    # Lead with composite framing (multiple variants per band so daily rotation feels fresh)
     if score < 60:
         openers = [
-            f"Composite at {score:.0f}/100. There's more than one thing going on here, worth taking the time to understand the whole picture before picking a focus.",
-            f"Score {score:.0f}/100. A few signals are pointing the same direction, which usually means there's a single underlying habit driving it rather than three separate issues.",
+            f"Composite at {score:.0f}/100. There's more than one thing going on here, worth taking time to see the whole picture before picking a single focus.",
+            f"Score {score:.0f}/100. A few signals are pointing the same direction, which usually means one underlying habit is driving it rather than three separate issues.",
+            f"At {score:.0f}/100, the picture is layered. The temptation is to coach all of it at once, which rarely works. Better to find the root and pull on that thread.",
+            f"Composite {score:.0f}. Multi-front, but not random. Patterns this consistent usually trace back to a single behavior at the close or in the customer interaction.",
+            f"Score lands at {score:.0f}/100. Worth slowing down before reacting. The numbers tell us where, but the conversation tells us why.",
         ]
         parts.append(_stable_pick(openers, tm))
     elif score < 80:
         openers = [
-            f"Composite {score:.0f}/100. One area is doing most of the work pulling the score down. Worth zeroing in on that before broadening.",
-            f"At {score:.0f}/100. The headline number isn't a crisis, but there's a pattern that's consistent enough to be worth a conversation.",
+            f"Composite {score:.0f}/100. One area is doing most of the work pulling the score down. Zeroing in there is more productive than broadening.",
+            f"At {score:.0f}/100, the headline number isn't a crisis, but the pattern is consistent enough to be worth a conversation.",
+            f"Score {score:.0f}/100. Close enough to the line that one focused habit shift could move it meaningfully in two weeks.",
+            f"Composite at {score:.0f}. Not a fire, more like a small leak. Worth catching now before it widens.",
+            f"At {score:.0f}/100. He's not far off, which is the trickiest place to coach because the natural pull is to leave it alone.",
         ]
         parts.append(_stable_pick(openers, tm))
     else:
         openers = [
-            f"Composite {score:.0f}/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week.",
+            f"Composite {score:.0f}/100. Close to the line on most things, slightly under on one. A small course-correction kind of week.",
+            f"At {score:.0f}/100, this is light-touch maintenance coaching. One area to nudge, nothing to redesign.",
+            f"Score {score:.0f}/100. Worth a brief check-in rather than a sit-down. Confidence reps, not crisis intervention.",
         ]
         parts.append(_stable_pick(openers, tm))
 
@@ -523,6 +541,31 @@ def make_framework(tm: TM) -> str:
     return "CSL Scenario 3.2: Estimate & Price + Assumptive Ask. Maintenance coaching, focused on consistency rather than correction."
 
 
+def make_score_breakdown(tm: TM) -> str:
+    """
+    Plain-text breakdown for the score badge tooltip. Shows each sub-score,
+    its weight, and the contribution.
+    """
+    rows: list[str] = []
+    label_map = {
+        "ajs": "Adj AJS",
+        "complaint": "Complaints",
+        "nps": "NPS",
+        "gr": "Reviews",
+    }
+    weight_present = sum(WEIGHTS[k] for k in tm.sub_scores)
+    for k in ("ajs", "complaint", "nps", "gr"):
+        if k not in tm.sub_scores:
+            rows.append(f"{label_map[k]}: no data")
+            continue
+        sub = tm.sub_scores[k]
+        eff_w = WEIGHTS[k] / weight_present if weight_present else 0
+        contrib = sub * eff_w
+        rows.append(f"{label_map[k]}: {sub:.0f}/100 × {eff_w*100:.0f}% = {contrib:.1f}")
+    rows.append(f"Composite: {tm.weighted_score:.0f}/100")
+    return "\n".join(rows)
+
+
 def make_metrics(tm: TM) -> list[dict]:
     """
     Show the 4 weighted metrics first (AJS, Complaint, NPS, GR), color-coded vs standard,
@@ -532,9 +575,13 @@ def make_metrics(tm: TM) -> list[dict]:
     std = STANDARDS[tm.franchise_code]
     out: list[dict] = []
 
-    # Composite score badge (always first)
+    # Composite score badge (always first), with breakdown tooltip
     score_cls = "bad" if tm.weighted_score < 75 else ("good" if tm.weighted_score >= 95 else None)
-    score_entry = {"l": "Score", "v": f"{tm.weighted_score:.0f}/100"}
+    score_entry = {
+        "l": "Score",
+        "v": f"{tm.weighted_score:.0f}/100",
+        "tip": make_score_breakdown(tm),
+    }
     if score_cls:
         score_entry["c"] = score_cls
     out.append(score_entry)
@@ -579,11 +626,14 @@ def render_teammates(records: list[dict]) -> str:
             continue
         chunks.append(f"\n    // {label[code]}")
         for tm in by_fr[code]:
-            metrics_js = ", ".join(
-                "{ l: " + json.dumps(m["l"]) + ", v: " + json.dumps(m["v"]) +
-                (", c: " + json.dumps(m["c"]) if "c" in m else "") + " }"
-                for m in tm["metrics"]
-            )
+            def _metric_js(m: dict) -> str:
+                pairs = ["l: " + json.dumps(m["l"]), "v: " + json.dumps(m["v"])]
+                if "c" in m:
+                    pairs.append("c: " + json.dumps(m["c"]))
+                if "tip" in m:
+                    pairs.append("tip: " + json.dumps(m["tip"]))
+                return "{ " + ", ".join(pairs) + " }"
+            metrics_js = ", ".join(_metric_js(m) for m in tm["metrics"])
             chunks.append(
                 "    {\n"
                 f"      id: {json.dumps(tm['id'])}, priority: {tm['priority']}, "
