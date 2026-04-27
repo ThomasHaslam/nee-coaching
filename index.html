@@ -3659,12 +3659,14 @@
 
     const head = document.getElementById('chat-main-head');
     head.innerHTML = `
+      <button type="button" class="chat-main-roster-toggle" id="chat-main-roster-toggle" aria-label="Show roster">📋 Roster</button>
       <div class="chat-main-mode-tag">🌐 General Coaching · Leadership, Training, Development</div>
       <div class="chat-main-tm-name">Ask Coach Rick anything.</div>
       <div class="chat-main-tm-meta">
         <span>Coaching philosophy · 1:1 prep · PIP design · huddle facilitation · CSL Scenarios · recognition · culture · difficult conversations</span>
       </div>
     `;
+    document.getElementById('chat-main-roster-toggle').addEventListener('click', openSidebarDrawer);
 
     const input = document.getElementById('chat-main-input');
     const send = document.getElementById('chat-main-send');
@@ -3695,9 +3697,10 @@
     CHAT_MAIN_TM = daily ? { ...tm, ...daily, score: tm.score, tier: tm.tier } : tm;
     CHAT_MAIN_HISTORY = loadChatHistory(tm.id);
 
-    // Update header
+    // Update header (preserves the mobile roster toggle)
     const head = document.getElementById('chat-main-head');
     head.innerHTML = `
+      <button type="button" class="chat-main-roster-toggle" id="chat-main-roster-toggle" aria-label="Show roster">📋 Roster</button>
       <div class="chat-main-tm-name">${escapeHtml(tm.name)}</div>
       <div class="chat-main-tm-meta">
         <span><strong>${escapeHtml(tm.role)}</strong></span>
@@ -3707,6 +3710,8 @@
         <span>${tm.resiJobs} resi jobs</span>
       </div>
     `;
+    // Re-bind roster toggle since the button was just re-rendered
+    document.getElementById('chat-main-roster-toggle').addEventListener('click', openSidebarDrawer);
 
     // Enable input
     const input = document.getElementById('chat-main-input');

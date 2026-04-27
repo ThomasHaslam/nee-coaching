@@ -23,6 +23,145 @@ const SCENARIOS = {
   "3.3": "Full Negotiation Protocol - cancel-edge customer. 5 steps: Re-Establish Value, Priority Items (full price first), Coupon, Identify Budget, Call Operations with TM on site.",
 };
 
+// ===== LEADERSHIP & COACHING LIBRARY =====
+// Curated frameworks Coach Rick draws on alongside the CSL Scenario playbook.
+// References the actual sources so he speaks with attribution, not platitudes.
+
+const LEADERSHIP_LIBRARY = [
+  {
+    name: "GROW Coaching Model",
+    source: "John Whitmore, Coaching for Performance",
+    use: "Default structure for any coaching conversation.",
+    text: "Goal: what does success look like in their own words. Reality: where are they now, in data not opinion. Options: what could they try (generate 3-5 before picking). Will: what specific action will they commit to in the next 7 days, and how will we both know it worked. Coaches who skip Reality go to fixes too fast and miss the cause."
+  },
+  {
+    name: "Radical Candor",
+    source: "Kim Scott",
+    use: "When you need to deliver hard feedback without damaging trust.",
+    text: "Two axes: care personally and challenge directly. Without care, challenge is obnoxious aggression. Without challenge, care is ruinous empathy. Most managers fail in the ruinous-empathy quadrant: they protect the relationship by withholding the truth. The teammate pays the price. Earn the right to challenge by showing care first, then say the hard thing clearly."
+  },
+  {
+    name: "SBI Feedback Model",
+    source: "Center for Creative Leadership",
+    use: "Replaces vague feedback (\"you always...\") with specific, hearable feedback.",
+    text: "Situation: name the specific moment. Behavior: describe the observable action, not interpretation. Impact: state the consequence on the customer / team / outcome. Example: 'On Tuesday's 2pm job (Situation), you skipped the assumptive ask after the bid (Behavior). The customer paused, asked to think about it, and we left with a 1/4 truck instead of a 1/2 (Impact).'"
+  },
+  {
+    name: "5 Dysfunctions of a Team",
+    source: "Patrick Lencioni",
+    use: "Diagnose why a team isn't performing.",
+    text: "The pyramid: Trust (vulnerability-based) → Healthy Conflict → Commitment → Accountability → Results. Each layer requires the one below. If teammates can't disagree openly, they won't truly commit. If they don't commit, they won't hold each other accountable. If they don't hold each other accountable, results will always lag. Most performance problems are accountability problems, and most accountability problems are trust problems."
+  },
+  {
+    name: "Crucial Conversations",
+    source: "Patterson, Grenny, McMillan, Switzler",
+    use: "Hard conversations where stakes are high and emotions are strong.",
+    text: "Start with heart: clarify what you really want for them, for you, and for the relationship. Make it safe: contrast what you don't mean with what you do mean ('I'm not saying you don't care, I AM saying the data shows the close isn't landing'). State your path: facts first, then your story (interpretation). Then ask for their path. Avoid the Sucker's Choice ('be silent or fight') by asking 'how can both be true?'"
+  },
+  {
+    name: "Trust Equation",
+    source: "Maister, Galford, Green",
+    use: "Diagnose why a teammate doesn't trust you (or vice versa).",
+    text: "Trust = (Credibility + Reliability + Intimacy) / Self-Orientation. Credibility = words you can believe. Reliability = consistent action over time. Intimacy = feeling safe to be vulnerable. Self-Orientation in the denominator: the more you talk about yourself or your goals, the more trust drops. Coaches with high self-orientation (\"I need you to hit your number\") lose teammates. Lower it by asking about THEM."
+  },
+  {
+    name: "Pink's Drive: Autonomy / Mastery / Purpose",
+    source: "Daniel Pink, Drive",
+    use: "Beyond money, what actually motivates skilled work.",
+    text: "Autonomy: control over what, when, how, and with whom. Mastery: the urge to get better at something that matters. Purpose: yearning to do work in service of something larger than ourselves. Stick-and-carrot motivation works for repetitive tasks but undermines performance on creative or judgment work (which is what selling is). The fastest way to demotivate a strong CSL is to micromanage their close."
+  },
+  {
+    name: "Self-Determination Theory",
+    source: "Deci & Ryan",
+    use: "Research foundation under Pink's Drive.",
+    text: "Three universal psychological needs: autonomy (volition), competence (effective interaction with environment), relatedness (connection to others). When these are satisfied, intrinsic motivation flourishes and people perform at their best. When thwarted (controlling micromanagement, repeated failure with no support, isolation) people disengage even if extrinsic rewards remain."
+  },
+  {
+    name: "Goal Setting Theory",
+    source: "Edwin Locke and Gary Latham",
+    use: "Why some goals drive performance and others don't.",
+    text: "Specific + difficult goals beat 'do your best.' Specific because vague goals don't focus attention. Difficult (but achievable) because easy goals don't engage effort. Goals must come with feedback (so they can self-correct), commitment (they accept it as theirs), and capability (they have or can build the skill). 'Hit standard AJS' is weaker than 'Run Scenario 1 Step 4 with confidence on every job for 7 days.'"
+  },
+  {
+    name: "Andy Grove's 1:1",
+    source: "High Output Management",
+    use: "Default 1:1 structure for any direct report.",
+    text: "Weekly. 30-60 minutes. They set the agenda; you ask questions. Your job is to surface what they're not saying. Standard prompts: 'What's working? What isn't? What's getting in your way?' Take notes; review them next time so they know it landed. Skip-level 1:1s twice a year to validate what you're hearing. Inspect what you expect: if you don't review the metric weekly, you don't actually care about it."
+  },
+  {
+    name: "Situational Leadership",
+    source: "Hersey & Blanchard",
+    use: "Calibrate coaching style to teammate readiness.",
+    text: "Four styles. Directing (high task, low relationship) for new teammates who can't yet. Coaching (high task, high relationship) for those who can't yet but are willing. Supporting (low task, high relationship) for those who can but won't yet. Delegating (low task, low relationship) for those who can and will. The mistake: applying one style across the team. New CSL needs Directing. Veteran needs Delegating. Treating them the same insults both."
+  },
+  {
+    name: "Tuckman: Forming / Storming / Norming / Performing",
+    source: "Bruce Tuckman, 1965",
+    use: "Diagnose team development phase.",
+    text: "Forming: polite, dependent, looking to leader for direction. Storming: conflict surfaces, roles questioned, performance dips. Norming: agreements form, trust builds, performance returns. Performing: high autonomy, high results. Most teams stall in Storming because the leader misreads conflict as disrespect rather than a normal stage. Sit in the discomfort; don't shut it down."
+  },
+  {
+    name: "Working Genius",
+    source: "Patrick Lencioni",
+    use: "Match teammates to the parts of work they're built for.",
+    text: "Six gifts: Wonder (asking questions), Invention (generating ideas), Discernment (instinctive judgment), Galvanizing (rallying others), Enablement (responding to others' needs), Tenacity (driving to the finish). Most people have 2 geniuses, 2 competencies, 2 frustrations. Teammates burn out fastest when stuck doing their frustrations. A CSL who's a Tenacity-Galvanizing built different than a CSL who's Discernment-Wonder. Don't coach them the same."
+  },
+  {
+    name: "Gottman 5:1 Ratio",
+    source: "John Gottman (relationships research)",
+    use: "Calibrate praise vs correction in coaching.",
+    text: "Strong, lasting relationships have at least five positive interactions for every negative one. Below 5:1 the relationship erodes; below 1:1 it's heading for breakdown. This applies to coach-teammate too. If 4 of your last 5 interactions were corrective, the next correction won't land no matter how true it is. Build the bank account before withdrawing."
+  },
+  {
+    name: "Growth Mindset",
+    source: "Carol Dweck",
+    use: "How to frame feedback so it builds capability, not defensiveness.",
+    text: "Fixed mindset: ability is innate (\"I'm not a closer\"). Growth mindset: ability is developed (\"I haven't built that muscle yet\"). Praise effort and process, not innate talent. The word 'yet' is the most useful coaching word in the language. 'You can't deliver the assumptive ask cleanly... yet.'"
+  },
+  {
+    name: "5 Languages of Appreciation in the Workplace",
+    source: "Gary Chapman & Paul White",
+    use: "Match recognition to what the teammate actually values.",
+    text: "Words of Affirmation, Quality Time, Acts of Service, Tangible Gifts, Physical Touch (handshakes, high fives in workplace context). Different teammates feel valued by different signals. The teammate who shrugs off the gift card might tear up at a public shout-out. Ask. Don't assume your language is theirs."
+  },
+  {
+    name: "Habit Loop",
+    source: "Charles Duhigg, The Power of Habit",
+    use: "Why scripted practice changes behavior more than reminders.",
+    text: "Cue → Routine → Reward. Behavior change happens by inserting a new routine into an existing cue, with a reward attached. 'After bidding the job (cue), I deliver the assumptive ask (new routine), and watch the customer move toward yes (reward).' Just telling someone to do something different doesn't work. You have to script the cue and the reward."
+  },
+  {
+    name: "Performance Improvement Plan, done well",
+    source: "Best practice synthesis",
+    use: "When a teammate is below standard for a sustained period.",
+    text: "Specific behaviors, not adjectives. Measurable targets, not vague improvement. Time-boxed (typically 30 days at NEE per CSL Performance Accountability). Weekly check-ins, not monthly surprises. Clear consequences if standards aren't met. The PIP is not a punishment, it's a contract: here's what we both commit to. Most PIPs fail because the manager hopes; a successful PIP is the manager being explicit."
+  },
+  {
+    name: "Trust-Building (Stephen M.R. Covey)",
+    source: "The Speed of Trust",
+    use: "Build the foundation that makes hard coaching possible.",
+    text: "13 behaviors: Talk straight, Demonstrate respect, Create transparency, Right wrongs, Show loyalty, Deliver results, Get better, Confront reality, Clarify expectations, Practice accountability, Listen first, Keep commitments, Extend trust. The fastest is Listen First; the most overlooked is Right Wrongs (when YOU were wrong). Trust isn't a feeling, it's a sequence of small acts."
+  },
+  {
+    name: "First, Break All the Rules - 12 Engagement Questions",
+    source: "Marcus Buckingham (Gallup)",
+    use: "Diagnose engagement at the team level.",
+    text: "The Q12: Do I know what is expected? Do I have the materials and equipment? Do I have the opportunity to do what I do best every day? In the last 7 days, have I received recognition for good work? Does my supervisor seem to care about me as a person? Is there someone at work who encourages my development? Does my opinion count? Does the mission make me feel my job is important? Are my coworkers committed to quality? Do I have a best friend at work? In the last 6 months, has someone talked to me about my progress? Have I had opportunities to learn and grow? Engagement starts at #1 - if a teammate doesn't know what's expected, nothing else matters."
+  },
+  {
+    name: "Servant Leadership / Level 5",
+    source: "Robert Greenleaf, Jim Collins",
+    use: "The posture that builds enduring teams.",
+    text: "Level 5 Leadership (Collins, Good to Great): combines extreme professional will with personal humility. Credit goes to the team and the conditions; blame is owned. Servant leadership flips the org chart: the leader exists to serve the people doing the work. Practical test: in a stand-up, what percent of the time do you spend talking? If it's more than 30%, you're not yet there."
+  },
+  {
+    name: "Inspect What You Expect",
+    source: "Andy Grove",
+    use: "Why goals you don't measure don't get hit.",
+    text: "Stating an expectation isn't enough. The teammate has to know you'll check, and the check has to actually happen. Weekly. Same metric, same time, same place. If the leader doesn't show up to inspect, the teammate learns the expectation isn't real. Rituals beat intentions."
+  },
+];
+
 const TRAINING_QUOTES = [
   {
     ref: "Scenario 1 Step 4 - Estimate & Price (Rules of the Range)",
@@ -118,22 +257,46 @@ Growth is about consistency, leadership reps, and stretch goals (mentoring, hard
 - URGENT (under 65): Direct, structured. Frame as Level 1 PIP territory if AJS is the driver. \
 Pair shadow + scripted practice. 15-day target back to standard.
 
-WHAT YOU KNOW:
-You have the full CSL Scenario library (Scenarios 1, 2, 3.1, 3.2, 3.3) committed to memory. \
-You will be given the relevant excerpts in every prompt. Treat them as authoritative.
+YOUR EXPERTISE:
+You have two libraries committed to memory and you reference them by name:
+
+1. THE CSL SCENARIO PLAYBOOK (Southwind / 1-800-GOT-JUNK?). The on-the-job sales process: \
+Scenarios 1, 2, 3.1, 3.2, 3.3. Each step, each example script. The Three Power Questions. \
+The 5-Star Service Agenda. FORD. REEAP. The Costco Effect. Roll-Over Pricing. The Negotiation \
+Protocol. You cite specific step numbers when relevant.
+
+2. A LEADERSHIP & COACHING LIBRARY of 22 named frameworks and research findings: GROW \
+(Whitmore), Radical Candor (Kim Scott), SBI Feedback, the 5 Dysfunctions of a Team (Lencioni), \
+Crucial Conversations (Patterson et al.), the Trust Equation (Maister/Galford/Green), Pink's \
+Drive (Autonomy/Mastery/Purpose), Self-Determination Theory (Deci & Ryan), Goal Setting Theory \
+(Locke & Latham), Andy Grove's 1:1, Situational Leadership (Hersey/Blanchard), Tuckman \
+(Forming/Storming/Norming/Performing), Working Genius (Lencioni), the Gottman 5:1 ratio, \
+Growth Mindset (Dweck), the 5 Languages of Appreciation (Chapman/White), the Habit Loop \
+(Duhigg), PIPs done well, the 13 Trust Behaviors (Stephen M.R. Covey), Gallup's Q12, \
+Servant / Level 5 Leadership (Greenleaf / Collins), and "Inspect What You Expect" (Grove).
+
+When relevant, NAME the framework you draw on. "This is a GROW conversation." "That's an \
+SBI feedback construction." "Lencioni would call this an accountability problem upstream of a \
+trust problem." Don't drown the answer in citations - one or two named frameworks per answer \
+is plenty. The point is that your advice is grounded in specific methods, not generic platitudes.
+
+Both libraries arrive in the prompt context every turn. Treat them as authoritative.
 
 You will also receive (when applicable):
-- A specific teammate's current performance data (metrics vs franchise standards)
+- A specific teammate's full performance data (every metric we track vs franchise standards)
 - The current daily AI-generated coaching write-up (Why / Play / Anchor)
 - Prior chat history in this conversation
 
-If the question requires data you don't have (recent shifts, individual call recordings, attendance \
-records, financials beyond what's in the metrics block), say so directly and suggest what \
+If the question requires data you don't have (recent shifts, individual call recordings, \
+attendance records, financials beyond the metrics block), say so directly and suggest what \
 additional info would help. Never invent training material, metrics, or teammate background. \
-When extrapolating beyond the documented playbook, say so explicitly.`;
+When the answer goes beyond the CSL playbook, ground it explicitly in the leadership library.`;
 
 function buildPrompt(tm, history, question) {
   const trainingLib = TRAINING_QUOTES.map(q => `--- ${q.ref} ---\n${q.text}`).join('\n\n');
+  const leadershipLib = LEADERSHIP_LIBRARY
+    .map(f => `### ${f.name} (${f.source})\nWhen to use: ${f.use}\n${f.text}`)
+    .join('\n\n');
   const histBlock = (history && history.length)
     ? '\n\nPRIOR EXCHANGES IN THIS CONVERSATION:\n' +
       history.slice(-8).map(m => `[${(m.role || 'user').toUpperCase()}] ${m.text}`).join('\n\n')
@@ -148,15 +311,18 @@ about coaching philosophy, how to run a 1:1, how to design a PIP, huddle facilit
 recognition, training rollout, building culture, handling difficult conversations, or
 any other leadership / development topic.)
 
-CSL SCENARIO LIBRARY (use as authoritative reference; cite exact scenario step numbers when applicable)
+CSL SCENARIO LIBRARY (cite exact scenario step numbers when applicable)
 ${trainingLib}
+
+LEADERSHIP & COACHING LIBRARY (name the frameworks you use)
+${leadershipLib}
 ${histBlock}
 
 LEADER'S QUESTION:
 ${question}
 
-Answer in voice. Reference Scenario steps when relevant. If the question goes beyond the
-documented playbook, say so explicitly and answer with general sales-coaching judgment.`;
+Answer in voice. Reference Scenario steps and / or named leadership frameworks where they fit.
+Be substantive, not generic. If the answer requires data you don't have, say so.`;
   }
 
   // SPECIFIC TEAMMATE MODE
@@ -199,14 +365,19 @@ ${tm.play || ''}
 
 ${anchorBlock}
 
-CSL SCENARIO LIBRARY (use these excerpts as authoritative reference - cite exact scenario step numbers)
+CSL SCENARIO LIBRARY (use as authoritative reference - cite exact scenario step numbers)
 ${trainingLib}
+
+LEADERSHIP & COACHING LIBRARY (name the frameworks you draw on)
+${leadershipLib}
 ${histBlock}
 
 LEADER'S QUESTION:
 ${question}
 
-Answer in voice. Stay specific to this teammate's actual numbers. Reference the relevant Scenario step.`;
+Answer in voice. Stay specific to this teammate's actual numbers. Reference relevant Scenario
+steps AND name 1-2 leadership frameworks where they apply (GROW for the conversation structure,
+SBI for feedback, etc.). Be substantive.`;
 }
 
 function corsHeaders(origin) {
