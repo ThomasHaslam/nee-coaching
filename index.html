@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LAST_UPDATED: 2026-04-27T03:15:37Z -->
+<!-- LAST_UPDATED: 2026-04-27T03:32:23Z -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -822,150 +822,150 @@
   const TEAMMATES = [
     // BOSTON NORTH
     {
-      id: "tm-bno-1", priority: 1, franchiseCode: "bno", name: "Armani Pabon", role: "CSL", severity: "urgent",
-      why: "Complaint rate 25.00%, 16.7x the 1.50% standard.",
-      play: "<strong>Richard pre-shift sit-down.</strong> Pull last 3 NPS detractors. Walk through what was missed. Have him personally call back 2 of those customers.",
-      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda either isn't being delivered or isn't landing.",
-      metrics: [{ l: "Adj AJS", v: "$1,315", c: "good" }, { l: "NPS", v: "100.0%", c: "good" }, { l: "Truck+", v: "40.7%", c: "good" }, { l: "1/6 or Less", v: "14.8%", c: "good" }]
+      id: "tm-bno-1", priority: 1, franchiseCode: "bno", name: "Deven Okowuga", role: "CEL", severity: "high",
+      why: "Composite 65. Not a crisis yet, but trending wrong. Google Reviews capture at 7.5% (standard 25%). The ask isn't happening on the truck. AJS $438 ($287 under). NPS 29% (under 90%). Sample: 40 resi jobs.",
+      play: "<strong>Richard ride-along, focus on the closeout moment.</strong> Listen for whether the review request happens. Coach the words in the moment, not after.",
+      framework: "CSL Scenario 3.2 close + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask is the lever.",
+      metrics: [{ l: "Score", v: "65/100", c: "bad" }, { l: "Adj AJS", v: "$438", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "29%", c: "bad" }, { l: "Reviews", v: "7.5%", c: "bad" }]
     },
     {
-      id: "tm-bno-2", priority: 2, franchiseCode: "bno", name: "Giovani Memeus", role: "CSL", severity: "urgent",
-      why: "Adj Resi AJS $641, $84 below the $725 standard. Complaint rate 8.30%, 5.5x the 1.50% standard.",
-      play: "<strong>Richard pre-shift sit-down.</strong> Pull last 3 NPS detractors. Walk through what was missed. Have him personally call back 2 of those customers.",
-      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda either isn't being delivered or isn't landing.",
-      metrics: [{ l: "Adj AJS", v: "$641", c: "bad" }, { l: "NPS", v: "100.0%", c: "good" }, { l: "Truck+", v: "12.3%", c: "good" }, { l: "1/6 or Less", v: "40.4%", c: "bad" }]
+      id: "tm-bno-2", priority: 2, franchiseCode: "bno", name: "Nathan Kapala", role: "CSL", severity: "high",
+      why: "Score 75/100. One real problem, a few smaller leaks. Complaints at 5.40%. That's 3.6x the 1.50% line. Customers are leaving angry. AJS $656 ($69 under). Reviews capture 14.6% (vs 25%). Sample: 48 resi jobs.",
+      play: "<strong>Tyler pulls the complaint logs together with him.</strong> Identify the pattern: pace, language, or close? One focus, one shift.",
+      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or not landing.",
+      metrics: [{ l: "Score", v: "75/100", c: "bad" }, { l: "Adj AJS", v: "$656", c: "bad" }, { l: "Complaints", v: "5.40%", c: "bad" }, { l: "NPS", v: "91%", c: "good" }, { l: "Reviews", v: "14.6%", c: "bad" }]
     },
     {
-      id: "tm-bno-3", priority: 3, franchiseCode: "bno", name: "Nathan Kapala", role: "CSL", severity: "urgent",
-      why: "Adj Resi AJS $656, $69 below the $725 standard. Complaint rate 5.40%, 3.6x the 1.50% standard.",
-      play: "<strong>Richard pre-shift sit-down.</strong> Pull last 3 NPS detractors. Walk through what was missed. Have him personally call back 2 of those customers.",
-      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda either isn't being delivered or isn't landing.",
-      metrics: [{ l: "Adj AJS", v: "$656", c: "bad" }, { l: "NPS", v: "90.9%", c: "good" }, { l: "Truck+", v: "18.8%", c: "good" }, { l: "1/6 or Less", v: "39.6%", c: "bad" }]
+      id: "tm-bno-3", priority: 3, franchiseCode: "bno", name: "Jeron Feaster", role: "CSL", severity: "high",
+      why: "Google Reviews capture at 8.8% (standard 25%). The ask isn't happening on the truck. AJS $458 ($267 under). NPS 75% (under 90%). Sample: 34 resi jobs.",
+      play: "<strong>Richard 15-min huddle on the review ask.</strong> Practice the script out loud. Goal: every job tomorrow gets the ask, no exceptions. Track on paper.",
+      framework: "CSL Scenario 3.2 close + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask is the lever.",
+      metrics: [{ l: "Score", v: "75/100" }, { l: "Adj AJS", v: "$458", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "75%", c: "bad" }, { l: "Reviews", v: "8.8%", c: "bad" }]
     },
     {
-      id: "tm-bno-4", priority: 4, franchiseCode: "bno", name: "Angel Ortiz", role: "CSL", severity: "urgent",
-      why: "Complaint rate 4.30%, 2.9x the 1.50% standard. NPS 60.0%, 30 points below standard. Service quality is the bigger fire.",
-      play: "<strong>Richard pre-shift sit-down.</strong> Pull last 3 NPS detractors. Walk through what was missed. Have him personally call back 2 of those customers.",
-      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda either isn't being delivered or isn't landing.",
-      metrics: [{ l: "Adj AJS", v: "$734", c: "good" }, { l: "NPS", v: "60.0%", c: "bad" }, { l: "Truck+", v: "21.4%", c: "good" }, { l: "1/6 or Less", v: "32.1%", c: "good" }]
+      id: "tm-bno-4", priority: 4, franchiseCode: "bno", name: "Geronal Memeus", role: "CSL", severity: "high",
+      why: "Google Reviews capture at 5.3% (standard 25%). The ask isn't happening on the truck. AJS $618 ($107 under). NPS 85% (under 90%). Sample: 75 resi jobs.",
+      play: "<strong>Tyler 15-min huddle on the review ask.</strong> Practice the script out loud. Goal: every job tomorrow gets the ask, no exceptions. Track on paper.",
+      framework: "CSL Scenario 3.2 close + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask is the lever.",
+      metrics: [{ l: "Score", v: "80/100" }, { l: "Adj AJS", v: "$618", c: "bad" }, { l: "Complaints", v: "1.50%", c: "good" }, { l: "NPS", v: "85%", c: "bad" }, { l: "Reviews", v: "5.3%", c: "bad" }]
     },
     {
-      id: "tm-bno-5", priority: 5, franchiseCode: "bno", name: "Deven Okowuga", role: "CEL", severity: "urgent",
-      why: "Adj Resi AJS $438, $287 below the $725 standard. NPS 28.6%, 61 points below standard. Service quality is the bigger fire. Truck+ 5.0% (vs 10.0% std). Closing small loads, not pitching the upsell.",
-      play: "<strong>Richard 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top performer next 2 shifts. 15-day target back to $725.",
-      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS for one month triggers documented plan with 30-day target.",
-      metrics: [{ l: "Adj AJS", v: "$438", c: "bad" }, { l: "NPS", v: "28.6%", c: "bad" }, { l: "Truck+", v: "5.0%", c: "bad" }, { l: "1/6 or Less", v: "50.0%", c: "bad" }]
+      id: "tm-bno-5", priority: 5, franchiseCode: "bno", name: "Angel Ortiz", role: "CSL", severity: "medium",
+      why: "Complaint rate 4.30%, 2.9x our 1.50% mark. Quality is slipping. NPS 60% (under 90%). Reviews capture 21.4% (vs 25%). Sample: 28 resi jobs.",
+      play: "<strong>Richard pulls the complaint logs together with him.</strong> Identify the pattern: pace, language, or close? One focus, one shift.",
+      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or not landing.",
+      metrics: [{ l: "Score", v: "80/100" }, { l: "Adj AJS", v: "$734", c: "good" }, { l: "Complaints", v: "4.30%", c: "bad" }, { l: "NPS", v: "60%", c: "bad" }, { l: "Reviews", v: "21.4%", c: "bad" }]
     },
 
     // BOSTON SOUTH
     {
-      id: "tm-bso-1", priority: 1, franchiseCode: "bso", name: "Jadiel Diaz", role: "CEL", severity: "urgent",
-      why: "Adj Resi AJS $494, $231 below the $725 standard. NPS 57.1%, 33 points below standard. Service quality is the bigger fire. Truck+ 5.6% (vs 10.0% std). Closing small loads, not pitching the upsell.",
-      play: "<strong>Tommy 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top performer next 2 shifts. 15-day target back to $725.",
-      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS for one month triggers documented plan with 30-day target.",
-      metrics: [{ l: "Adj AJS", v: "$494", c: "bad" }, { l: "NPS", v: "57.1%", c: "bad" }, { l: "Truck+", v: "5.6%", c: "bad" }, { l: "1/6 or Less", v: "44.4%", c: "bad" }]
+      id: "tm-bso-1", priority: 1, franchiseCode: "bso", name: "Jadiel Diaz", role: "CEL", severity: "high",
+      why: "Google Reviews capture at 13.9% (standard 25%). The ask isn't happening on the truck. AJS $494 ($231 under). NPS 57% (under 90%). Sample: 36 resi jobs.",
+      play: "<strong>Tommy ride-along, focus on the closeout moment.</strong> Listen for whether the review request happens. Coach the words in the moment, not after.",
+      framework: "CSL Scenario 3.2 close + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask is the lever.",
+      metrics: [{ l: "Score", v: "78/100" }, { l: "Adj AJS", v: "$494", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "57%", c: "bad" }, { l: "Reviews", v: "13.9%", c: "bad" }]
     },
     {
-      id: "tm-bso-2", priority: 2, franchiseCode: "bso", name: "Michael Peterson", role: "CSL", severity: "urgent",
-      why: "Adj Resi AJS $517, $208 below the $725 standard. NPS 75.0%, 15 points below standard. Service quality is the bigger fire. Truck+ 4.0% (vs 10.0% std). Closing small loads, not pitching the upsell.",
-      play: "<strong>Tommy 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top performer next 2 shifts. 15-day target back to $725.",
-      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS for one month triggers documented plan with 30-day target.",
-      metrics: [{ l: "Adj AJS", v: "$517", c: "bad" }, { l: "NPS", v: "75.0%", c: "bad" }, { l: "Truck+", v: "4.0%", c: "bad" }, { l: "1/6 or Less", v: "40.0%", c: "bad" }]
+      id: "tm-bso-2", priority: 2, franchiseCode: "bso", name: "Dawson Guidetti", role: "CSL", severity: "medium",
+      why: "Google Reviews capture at 10.8% (standard 25%). The ask isn't happening on the truck. AJS $540 ($185 under). NPS 88% (under 90%). Sample: 111 resi jobs.",
+      play: "<strong>Kendall ride-along, focus on the closeout moment.</strong> Listen for whether the review request happens. Coach the words in the moment, not after.",
+      framework: "CSL Scenario 3.2 close + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask is the lever.",
+      metrics: [{ l: "Score", v: "84/100" }, { l: "Adj AJS", v: "$540", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "88%", c: "bad" }, { l: "Reviews", v: "10.8%", c: "bad" }]
     },
     {
-      id: "tm-bso-3", priority: 3, franchiseCode: "bso", name: "Ryan Collazo", role: "CSL", severity: "urgent",
-      why: "Adj Resi AJS $566, $159 below the $725 standard. NPS 66.7%, 23 points below standard. Service quality is the bigger fire. Truck+ 5.8% (vs 10.0% std). Closing small loads, not pitching the upsell.",
-      play: "<strong>Tommy 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top performer next 2 shifts. 15-day target back to $725.",
-      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS for one month triggers documented plan with 30-day target.",
-      metrics: [{ l: "Adj AJS", v: "$566", c: "bad" }, { l: "NPS", v: "66.7%", c: "bad" }, { l: "Truck+", v: "5.8%", c: "bad" }, { l: "1/6 or Less", v: "46.1%", c: "bad" }]
+      id: "tm-bso-3", priority: 3, franchiseCode: "bso", name: "Tyler Andrade", role: "CSL", severity: "medium",
+      why: "Google Reviews capture at 10.8% (standard 25%). The ask isn't happening on the truck. AJS $540 ($185 under). NPS 88% (under 90%). Sample: 111 resi jobs.",
+      play: "<strong>Tommy ride-along, focus on the closeout moment.</strong> Listen for whether the review request happens. Coach the words in the moment, not after.",
+      framework: "CSL Scenario 3.2 close + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask is the lever.",
+      metrics: [{ l: "Score", v: "84/100" }, { l: "Adj AJS", v: "$540", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "88%", c: "bad" }, { l: "Reviews", v: "10.8%", c: "bad" }]
     },
     {
-      id: "tm-bso-4", priority: 4, franchiseCode: "bso", name: "Roberto Colon", role: "CEL", severity: "urgent",
-      why: "Adj Resi AJS $517, $208 below the $725 standard. Truck+ 3.0% (vs 10.0% std). Closing small loads, not pitching the upsell.",
-      play: "<strong>Tommy 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top performer next 2 shifts. 15-day target back to $725.",
-      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS for one month triggers documented plan with 30-day target.",
-      metrics: [{ l: "Adj AJS", v: "$517", c: "bad" }, { l: "NPS", v: "100.0%", c: "good" }, { l: "Truck+", v: "3.0%", c: "bad" }, { l: "1/6 or Less", v: "39.4%", c: "bad" }]
+      id: "tm-bso-4", priority: 4, franchiseCode: "bso", name: "Logan Ballou", role: "CEL", severity: "medium",
+      why: "Adj Resi AJS $481. That's $244 under $725. The close isn't landing. Reviews capture 20.0% (vs 25%). Truck+ 8.3% (vs 10.0% std). Sample: 60 resi jobs.",
+      play: "<strong>Kendall 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top closer next 2 shifts. 15-day target back to $725.",
+      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS one month triggers a documented 30-day plan.",
+      metrics: [{ l: "Score", v: "88/100" }, { l: "Adj AJS", v: "$481", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "20.0%", c: "bad" }]
     },
     {
-      id: "tm-bso-5", priority: 5, franchiseCode: "bso", name: "Joseph Currier", role: "CSL", severity: "urgent",
-      why: "Adj Resi AJS $539, $186 below the $725 standard. Cancel conversion 100%. Every cancel he touched stayed cancelled. SC Save mechanics are missing.",
-      play: "<strong>Tommy 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top performer next 2 shifts. 15-day target back to $725.",
-      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS for one month triggers documented plan with 30-day target.",
-      metrics: [{ l: "Adj AJS", v: "$539", c: "bad" }, { l: "NPS", v: "100.0%", c: "good" }, { l: "Truck+", v: "12.9%", c: "good" }, { l: "1/6 or Less", v: "44.3%", c: "bad" }]
+      id: "tm-bso-5", priority: 5, franchiseCode: "bso", name: "Nicholas Strojny", role: "CSL", severity: "medium",
+      why: "Adj Resi AJS $512. That's $213 under $725. The close isn't landing. Reviews capture 20.0% (vs 25%). Truck+ 6.2% (vs 10.0% std). Sample: 65 resi jobs.",
+      play: "<strong>Tommy 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top closer next 2 shifts. 15-day target back to $725.",
+      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS one month triggers a documented 30-day plan.",
+      metrics: [{ l: "Score", v: "89/100" }, { l: "Adj AJS", v: "$512", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "92%", c: "good" }, { l: "Reviews", v: "20.0%", c: "bad" }]
     },
 
     // COASTAL PORTS
     {
-      id: "tm-cp-1", priority: 1, franchiseCode: "cp", name: "Joshua Meserve", role: "CSL", severity: "urgent",
-      why: "Adj Resi AJS $485, $134 below the $619 standard. Truck+ 3.3% (vs 12.5% std). Closing small loads, not pitching the upsell.",
-      play: "<strong>Pat 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top performer next 2 shifts. 15-day target back to $619.",
-      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS for one month triggers documented plan with 30-day target.",
-      metrics: [{ l: "Adj AJS", v: "$485", c: "bad" }, { l: "NPS", v: "100.0%", c: "good" }, { l: "Truck+", v: "3.3%", c: "bad" }, { l: "1/6 or Less", v: "36.7%", c: "bad" }]
+      id: "tm-cp-1", priority: 1, franchiseCode: "cp", name: "Joshua Meserve", role: "CSL", severity: "medium",
+      why: "Adj Resi AJS $485. That's $134 under $619. The close isn't landing. Truck+ 3.3% (vs 12.5% std). Sample: 60 resi jobs.",
+      play: "<strong>Pat pre-shift today, then shadow tomorrow.</strong> Verbal Scenario 3.1 walk-through. Identify whether it's Priority Items or the Assumptive Ask that's leaking.",
+      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS one month triggers a documented 30-day plan.",
+      metrics: [{ l: "Score", v: "101/100", c: "good" }, { l: "Adj AJS", v: "$485", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "48.3%", c: "good" }]
     },
     {
-      id: "tm-cp-2", priority: 2, franchiseCode: "cp", name: "Sebastian Lugo", role: "CSL", severity: "urgent",
-      why: "Cancel conversion 100%. Every cancel he touched stayed cancelled. SC Save mechanics are missing. Truck+ 11.5% (vs 12.5% std). Closing small loads, not pitching the upsell. 1/6-or-less rate 34.6% (vs 30% std). Tiny-load problem.",
-      play: "<strong>Pat runs a 15-min Scenario 3.3 verbal practice.</strong> Pull 1 actual cancel from this week and replay it together. Have him commit to 1 SC Save attempt per cancellation tomorrow.",
-      framework: "CSL Scenario 3.3: REEAP Negotiation Protocol. 100% conversion-to-cancel is a coaching emergency disguised as a metric.",
-      metrics: [{ l: "Adj AJS", v: "$727", c: "good" }, { l: "NPS", v: "100.0%", c: "good" }, { l: "Truck+", v: "11.5%", c: "bad" }, { l: "1/6 or Less", v: "34.6%", c: "bad" }]
+      id: "tm-cp-2", priority: 2, franchiseCode: "cp", name: "Derek Lee", role: "CSL", severity: "medium",
+      why: "Google Reviews capture at 17.2% (standard 25%). The ask isn't happening on the truck. Sample: 64 resi jobs.",
+      play: "<strong>Pat ride-along, focus on the closeout moment.</strong> Listen for whether the review request happens. Coach the words in the moment, not after.",
+      framework: "CSL Scenario 3.2 close + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask is the lever.",
+      metrics: [{ l: "Score", v: "107/100", c: "good" }, { l: "Adj AJS", v: "$737", c: "good" }, { l: "Complaints", v: "1.50%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "17.2%", c: "bad" }]
     },
     {
-      id: "tm-cp-3", priority: 3, franchiseCode: "cp", name: "Jason Trostle", role: "CEL", severity: "high",
-      why: "Adj Resi AJS $577, $42 below the $619 standard. Truck+ 7.1% (vs 12.5% std). Closing small loads, not pitching the upsell.",
-      play: "<strong>Pat 30-min Scenario 3.1 refresher.</strong> Specifically the Priority Items step. Commit to 1 Truck+ pitch per job tomorrow.",
-      framework: "CSL Scenario 3.1: Priority Items + Estimate & Price. Truck+ rate is the canary on AJS health.",
-      metrics: [{ l: "Adj AJS", v: "$577", c: "bad" }, { l: "NPS", v: "100.0%", c: "good" }, { l: "Truck+", v: "7.1%", c: "bad" }, { l: "1/6 or Less", v: "42.9%", c: "bad" }]
+      id: "tm-cp-3", priority: 3, franchiseCode: "cp", name: "Jonathan Meserve", role: "CEL", severity: "medium",
+      why: "Adj Resi AJS $608, $11 short of $619. Hovering at the line. Truck+ 9.6% (vs 12.5% std). Sample: 52 resi jobs.",
+      play: "<strong>Pat morning huddle.</strong> Explicit AJS goal for the day. Track each job's upsell attempt on paper. Review at EOD.",
+      framework: "CSL Scenario 3.1: Priority Items + Estimate & Price. AJS dips usually live in the close, not the truck.",
+      metrics: [{ l: "Score", v: "108/100", c: "good" }, { l: "Adj AJS", v: "$608", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "26.9%", c: "good" }]
     },
     {
-      id: "tm-cp-4", priority: 4, franchiseCode: "cp", name: "Jonathan Meserve", role: "CEL", severity: "high",
-      why: "Adj Resi AJS $608, $11 below the $619 standard. Truck+ 9.6% (vs 12.5% std). Closing small loads, not pitching the upsell.",
-      play: "<strong>Pat 30-min Scenario 3.1 refresher.</strong> Specifically the Priority Items step. Commit to 1 Truck+ pitch per job tomorrow.",
-      framework: "CSL Scenario 3.1: Priority Items + Estimate & Price. Truck+ rate is the canary on AJS health.",
-      metrics: [{ l: "Adj AJS", v: "$608", c: "bad" }, { l: "NPS", v: "100.0%", c: "good" }, { l: "Truck+", v: "9.6%", c: "bad" }, { l: "1/6 or Less", v: "26.9%", c: "good" }]
+      id: "tm-cp-4", priority: 4, franchiseCode: "cp", name: "Jason Trostle", role: "CEL", severity: "medium",
+      why: "Adj Resi AJS $577, $42 short of $619. Hovering at the line. Truck+ 7.1% (vs 12.5% std). Sample: 56 resi jobs.",
+      play: "<strong>Pat mid-shift check-in.</strong> One job pulled apart together: was Priority Items delivered? Was Truck+ pitched? Adjust on the next call.",
+      framework: "CSL Scenario 3.1: Priority Items + Estimate & Price. AJS dips usually live in the close, not the truck.",
+      metrics: [{ l: "Score", v: "109/100", c: "good" }, { l: "Adj AJS", v: "$577", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "44.6%", c: "good" }]
     },
     {
       id: "tm-cp-5", priority: 5, franchiseCode: "cp", name: "Darien Koziarski", role: "CSL", severity: "medium",
-      why: "Truck+ 7.3% (vs 12.5% std). Closing small loads, not pitching the upsell.",
-      play: "<strong>Pat 30-min Scenario 3.1 refresher.</strong> Specifically the Priority Items step. Commit to 1 Truck+ pitch per job tomorrow.",
-      framework: "CSL Scenario 3.1: Priority Items + Estimate & Price. Truck+ rate is the canary on AJS health.",
-      metrics: [{ l: "Adj AJS", v: "$694", c: "good" }, { l: "NPS", v: "100.0%", c: "good" }, { l: "Truck+", v: "7.3%", c: "bad" }, { l: "1/6 or Less", v: "26.8%", c: "good" }]
+      why: "Truck+ 7.3% (vs 12.5% std). Sample: 41 resi jobs.",
+      play: "<strong>Pat morning huddle.</strong> Explicit AJS goal for the day. Track each job's upsell attempt on paper. Review at EOD.",
+      framework: "CSL Scenario 3.2: Estimate & Price + Assumptive Ask. Maintenance coaching focused on consistency.",
+      metrics: [{ l: "Score", v: "115/100", c: "good" }, { l: "Adj AJS", v: "$694", c: "good" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "26.8%", c: "good" }]
     },
 
     // CONNECTICUT
     {
-      id: "tm-ct-1", priority: 1, franchiseCode: "ct", name: "Kenneth Johnson", role: "CSL", severity: "urgent",
-      why: "Adj Resi AJS $507, $112 below the $619 standard. Complaint rate 4.20%, 3.2x the 1.30% standard. NPS 75.0%, 15 points below standard. Service quality is the bigger fire. Truck+ 7.9% (vs 10.0% std). Closing small loads, not pitching the upsell.",
-      play: "<strong>Larry 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top performer next 2 shifts. 15-day target back to $619.",
-      framework: "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS for one month triggers documented plan with 30-day target.",
-      metrics: [{ l: "Adj AJS", v: "$507", c: "bad" }, { l: "NPS", v: "75.0%", c: "bad" }, { l: "Truck+", v: "7.9%", c: "bad" }, { l: "1/6 or Less", v: "47.4%", c: "bad" }]
+      id: "tm-ct-1", priority: 1, franchiseCode: "ct", name: "Kenneth Johnson", role: "CSL", severity: "high",
+      why: "Score 71/100. One real problem, a few smaller leaks. Complaints at 4.20%. That's 3.2x the 1.30% line. Customers are leaving angry. AJS $507 ($112 under). NPS 75% (under 90%). Sample: 38 resi jobs.",
+      play: "<strong>Larry pulls the complaint logs together with him.</strong> Identify the pattern: pace, language, or close? One focus, one shift.",
+      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or not landing.",
+      metrics: [{ l: "Score", v: "71/100", c: "bad" }, { l: "Adj AJS", v: "$507", c: "bad" }, { l: "Complaints", v: "4.20%", c: "bad" }, { l: "NPS", v: "75%", c: "bad" }, { l: "Reviews", v: "18.4%", c: "bad" }]
     },
     {
-      id: "tm-ct-2", priority: 2, franchiseCode: "ct", name: "Brendan Chicano", role: "CSL", severity: "urgent",
-      why: "Adj Resi AJS $546, $73 below the $619 standard. Complaint rate 3.70%, 2.8x the 1.30% standard. NPS 70.0%, 20 points below standard. Service quality is the bigger fire.",
-      play: "<strong>Larry pre-shift sit-down.</strong> Pull last 3 NPS detractors. Walk through what was missed. Have him personally call back 2 of those customers.",
-      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda either isn't being delivered or isn't landing.",
-      metrics: [{ l: "Adj AJS", v: "$546", c: "bad" }, { l: "NPS", v: "70.0%", c: "bad" }, { l: "Truck+", v: "15.5%", c: "good" }, { l: "1/6 or Less", v: "42.2%", c: "bad" }]
+      id: "tm-ct-2", priority: 2, franchiseCode: "ct", name: "Brendan Chicano", role: "CSL", severity: "high",
+      why: "Complaint rate 3.70%, 2.8x our 1.30% mark. Quality is slipping. AJS $546 ($73 under). NPS 70% (under 90%). Sample: 71 resi jobs.",
+      play: "<strong>Jakarie runs a service ride-along this week.</strong> Watch the 4-6pm hour. Score Punctual + Etiquette + Memorable. Debrief same day.",
+      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or not landing.",
+      metrics: [{ l: "Score", v: "78/100" }, { l: "Adj AJS", v: "$546", c: "bad" }, { l: "Complaints", v: "3.70%", c: "bad" }, { l: "NPS", v: "70%", c: "bad" }, { l: "Reviews", v: "25.4%", c: "good" }]
     },
     {
-      id: "tm-ct-3", priority: 3, franchiseCode: "ct", name: "Joel Azar", role: "CSL", severity: "urgent",
-      why: "Adj Resi AJS $555, $64 below the $619 standard. Complaint rate 3.60%, 2.8x the 1.30% standard.",
-      play: "<strong>Larry pre-shift sit-down.</strong> Pull last 3 NPS detractors. Walk through what was missed. Have him personally call back 2 of those customers.",
-      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda either isn't being delivered or isn't landing.",
-      metrics: [{ l: "Adj AJS", v: "$555", c: "bad" }, { l: "NPS", v: "91.3%", c: "good" }, { l: "Truck+", v: "13.0%", c: "good" }, { l: "1/6 or Less", v: "44.9%", c: "bad" }]
+      id: "tm-ct-3", priority: 3, franchiseCode: "ct", name: "Joel Azar", role: "CSL", severity: "medium",
+      why: "Complaint rate 3.60%, 2.8x our 1.30% mark. Quality is slipping. AJS $555 ($64 under). Sample: 69 resi jobs.",
+      play: "<strong>Tim pulls the complaint logs together with him.</strong> Identify the pattern: pace, language, or close? One focus, one shift.",
+      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or not landing.",
+      metrics: [{ l: "Score", v: "87/100" }, { l: "Adj AJS", v: "$555", c: "bad" }, { l: "Complaints", v: "3.60%", c: "bad" }, { l: "NPS", v: "91%", c: "good" }, { l: "Reviews", v: "39.1%", c: "good" }]
     },
     {
-      id: "tm-ct-4", priority: 4, franchiseCode: "ct", name: "Jose Arroyo", role: "CSL", severity: "urgent",
-      why: "Complaint rate 3.20%, 2.5x the 1.30% standard. 1/6-or-less rate 36.1% (vs 35% std). Tiny-load problem.",
-      play: "<strong>Larry pre-shift sit-down.</strong> Pull last 3 NPS detractors. Walk through what was missed. Have him personally call back 2 of those customers.",
-      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda either isn't being delivered or isn't landing.",
-      metrics: [{ l: "Adj AJS", v: "$683", c: "good" }, { l: "NPS", v: "100.0%", c: "good" }, { l: "Truck+", v: "13.1%", c: "good" }, { l: "1/6 or Less", v: "36.1%", c: "bad" }]
+      id: "tm-ct-4", priority: 4, franchiseCode: "ct", name: "Martin Dinkins", role: "CSL", severity: "medium",
+      why: "Google Reviews capture at 7.1% (standard 25%). The ask isn't happening on the truck. AJS $513 ($106 under). Truck+ 3.6% (vs 10.0% std). Sample: 28 resi jobs.",
+      play: "<strong>Larry ride-along, focus on the closeout moment.</strong> Listen for whether the review request happens. Coach the words in the moment, not after.",
+      framework: "CSL Scenario 3.2 close + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask is the lever.",
+      metrics: [{ l: "Score", v: "88/100" }, { l: "Adj AJS", v: "$513", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "100%", c: "good" }, { l: "Reviews", v: "7.1%", c: "bad" }]
     },
     {
-      id: "tm-ct-5", priority: 5, franchiseCode: "ct", name: "Robin Bissoon", role: "CEL", severity: "urgent",
-      why: "Complaint rate 3.20%, 2.5x the 1.30% standard. NPS 81.8% borderline. 1/6-or-less rate 48.3% (vs 35% std). Tiny-load problem.",
-      play: "<strong>Larry pre-shift sit-down.</strong> Pull last 3 NPS detractors. Walk through what was missed. Have him personally call back 2 of those customers.",
-      framework: "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda either isn't being delivered or isn't landing.",
-      metrics: [{ l: "Adj AJS", v: "$701", c: "good" }, { l: "NPS", v: "81.8%", c: "bad" }, { l: "Truck+", v: "13.8%", c: "good" }, { l: "1/6 or Less", v: "48.3%", c: "bad" }]
+      id: "tm-ct-5", priority: 5, franchiseCode: "ct", name: "Esteban Santacruz Pulla", role: "CSL", severity: "medium",
+      why: "Google Reviews capture at 16.1% (standard 25%). The ask isn't happening on the truck. AJS $534 ($85 under). Cancel conversion 100%. Every save attempt failed. Sample: 56 resi jobs.",
+      play: "<strong>Jakarie pairs him with a strong closer for two shifts.</strong> Goal: one documented save attempt per cancel. Track it on paper.",
+      framework: "CSL Scenario 3.3: REEAP Negotiation. 100% conversion-to-cancel means he's not even attempting the save.",
+      metrics: [{ l: "Score", v: "94/100" }, { l: "Adj AJS", v: "$534", c: "bad" }, { l: "Complaints", v: "0.00%", c: "good" }, { l: "NPS", v: "92%", c: "good" }, { l: "Reviews", v: "16.1%", c: "bad" }, { l: "Cancel Conv", v: "100%", c: "bad" }]
     }
   ];
 

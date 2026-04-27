@@ -41,13 +41,16 @@ FRANCHISE_NAMES = {
     "ct":  "Connecticut",
 }
 
-# Standards per franchise: AJS $, 1/6 max%, Truck+ min%, complaint max%, NPS min%
+# Standards per franchise: AJS $, 1/6 max%, Truck+ min%, complaint max%, NPS min%, GR min%
 STANDARDS = {
-    "bno": {"ajs": 725, "loss": 33.0, "truck": 10.0, "complaint": 1.50, "nps": 90.0},
-    "bso": {"ajs": 725, "loss": 33.0, "truck": 10.0, "complaint": 1.50, "nps": 90.0},
-    "cp":  {"ajs": 619, "loss": 30.0, "truck": 12.5, "complaint": 1.50, "nps": 90.0},
-    "ct":  {"ajs": 619, "loss": 35.0, "truck": 10.0, "complaint": 1.30, "nps": 90.0},
+    "bno": {"ajs": 725, "loss": 33.0, "truck": 10.0, "complaint": 1.50, "nps": 90.0, "gr": 25.0},
+    "bso": {"ajs": 725, "loss": 33.0, "truck": 10.0, "complaint": 1.50, "nps": 90.0, "gr": 25.0},
+    "cp":  {"ajs": 619, "loss": 30.0, "truck": 12.5, "complaint": 1.50, "nps": 90.0, "gr": 25.0},
+    "ct":  {"ajs": 619, "loss": 35.0, "truck": 10.0, "complaint": 1.30, "nps": 90.0, "gr": 25.0},
 }
+
+# Weighted score weights (must sum to 1.0). Lower weighted score = worse performer.
+WEIGHTS = {"ajs": 0.50, "complaint": 0.20, "nps": 0.15, "gr": 0.15}
 
 COACHES = {
     "bno": ["Richard", "Tyler"],
@@ -58,7 +61,7 @@ COACHES = {
 
 # Min residential jobs for a TM to be eligible for coaching priority
 # (small samples are noisy and not actionable)
-MIN_RESI_JOBS = 8
+MIN_RESI_JOBS = 10
 
 
 # ---------- data shape ----------
@@ -75,8 +78,11 @@ class TM:
     truck_pct: Optional[float]
     cancel_conv_pct: Optional[float]
     complaint_pct: Optional[float]
-    tier: int = 0      # 1=urgent, 2=high, 3=medium, 0=ok
-    score: float = 0.0
+    gr_pct: Optional[float] = None     # Google Reviews capture %
+    weighted_score: float = 100.0      # 100 = at standard across the board, lower = worse
+    sub_scores: dict = field(default_factory=dict)  # per-metric 0-100 scores
+    severity: str = "medium"
+    primary_issue: str = ""             # which metric is the dominant problem
     reasons: list[str] = field(default_factory=list)
 
 
@@ -219,6 +225,7 @@ def read_section(rows: list[list[str]], name_col_idx: int, role: str, code: str)
             truck_pct=parse_pct(cell(10)),
             cancel_conv_pct=parse_pct(cell(20)),
             complaint_pct=parse_pct(cell(22)),
+            gr_pct=parse_pct(cell(14)),
         ))
     return tms
 
@@ -236,88 +243,69 @@ def fetch_franchise(gc: gspread.Client, code: str) -> list[TM]:
     return cels + csls
 
 
-# ---------- scoring ----------
+# ---------- weighted scoring ----------
+
+def _sub_score_higher_better(value: Optional[float], standard: float) -> Optional[float]:
+    """Score where higher value = better. 100 = at standard. Capped 0-130."""
+    if value is None or standard <= 0:
+        return None
+    return max(0.0, min(130.0, (value / standard) * 100.0))
+
+
+def _sub_score_lower_better(value: Optional[float], standard: float) -> Optional[float]:
+    """Score where lower value = better (e.g., complaints). 100 = at standard."""
+    if value is None or standard <= 0:
+        return None
+    if value <= 0:
+        return 130.0  # better than perfect
+    return max(0.0, min(130.0, (standard / value) * 100.0))
+
 
 def score_tm(tm: TM) -> None:
     std = STANDARDS[tm.franchise_code]
-    reds: list[str] = []
-    urgent = False
 
-    if tm.resi_ajs is not None and tm.resi_ajs < std["ajs"] - 100:
-        urgent = True
-        reds.append(f"Adj AJS ${tm.resi_ajs:.0f}, ${std['ajs'] - tm.resi_ajs:.0f} below ${std['ajs']} standard")
-    if tm.complaint_pct is not None and tm.complaint_pct > 2 * std["complaint"]:
-        urgent = True
-        reds.append(f"Complaint {tm.complaint_pct:.2f}%, {tm.complaint_pct/std['complaint']:.1f}x the {std['complaint']:.2f}% standard")
-    if tm.cancel_conv_pct is not None and tm.cancel_conv_pct >= 99.5:
-        urgent = True
-        reds.append("Cancel conversion 100%. Every cancel he touched stayed cancelled")
+    sub = {
+        "ajs":        _sub_score_higher_better(tm.resi_ajs, std["ajs"]),
+        "complaint":  _sub_score_lower_better(tm.complaint_pct, std["complaint"]),
+        "nps":        _sub_score_higher_better(tm.nps, std["nps"]),
+        "gr":         _sub_score_higher_better(tm.gr_pct, std["gr"]),
+    }
+    tm.sub_scores = {k: v for k, v in sub.items() if v is not None}
 
-    secondary_reds: list[str] = []
-    if tm.resi_ajs is not None and tm.resi_ajs < std["ajs"]:
-        gap = std["ajs"] - tm.resi_ajs
-        if gap <= 100:
-            secondary_reds.append(f"Adj AJS ${tm.resi_ajs:.0f}, ${gap:.0f} below ${std['ajs']} standard")
-    if tm.loss_pct is not None and tm.loss_pct > std["loss"]:
-        secondary_reds.append(f"1/6-or-less {tm.loss_pct:.1f}% (vs {std['loss']:.0f}% std)")
-    if tm.truck_pct is not None and tm.truck_pct < std["truck"]:
-        secondary_reds.append(f"Truck+ {tm.truck_pct:.1f}% (vs {std['truck']:.1f}% std)")
-    if tm.complaint_pct is not None and std["complaint"] < tm.complaint_pct <= 2 * std["complaint"]:
-        secondary_reds.append(f"Complaint {tm.complaint_pct:.2f}% (vs {std['complaint']:.2f}% std)")
-    nps_low = tm.nps is not None and tm.nps < std["nps"]
-    nps_severe = tm.nps is not None and tm.nps < 80.0
-
-    if urgent:
-        tm.tier = 1
-        tm.reasons = reds + secondary_reds
-    elif nps_severe:
-        tm.tier = 2
-        tm.reasons = [f"NPS {tm.nps:.1f}%, {std['nps'] - tm.nps:.0f}pts below the {std['nps']:.0f}% standard"] + secondary_reds
-    elif (tm.resi_ajs is not None and tm.resi_ajs < std["ajs"]) and len(secondary_reds) >= 2:
-        tm.tier = 2
-        tm.reasons = secondary_reds
-    elif secondary_reds or nps_low:
-        tm.tier = 3
-        tm.reasons = secondary_reds[:1] or [f"NPS {tm.nps:.1f}% below {std['nps']:.0f}% standard"]
+    # Reweight available metrics so missing data doesn't deflate score artificially
+    weight_present = sum(WEIGHTS[k] for k, v in sub.items() if v is not None)
+    if weight_present == 0:
+        tm.weighted_score = 100.0
     else:
-        tm.tier = 0
+        tm.weighted_score = sum(
+            (sub[k] * WEIGHTS[k] / weight_present) for k in sub if sub[k] is not None
+        )
 
-    # Score for ranking inside a tier (lower = worse)
-    parts: list[float] = []
-    if tm.resi_ajs is not None:
-        parts.append((tm.resi_ajs - std["ajs"]) / std["ajs"])
-    if tm.complaint_pct is not None:
-        parts.append(-(tm.complaint_pct - std["complaint"]) / max(std["complaint"], 0.5))
-    if tm.cancel_conv_pct is not None:
-        parts.append(-(tm.cancel_conv_pct) / 100.0)
-    if tm.nps is not None:
-        parts.append((tm.nps - std["nps"]) / std["nps"])
-    if tm.truck_pct is not None:
-        parts.append((tm.truck_pct - std["truck"]) / max(std["truck"], 1.0))
-    tm.score = sum(parts) / len(parts) if parts else 0.0
+    # Identify the dominant problem area (lowest sub-score)
+    below = {k: v for k, v in tm.sub_scores.items() if v < 100}
+    if below:
+        tm.primary_issue = min(below, key=below.get)
+    else:
+        tm.primary_issue = ""
+
+    # Map score to severity bucket
+    if tm.weighted_score < 60:
+        tm.severity = "urgent"
+    elif tm.weighted_score < 80:
+        tm.severity = "high"
+    else:
+        tm.severity = "medium"
 
 
 def pick_worst_5(tms: list[TM]) -> list[TM]:
     eligible = [t for t in tms if t.resi_jobs >= MIN_RESI_JOBS]
     for t in eligible:
         score_tm(t)
-    flagged = [t for t in eligible if t.tier > 0]
-    flagged.sort(key=lambda t: (t.tier, t.score))  # tier 1 first, then worst score
-    if len(flagged) < 5:
-        # Backfill with next-worst by score even if not flagged
-        rest = [t for t in eligible if t.tier == 0]
-        for t in rest:
-            score_tm(t)
-        rest.sort(key=lambda t: t.score)
-        flagged += rest[: 5 - len(flagged)]
-    return flagged[:5]
+    eligible.sort(key=lambda t: t.weighted_score)  # ascending = worst first
+    return eligible[:5]
 
 
 # ---------- narrative generation ----------
-
-def severity_label(tier: int) -> str:
-    return {1: "urgent", 2: "high", 3: "medium"}.get(tier, "medium")
-
 
 def fmt_money(v: Optional[float]) -> str:
     return f"${v:,.0f}" if v is not None else "n/a"
@@ -327,104 +315,205 @@ def fmt_pct(v: Optional[float], digits: int = 1) -> str:
     return f"{v:.{digits}f}%" if v is not None else "n/a"
 
 
-def coach_line(code: str, action: str) -> str:
+def pick_coach(code: str, idx: int) -> str:
+    """Rotate through coaches by priority slot so the same coach isn't named 5 times."""
     coaches = COACHES[code]
-    name = coaches[0]  # default lead coach
-    return f"<strong>{name} {action}</strong>"
+    return coaches[idx % len(coaches)]
+
+
+def _stable_pick(seq: list[str], tm: TM) -> str:
+    """Stable per-TM choice from a list of phrasings (deterministic, varies by name)."""
+    h = sum(ord(c) for c in tm.name)
+    return seq[h % len(seq)]
 
 
 def make_why(tm: TM) -> str:
+    """
+    Build a why narrative anchored on the dominant problem, with secondary observations.
+    Voice: short, punchy, warm but direct. No em dashes.
+    """
     std = STANDARDS[tm.franchise_code]
+    score = tm.weighted_score
     parts: list[str] = []
 
-    if tm.resi_ajs is not None and tm.resi_ajs < std["ajs"]:
-        gap = std["ajs"] - tm.resi_ajs
-        parts.append(f"Adj Resi AJS {fmt_money(tm.resi_ajs)}, ${gap:.0f} below the {fmt_money(std['ajs'])} standard.")
+    # Lead with score context for severity
+    if score < 50:
+        opener_pool = [
+            f"Composite {score:.0f}/100. Multi-front problem.",
+            f"Score {score:.0f}/100. He's bleeding on more than one axis.",
+            f"Composite {score:.0f}. Whole picture is red.",
+        ]
+        parts.append(_stable_pick(opener_pool, tm))
+    elif score < 75:
+        opener_pool = [
+            f"Score {score:.0f}/100. One real problem, a few smaller leaks.",
+            f"Composite {score:.0f}. Not a crisis yet, but trending wrong.",
+        ]
+        parts.append(_stable_pick(opener_pool, tm))
 
-    if tm.complaint_pct is not None and tm.complaint_pct > std["complaint"]:
+    # Anchor on dominant issue
+    primary = tm.primary_issue
+    if primary == "ajs" and tm.resi_ajs is not None:
+        gap = std["ajs"] - tm.resi_ajs
+        if gap > 100:
+            parts.append(f"Adj Resi AJS {fmt_money(tm.resi_ajs)}. That's ${gap:.0f} under {fmt_money(std['ajs'])}. The close isn't landing.")
+        else:
+            parts.append(f"Adj Resi AJS {fmt_money(tm.resi_ajs)}, ${gap:.0f} short of {fmt_money(std['ajs'])}. Hovering at the line.")
+    elif primary == "complaint" and tm.complaint_pct is not None:
         ratio = tm.complaint_pct / std["complaint"]
-        parts.append(f"Complaint rate {tm.complaint_pct:.2f}%, {ratio:.1f}x the {std['complaint']:.2f}% standard.")
+        if ratio >= 3:
+            parts.append(f"Complaints at {tm.complaint_pct:.2f}%. That's {ratio:.1f}x the {std['complaint']:.2f}% line. Customers are leaving angry.")
+        else:
+            parts.append(f"Complaint rate {tm.complaint_pct:.2f}%, {ratio:.1f}x our {std['complaint']:.2f}% mark. Quality is slipping.")
+    elif primary == "nps" and tm.nps is not None:
+        gap = std["nps"] - tm.nps
+        if tm.nps < 70:
+            parts.append(f"NPS {tm.nps:.0f}%. {gap:.0f} points below standard. Customers aren't recommending him.")
+        elif tm.nps < 80:
+            parts.append(f"NPS at {tm.nps:.0f}%, {gap:.0f} points off. Service execution is breaking.")
+        else:
+            parts.append(f"NPS {tm.nps:.0f}%. Right at the line, not under it yet.")
+    elif primary == "gr" and tm.gr_pct is not None:
+        parts.append(f"Google Reviews capture at {tm.gr_pct:.1f}% (standard {std['gr']:.0f}%). The ask isn't happening on the truck.")
+
+    # Add 1-2 secondary observations (skip the primary, dedupe)
+    secondary_pool: list[str] = []
+
+    if primary != "ajs" and tm.resi_ajs is not None and tm.resi_ajs < std["ajs"]:
+        gap = std["ajs"] - tm.resi_ajs
+        secondary_pool.append(f"AJS {fmt_money(tm.resi_ajs)} (${gap:.0f} under).")
+    if primary != "complaint" and tm.complaint_pct is not None and tm.complaint_pct > std["complaint"]:
+        secondary_pool.append(f"Complaints {tm.complaint_pct:.2f}% (vs {std['complaint']:.2f}% std).")
+    if primary != "nps" and tm.nps is not None and tm.nps < std["nps"]:
+        secondary_pool.append(f"NPS {tm.nps:.0f}% (under {std['nps']:.0f}%).")
+    if primary != "gr" and tm.gr_pct is not None and tm.gr_pct < std["gr"]:
+        secondary_pool.append(f"Reviews capture {tm.gr_pct:.1f}% (vs {std['gr']:.0f}%).")
 
     if tm.cancel_conv_pct is not None and tm.cancel_conv_pct >= 99.5:
-        parts.append("Cancel conversion 100%. Every cancel he touched stayed cancelled. SC Save mechanics are missing.")
-
-    if tm.nps is not None and tm.nps < std["nps"]:
-        gap = std["nps"] - tm.nps
-        if tm.nps < 80:
-            parts.append(f"NPS {tm.nps:.1f}%, {gap:.0f} points below standard. Service quality is the bigger fire.")
-        else:
-            parts.append(f"NPS {tm.nps:.1f}% borderline.")
-
+        secondary_pool.append("Cancel conversion 100%. Every save attempt failed.")
     if tm.truck_pct is not None and tm.truck_pct < std["truck"]:
-        parts.append(f"Truck+ {tm.truck_pct:.1f}% (vs {std['truck']:.1f}% std). Closing small loads, not pitching the upsell.")
+        secondary_pool.append(f"Truck+ {tm.truck_pct:.1f}% (vs {std['truck']:.1f}% std).")
 
-    if tm.loss_pct is not None and tm.loss_pct > std["loss"] and not any("AJS" in p for p in parts):
-        parts.append(f"1/6-or-less rate {tm.loss_pct:.1f}% (vs {std['loss']:.0f}% std). Tiny-load problem.")
+    parts.extend(secondary_pool[:2])
 
-    if not parts:
-        parts.append(f"Adj AJS {fmt_money(tm.resi_ajs)} below {fmt_money(std['ajs'])}. Single-metric watch list.")
+    # Volume context (last beat)
+    if tm.resi_jobs > 0:
+        parts.append(f"Sample: {tm.resi_jobs} resi jobs.")
 
     return " ".join(parts)
 
 
-def make_play(tm: TM) -> str:
+def make_play(tm: TM, slot_idx: int) -> str:
+    """
+    Build a play action. Coach rotates per slot. Voice: short, action-first.
+    """
     std = STANDARDS[tm.franchise_code]
-    if tm.tier == 1 and tm.resi_ajs is not None and tm.resi_ajs < std["ajs"] - 100:
-        return f"{coach_line(tm.franchise_code, '1:1 today.')} Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top performer next 2 shifts. 15-day target back to {fmt_money(std['ajs'])}."
+    coach = pick_coach(tm.franchise_code, slot_idx)
+    primary = tm.primary_issue
+
     if tm.cancel_conv_pct is not None and tm.cancel_conv_pct >= 99.5:
-        return f"{coach_line(tm.franchise_code, 'runs a 15-min Scenario 3.3 verbal practice.')} Pull 1 actual cancel from this week and replay it together. Have him commit to 1 SC Save attempt per cancellation tomorrow."
-    if tm.complaint_pct is not None and tm.complaint_pct > 2 * std["complaint"]:
-        return f"{coach_line(tm.franchise_code, 'pre-shift sit-down.')} Pull last 3 NPS detractors. Walk through what was missed. Have him personally call back 2 of those customers."
-    if tm.nps is not None and tm.nps < 80:
-        return f"{coach_line(tm.franchise_code, 'runs a service-focused review.')} Listen to 3 detractor calls together. CUSTOMER framework: Memorable, WOW Factor, Etiquette. Commit to 2 picture-perfect moments per shift."
-    if tm.truck_pct is not None and tm.truck_pct < std["truck"]:
-        return f"{coach_line(tm.franchise_code, '30-min Scenario 3.1 refresher.')} Specifically the Priority Items step. Commit to 1 Truck+ pitch per job tomorrow."
-    return f"{coach_line(tm.franchise_code, 'morning huddle.')} Set explicit AJS goal for the day. Have him write down each job's upsell attempts. Review at EOD."
+        actions = [
+            f"<strong>{coach} runs Scenario 3.3 verbal practice today.</strong> Pull one actual cancel from this week. Replay it line by line. Have him script the SC Save out loud before next shift.",
+            f"<strong>{coach} pairs him with a strong closer for two shifts.</strong> Goal: one documented save attempt per cancel. Track it on paper.",
+        ]
+        return _stable_pick(actions, tm)
+
+    if primary == "complaint":
+        actions = [
+            f"<strong>{coach} pre-shift sit-down.</strong> Pull the 3 most recent detractors. Walk through what got missed. Have him personally call 2 customers back tomorrow.",
+            f"<strong>{coach} runs a service ride-along this week.</strong> Watch the 4-6pm hour. Score Punctual + Etiquette + Memorable. Debrief same day.",
+            f"<strong>{coach} pulls the complaint logs together with him.</strong> Identify the pattern: pace, language, or close? One focus, one shift.",
+        ]
+        return _stable_pick(actions, tm)
+
+    if primary == "nps":
+        actions = [
+            f"<strong>{coach} listens to 3 detractor calls with him this week.</strong> CUSTOMER framework: Memorable, WOW Factor, Positive Ending. Commit to 2 picture-perfect moments per shift.",
+            f"<strong>{coach} blocks 30 minutes for a service review.</strong> Replay the worst 2 NPS responses. Where did the experience break? Concrete fix per job tomorrow.",
+        ]
+        return _stable_pick(actions, tm)
+
+    if primary == "gr":
+        actions = [
+            f"<strong>{coach} 15-min huddle on the review ask.</strong> Practice the script out loud. Goal: every job tomorrow gets the ask, no exceptions. Track on paper.",
+            f"<strong>{coach} ride-along, focus on the closeout moment.</strong> Listen for whether the review request happens. Coach the words in the moment, not after.",
+        ]
+        return _stable_pick(actions, tm)
+
+    # AJS-led (or fallback)
+    if tm.resi_ajs is not None and (std["ajs"] - tm.resi_ajs) > 100:
+        actions = [
+            f"<strong>{coach} 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top closer next 2 shifts. 15-day target back to {fmt_money(std['ajs'])}.",
+            f"<strong>{coach} pre-shift today, then shadow tomorrow.</strong> Verbal Scenario 3.1 walk-through. Identify whether it's Priority Items or the Assumptive Ask that's leaking.",
+        ]
+        return _stable_pick(actions, tm)
+
+    actions = [
+        f"<strong>{coach} morning huddle.</strong> Explicit AJS goal for the day. Track each job's upsell attempt on paper. Review at EOD.",
+        f"<strong>{coach} mid-shift check-in.</strong> One job pulled apart together: was Priority Items delivered? Was Truck+ pitched? Adjust on the next call.",
+        f"<strong>{coach} 20-min Scenario 3.1 refresher.</strong> Priority Items step specifically. One Truck+ pitch per job tomorrow, no exceptions.",
+    ]
+    return _stable_pick(actions, tm)
 
 
 def make_framework(tm: TM) -> str:
-    std = STANDARDS[tm.franchise_code]
-    if tm.tier == 1 and tm.resi_ajs is not None and tm.resi_ajs < std["ajs"] - 100:
-        return "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS for one month triggers documented plan with 30-day target."
+    primary = tm.primary_issue
+
     if tm.cancel_conv_pct is not None and tm.cancel_conv_pct >= 99.5:
-        return "CSL Scenario 3.3: REEAP Negotiation Protocol. 100% conversion-to-cancel is a coaching emergency disguised as a metric."
-    if tm.complaint_pct is not None and tm.complaint_pct > 2 * std["complaint"]:
-        return "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda either isn't being delivered or isn't landing."
-    if tm.nps is not None and tm.nps < 80:
-        return "CEL CUSTOMER framework: Memorable, Creating Lifelong Customers, Positive Ending. Low NPS at this scale is a service problem."
-    if tm.truck_pct is not None and tm.truck_pct < std["truck"]:
-        return "CSL Scenario 3.1: Priority Items + Estimate & Price. Truck+ rate is the canary on AJS health."
-    return "CSL Scenario 3.2: Estimate & Price + Assumptive Ask. Maintenance coaching focused on the close."
+        return "CSL Scenario 3.3: REEAP Negotiation. 100% conversion-to-cancel means he's not even attempting the save."
+    if primary == "complaint":
+        return "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or not landing."
+    if primary == "nps":
+        if tm.nps is not None and tm.nps < 70:
+            return "CEL CUSTOMER framework: Memorable, Creating Lifelong Customers, Positive Ending. NPS this low is a service-quality fire, not a sales one."
+        return "CEL CUSTOMER framework: back half (Memorable, Genuine, Positive Ending). Customers are leaving lukewarm."
+    if primary == "gr":
+        return "CSL Scenario 3.2 close + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask is the lever."
+    if primary == "ajs":
+        std = STANDARDS[tm.franchise_code]
+        if tm.resi_ajs is not None and tm.resi_ajs < std["ajs"] - 100:
+            return "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS one month triggers a documented 30-day plan."
+        return "CSL Scenario 3.1: Priority Items + Estimate & Price. AJS dips usually live in the close, not the truck."
+    return "CSL Scenario 3.2: Estimate & Price + Assumptive Ask. Maintenance coaching focused on consistency."
 
 
 def make_metrics(tm: TM) -> list[dict]:
+    """
+    Show the 4 weighted metrics first (AJS, Complaint, NPS, GR), color-coded vs standard,
+    plus the composite score. Drops in 1-2 contextual metrics if AJS/Complaint/NPS/GR alone
+    don't tell the story.
+    """
     std = STANDARDS[tm.franchise_code]
     out: list[dict] = []
+
+    # Composite score badge (always first)
+    score_cls = "bad" if tm.weighted_score < 75 else ("good" if tm.weighted_score >= 95 else None)
+    score_entry = {"l": "Score", "v": f"{tm.weighted_score:.0f}/100"}
+    if score_cls:
+        score_entry["c"] = score_cls
+    out.append(score_entry)
 
     if tm.resi_ajs is not None:
         cls = "bad" if tm.resi_ajs < std["ajs"] else "good"
         out.append({"l": "Adj AJS", "v": fmt_money(tm.resi_ajs), "c": cls})
 
+    if tm.complaint_pct is not None:
+        cls = "bad" if tm.complaint_pct > std["complaint"] else "good"
+        out.append({"l": "Complaints", "v": fmt_pct(tm.complaint_pct, 2), "c": cls})
+
     if tm.nps is not None:
         cls = "bad" if tm.nps < std["nps"] else "good"
-        out.append({"l": "NPS", "v": fmt_pct(tm.nps, 1), "c": cls})
+        out.append({"l": "NPS", "v": fmt_pct(tm.nps, 0), "c": cls})
 
-    if tm.truck_pct is not None:
-        cls = "bad" if tm.truck_pct < std["truck"] else "good"
-        out.append({"l": "Truck+", "v": fmt_pct(tm.truck_pct, 1), "c": cls})
+    if tm.gr_pct is not None:
+        cls = "bad" if tm.gr_pct < std["gr"] else "good"
+        out.append({"l": "Reviews", "v": fmt_pct(tm.gr_pct, 1), "c": cls})
 
-    if tm.loss_pct is not None:
-        cls = "bad" if tm.loss_pct > std["loss"] else "good"
-        out.append({"l": "1/6 or Less", "v": fmt_pct(tm.loss_pct, 1), "c": cls})
-
-    if tm.complaint_pct is not None and (tm.complaint_pct > std["complaint"] or len(out) < 4):
-        cls = "bad" if tm.complaint_pct > std["complaint"] else "good"
-        out.append({"l": "Complaint", "v": fmt_pct(tm.complaint_pct, 2), "c": cls})
-
+    # Contextual extras only if there's a clear secondary signal
     if tm.cancel_conv_pct is not None and tm.cancel_conv_pct >= 99.5:
         out.append({"l": "Cancel Conv", "v": fmt_pct(tm.cancel_conv_pct, 0), "c": "bad"})
 
-    return out[:4]
+    return out
 
 
 # ---------- HTML injection ----------
@@ -514,13 +603,14 @@ def main() -> int:
                 "franchiseCode": code,
                 "name": tm.name,
                 "role": tm.role,
-                "severity": severity_label(tm.tier or 3),
+                "severity": tm.severity,
                 "why": make_why(tm),
-                "play": make_play(tm),
+                "play": make_play(tm, slot_idx=i - 1),
                 "framework": make_framework(tm),
                 "metrics": make_metrics(tm),
             })
-        print(f"  {code.upper()}: {len(tms)} TMs read, picked {len(worst)} for coaching", file=sys.stderr)
+        print(f"  {code.upper()}: {len(tms)} TMs read, picked {len(worst)} for coaching "
+              f"(scores: {', '.join(f'{t.weighted_score:.0f}' for t in worst)})", file=sys.stderr)
 
     if not all_records:
         print("::error::No teammates picked. Refusing to overwrite index.html.", file=sys.stderr)
