@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0e1a">
+<title>NEE Coaching · Built Different</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg-card: #111827;
+    --bg-elevated: #1a2236;
+    --bg-section: #0f1524;
+    --border: #1f2a44;
+    --border-bright: #2d3a5c;
+    --text: #e8ecf5;
+    --text-muted: #8a96b3;
+    --text-dim: #5a6481;
+    --accent: #d4a256;
+    --accent-bright: #e8b870;
+    --urgent: #e25c5c;
+    --high: #e89640;
+    --done: #5cb88a;
+    --info: #6ba6d4;
+    --display: 'Cormorant Garamond', Georgia, serif;
+    --body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    min-height: 100vh;
+    line-height: 1.5;
+    background-image:
+      radial-gradient(at 20% 0%, rgba(212, 162, 86, 0.05) 0%, transparent 50%),
+      radial-gradient(at 80% 100%, rgba(92, 184, 138, 0.03) 0%, transparent 50%);
+    overflow-x: hidden;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .brand-mark {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .brand-title {
+    font-family: var(--display);
+    font-size: 38px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .brand-tagline {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-style: italic;
+    font-family: var(--display);
+  }
+
+  .date-block { text-align: right; }
+
+  .date-day {
+    font-family: var(--display);
+    font-size: 22px;
+  }
+
+  .date-mtd {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  /* ===== CONTROLS ===== */
+  .controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-right: 4px;
+    font-weight: 600;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+    min-height: 36px;
+  }
+
+  .filter-btn:active { transform: scale(0.97); }
+
+  .filter-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .global-counter {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .progress-bar {
+    width: 80px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--done);
+    transition: width 0.3s ease;
+  }
+
+  /* ===== FRANCHISE GROUP ===== */
+  .franchise-group {
+    margin-bottom: 24px;
+    background: var(--bg-section);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .franchise-header {
+    padding: 16px 20px;
+    background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-section) 100%);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    gap: 12px;
+  }
+
+  .franchise-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .franchise-chip {
+    width: 6px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .franchise-chip.bno { background: #e25c5c; }
+  .franchise-chip.bso { background: #e89640; }
+  .franchise-chip.cp  { background: #5cb88a; }
+  .franchise-chip.ct  { background: #6ba6d4; }
+
+  .franchise-title-block { flex: 1; min-width: 0; }
+
+  .franchise-title {
+    font-family: var(--display);
+    font-size: 22px;
+    color: var(--text);
+    font-weight: 500;
+    line-height: 1.1;
+  }
+
+  .franchise-context {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+  }
+
+  .franchise-stats {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .standards-badge {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+  }
+
+  .standards-badge strong { color: var(--text); font-weight: 600; }
+
+  .franchise-stat { text-align: center; }
+
+  .franchise-stat-value {
+    font-family: var(--display);
+    font-size: 18px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .franchise-stat-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  .collapse-icon {
+    font-size: 14px;
+    color: var(--text-dim);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .franchise-group.collapsed .collapse-icon { transform: rotate(-90deg); }
+  .franchise-group.collapsed .franchise-cards { display: none; }
+
+  .franchise-cards {
+    padding: 14px;
+    display: grid;
+    gap: 12px;
+  }
+
+  /* ===== TM CARD ===== */
+  .tm-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    transition: opacity 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tm-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+  }
+
+  .tm-card.urgent::before    { background: var(--urgent); }
+  .tm-card.high::before      { background: var(--high); }
+  .tm-card.medium::before    { background: var(--info); }
+  .tm-card.completed::before { background: var(--done); }
+
+  .tm-card.completed { opacity: 0.5; }
+
+  .tm-card.completed .card-name,
+  .tm-card.completed .card-why,
+  .tm-card.completed .card-play { text-decoration: line-through; text-decoration-color: var(--text-dim); }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .card-id-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .card-num {
+    font-family: var(--display);
+    font-size: 26px;
+    color: var(--accent);
+    line-height: 1;
+    font-weight: 500;
+    min-width: 28px;
+    flex-shrink: 0;
+  }
+
+  .card-info { flex: 1; min-width: 0; }
+
+  .card-name {
+    font-family: var(--display);
+    font-size: 19px;
+    color: var(--text);
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .card-role-tag {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--accent-bright);
+    background: rgba(212, 162, 86, 0.1);
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-left: 6px;
+    font-weight: 600;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+
+  .card-tags { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .tag {
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .tag-urgent { background: rgba(226, 92, 92, 0.15);   color: var(--urgent); border: 1px solid rgba(226, 92, 92, 0.3); }
+  .tag-high   { background: rgba(232, 150, 64, 0.15);  color: var(--high);   border: 1px solid rgba(232, 150, 64, 0.3); }
+  .tag-medium { background: rgba(107, 166, 212, 0.15); color: var(--info);   border: 1px solid rgba(107, 166, 212, 0.3); }
+  .tag-done   { background: rgba(92, 184, 138, 0.15);  color: var(--done);   border: 1px solid rgba(92, 184, 138, 0.3); }
+
+  .tm-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--bg-elevated);
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+
+  .metric { display: flex; flex-direction: column; }
+
+  .metric-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .metric-value {
+    font-family: var(--display);
+    font-size: 16px;
+    color: var(--text);
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  .metric-value.bad  { color: var(--urgent); }
+  .metric-value.good { color: var(--done); }
+
+  .card-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 12px;
+  }
+
+  .card-block-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+
+  .card-why, .card-play {
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .card-play strong {
+    color: var(--accent-bright);
+    font-weight: 600;
+  }
+
+  .framework-ref {
+    background: rgba(107, 166, 212, 0.06);
+    border-left: 2px solid var(--info);
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    border-radius: 0 4px 4px 0;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .framework-ref strong { color: var(--text); }
+
+  .framework-ref-label {
+    font-size: 9px;
+    color: var(--info);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .card-actions {
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+
+  .notes-area {
+    width: 100%;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 60px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    -webkit-appearance: none;
+  }
+
+  .notes-area:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .notes-area::placeholder {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .meta-info { font-size: 10px; color: var(--text-dim); }
+
+  .complete-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 10px 18px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-height: 40px;
+  }
+
+  .complete-btn:active { transform: scale(0.97); }
+
+  .complete-btn.completed {
+    background: var(--bg-elevated);
+    color: var(--done);
+    border: 1px solid var(--done);
+  }
+
+  .save-status {
+    font-size: 10px;
+    color: var(--done);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    margin-right: auto;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .save-status.show { opacity: 1; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .footer-mark {
+    color: var(--accent);
+    font-family: var(--display);
+    text-transform: none;
+    letter-spacing: 0.5px;
+    font-style: italic;
+    margin-top: 6px;
+    font-size: 14px;
+  }
+
+  .footer-utility { margin-top: 14px; }
+
+  .reset-link {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 10px;
+    cursor: pointer;
+    text-decoration: underline;
+    margin: 0 6px;
+    font-family: inherit;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 4px;
+  }
+
+  .reset-link:active { color: var(--urgent); }
+
+  /* ===== MOBILE OPTIMIZATIONS ===== */
+  @media (max-width: 768px) {
+    .container { padding: 16px 12px 40px; }
+
+    .header {
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      gap: 8px;
+    }
+
+    .brand-title { font-size: 28px; }
+    .brand-tagline { font-size: 11px; }
+    .date-block { text-align: left; }
+    .date-day { font-size: 18px; }
+
+    .controls-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .filter-bar {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .filter-bar::-webkit-scrollbar { display: none; }
+
+    .filter-label { display: none; }
+
+    .filter-btn {
+      flex-shrink: 0;
+      font-size: 12px;
+      padding: 10px 14px;
+      min-height: 40px;
+    }
+
+    .global-counter {
+      justify-content: center;
+      width: 100%;
+    }
+
+    .franchise-header {
+      padding: 14px 14px;
+      gap: 8px;
+    }
+
+    .franchise-title { font-size: 19px; }
+    .franchise-context {
+      font-size: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Hide the long context line on small phones to keep header tidy */
+    @media (max-width: 480px) {
+      .franchise-context { display: none; }
+    }
+
+    .franchise-stats {
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
+
+    .standards-badge {
+      font-size: 9px;
+      padding: 4px 8px;
+    }
+
+    .franchise-stat-value { font-size: 15px; }
+    .franchise-stat-label { font-size: 8px; }
+
+    .franchise-cards {
+      padding: 10px;
+      gap: 10px;
+    }
+
+    .tm-card {
+      padding: 14px 14px;
+    }
+
+    .card-num {
+      font-size: 22px;
+      min-width: 24px;
+    }
+
+    .card-name { font-size: 17px; }
+
+    /* Stack The Why / The Play vertically on mobile */
+    .card-content {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .card-why, .card-play {
+      font-size: 13px;
+    }
+
+    /* Compact metrics on mobile - 2 col grid */
+    .tm-metrics {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 12px;
+      padding: 10px 12px;
+    }
+
+    .metric-value { font-size: 15px; }
+
+    .framework-ref {
+      font-size: 11px;
+      padding: 8px 10px;
+    }
+
+    .complete-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 11px;
+    }
+
+    .action-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .meta-info {
+      text-align: center;
+      order: -1;
+    }
+
+    .save-status {
+      text-align: center;
+      margin-right: 0;
+    }
+
+    .footer { font-size: 9px; }
+    .footer-mark { font-size: 13px; }
+    .reset-link {
+      display: inline-block;
+      margin: 4px;
+      font-size: 11px;
+    }
+  }
+
+  /* iPhone SE / very small */
+  @media (max-width: 380px) {
+    .brand-title { font-size: 24px; }
+    .franchise-stats .standards-badge { display: none; }
+  }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <div>
+      <div class="brand-mark">New England Elite</div>
+      <h1 class="brand-title">Teammate Coaching</h1>
+      <div class="brand-tagline">Elite Leaders Create Elite Leaders.</div>
+    </div>
+    <div class="date-block">
+      <div class="date-day" id="today-date">Sunday, April 26</div>
+      <div class="date-mtd">April MTD · TM-Level Metrics</div>
+    </div>
+  </header>
+
+  <div class="controls-row">
+    <div class="filter-bar">
+      <span class="filter-label">Show:</span>
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="bno">Boston North</button>
+      <button class="filter-btn" data-filter="bso">Boston South</button>
+      <button class="filter-btn" data-filter="cp">Coastal Ports</button>
+      <button class="filter-btn" data-filter="ct">Connecticut</button>
+    </div>
+    <div class="global-counter">
+      <span id="global-progress-text">0 of 20 coached</span>
+      <div class="progress-bar"><div class="progress-fill" id="global-progress-fill" style="width: 0%"></div></div>
+    </div>
+  </div>
+
+  <div id="dashboard"></div>
+
+  <footer class="footer">
+    <div>NEE Teammate Coaching · Built for Thomas Haslam, VP</div>
+    <div class="footer-mark">Built Different.</div>
+    <div class="footer-utility">
+      <button class="reset-link" id="expand-all">Expand All</button>
+      <span style="color: var(--border-bright)">·</span>
+      <button class="reset-link" id="collapse-all">Collapse All</button>
+      <span style="color: var(--border-bright)">·</span>
+      <button class="reset-link" id="reset-btn">Reset for new day</button>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // ===== FRANCHISE STRUCTURE =====
+  const FRANCHISES = [
+    {
+      code: 'bno', name: 'Boston North',
+      context: 'Cabrera · Ramsey  |  AJS Std $725  |  NPS 90%',
+      standards: '<strong>$725</strong> AJS · <strong>33%</strong> 1/6 · <strong>10%</strong> Truck+'
+    },
+    {
+      code: 'bso', name: 'Boston South',
+      context: 'Henion · Miller  |  AJS Std $725  |  NPS 90%',
+      standards: '<strong>$725</strong> AJS · <strong>33%</strong> 1/6 · <strong>10%</strong> Truck+'
+    },
+    {
+      code: 'cp', name: 'Coastal Ports',
+      context: 'Caiazzo  |  AJS Std $619  |  NPS 90%',
+      standards: '<strong>$619</strong> AJS · <strong>30%</strong> 1/6 · <strong>12.5%</strong> Truck+'
+    },
+    {
+      code: 'ct', name: 'Connecticut',
+      context: 'Gorneault · Jackson · Liciaga  |  AJS Std $619',
+      standards: '<strong>$619</strong> AJS · <strong>35%</strong> 1/6 · <strong>10%</strong> Truck+'
+    }
+  ];
+
+  // ===== TEAMMATE DATA =====
+  const TEAMMATES = [
+    // BOSTON NORTH
+    {
+      id: 'tm-bno-1', priority: 1, franchiseCode: 'bno', name: 'Adrian Vidal', role: 'SSL', severity: 'urgent',
+      why: 'Adj Resi AJS $619 — $106 below BNO $725 standard. Below the 66% Adj AJS threshold for the month, on PIP track.',
+      play: '<strong>Richard 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with Haskell next 2 shifts. 15-day target back to $725.',
+      framework: 'CSL Performance Accountability — Level 1 PIP. Below 66% Resi AJS for 1 month triggers documented plan.',
+      metrics: [{ l: 'Adj AJS', v: '$619', c: 'bad' }, { l: 'Std', v: '$725' }, { l: 'Truck+', v: '5.4%', c: 'bad' }, { l: 'Complaint', v: '1.2%' }]
+    },
+    {
+      id: 'tm-bno-2', priority: 2, franchiseCode: 'bno', name: 'Carlos Rivera', role: 'CSL', severity: 'urgent',
+      why: 'Complaint rate 4.27% — 3.4x BNO standard of 1.25%. Brand new shifter (started 4/15). 10-day window to reset before this defines him.',
+      play: '<strong>Tyler pre-shift sit-down.</strong> Pull last 3 NPS detractors. Walk through what was missed. Have him personally call back 2 of those customers.',
+      framework: 'CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda either isn\'t being delivered or isn\'t landing.',
+      metrics: [{ l: 'Complaint', v: '4.27%', c: 'bad' }, { l: 'Std', v: '1.25%' }, { l: 'Adj AJS', v: '$722' }, { l: 'Days In', v: '10' }]
+    },
+    {
+      id: 'tm-bno-3', priority: 3, franchiseCode: 'bno', name: 'Jeovonne Maldonado', role: 'CSL', severity: 'high',
+      why: 'Complaint rate 2.89% (2.3x standard). Adj AJS $735 sits at line — passing on AJS, failing on customer experience.',
+      play: '<strong>Richard observes one full shift this week.</strong> Watch the 4-6 PM hour specifically. Listen for tone, pace, customer language. Coaching focus: Punctual + Etiquette.',
+      framework: 'CUSTOMER framework — Punctual, Etiquette, Authentic. Day-end fatigue is when customer experience usually breaks.',
+      metrics: [{ l: 'Complaint', v: '2.89%', c: 'bad' }, { l: 'Adj AJS', v: '$735', c: 'good' }, { l: 'Truck+', v: '11.1%' }]
+    },
+    {
+      id: 'tm-bno-4', priority: 4, franchiseCode: 'bno', name: 'Alex Alvarez', role: 'CSL', severity: 'high',
+      why: 'Complaint rate 2.85% — 2.3x standard. Adj AJS $696, $29 below standard. Two-front issue, not as urgent as Rivera but trending wrong.',
+      play: '<strong>Tyler mid-shift check-in.</strong> Pull 2 recent NPS surveys, walk through customer-facing language. Where\'s the gap — close, work, or attitude?',
+      framework: 'CUSTOMER framework — Authentic, Memorable. Sales-feel close that creates passive customers.',
+      metrics: [{ l: 'Complaint', v: '2.85%', c: 'bad' }, { l: 'Adj AJS', v: '$696', c: 'bad' }, { l: 'Cancel', v: '36.8%' }]
+    },
+    {
+      id: 'tm-bno-5', priority: 5, franchiseCode: 'bno', name: 'Michael Browne', role: 'CSL', severity: 'medium',
+      why: 'Adj AJS $707 below $725 standard. Complaint at 1.98% creeping up. Inconsistent days — needs structure not crisis intervention.',
+      play: '<strong>Quick morning huddle.</strong> Set explicit AJS goal for the day. Have him write down each job\'s upsell attempts. Review at EOD.',
+      framework: 'CSL Scenario 3.1 — Priority Items step. Quick refresher on how to surface additional load.',
+      metrics: [{ l: 'Adj AJS', v: '$707' }, { l: 'Std', v: '$725' }, { l: 'Complaint', v: '1.98%', c: 'bad' }]
+    },
+
+    // BOSTON SOUTH
+    {
+      id: 'tm-bso-1', priority: 1, franchiseCode: 'bso', name: 'Nicholas Strojny', role: 'CSL', severity: 'urgent',
+      why: 'Adj AJS $511 — lowest CSL in BSO, $214 below the $725 standard. 1/6-or-less rate at 53.85% (vs 33% std) means he\'s closing tiny loads only.',
+      play: '<strong>Tommy 1:1 before shift.</strong> Pair shadow with Cedeno-Martinez ($736 AJS) for 2 shifts. Verbal Scenario 3.1 walk-through — Priority Items step is where he\'s leaking.',
+      framework: 'CSL Scenarios 3.1 + 3.2. PIP-track per Tommy\'s accountability process — below 66% one month means PIP meeting by 7th of next month.',
+      metrics: [{ l: 'Adj AJS', v: '$511', c: 'bad' }, { l: '1/6 or Less', v: '53.85%', c: 'bad' }, { l: 'Truck+', v: '6.15%', c: 'bad' }, { l: 'NPS', v: '92.3%', c: 'good' }]
+    },
+    {
+      id: 'tm-bso-2', priority: 2, franchiseCode: 'bso', name: 'Andrade & Guidetti', role: 'PAIRED CSL', severity: 'urgent',
+      why: 'Identical numbers — paired truck team. Adj AJS $540 each, 119 jobs run together, 1/6-or-less at 49.55%. Either both shift up or split them.',
+      play: '<strong>Kendall makes the call this week.</strong> Either lock in 2 shadow shifts with Cedeno-Martinez as a pair, or split them across stronger partners. Both shifting together means neither is leading.',
+      framework: 'CSL Scenario 3.2 — Estimate & Price + Assumptive Ask. When two CSLs share a truck and both are below standard, the dominant voice is wrong.',
+      metrics: [{ l: 'Adj AJS', v: '$540', c: 'bad' }, { l: '1/6 or Less', v: '49.55%', c: 'bad' }, { l: 'NPS', v: '88.2%', c: 'bad' }, { l: 'Jobs', v: '119' }]
+    },
+    {
+      id: 'tm-bso-3', priority: 3, franchiseCode: 'bso', name: 'Casey Bingham', role: 'CSL', severity: 'high',
+      why: 'Adj AJS $545. Cancel conversion 27.78% — when a job is at risk, he\'s losing 1 in 4. SC Save is missing.',
+      play: '<strong>Tommy runs a 15-min Scenario 3.3 verbal practice.</strong> Pull 1 actual cancel from this week and replay it together. Have him commit to 1 SC Save attempt per cancellation tomorrow.',
+      framework: 'CSL Scenario 3.3 — REEAP Negotiation Protocol. Cancel conversion is the pure measure of REEAP execution.',
+      metrics: [{ l: 'Adj AJS', v: '$545', c: 'bad' }, { l: 'Cancel Conv', v: '27.78%', c: 'bad' }, { l: 'Truck+', v: '13.75%', c: 'good' }, { l: 'NPS', v: '100%', c: 'good' }]
+    },
+    {
+      id: 'tm-bso-4', priority: 4, franchiseCode: 'bso', name: 'Jadiel Diaz', role: 'CEL', severity: 'high',
+      why: 'NPS 57.14% — only 4 surveys but 1 detractor + 1 passive in 7 reviews is a pattern, not noise. Adj AJS $494 also weak.',
+      play: '<strong>Kendall pre-shift conversation.</strong> Listen to the 1 detractor call together. CUSTOMER framework — Memorable + Active Listening. Have him commit to 2 picture-perfect moments per shift.',
+      framework: 'CEL CUSTOMER framework — back half (Memorable, Genuine, Positive Ending). New CELs with low NPS need service coaching before sales coaching.',
+      metrics: [{ l: 'NPS', v: '57.14%', c: 'bad' }, { l: 'Adj AJS', v: '$494', c: 'bad' }, { l: 'Cancel Conv', v: '12.20%', c: 'bad' }]
+    },
+    {
+      id: 'tm-bso-5', priority: 5, franchiseCode: 'bso', name: 'Joseph Currier', role: 'CSL', severity: 'high',
+      why: 'Adj AJS $539. Cancel conversion 100% — every cancel he touched stayed cancelled. He\'s not even attempting the save.',
+      play: '<strong>Pair shadow with McAvoy ($1,121 AJS).</strong> One full day. Set explicit goal: 1 documented SC Save attempt per cancellation. Have him script the words first.',
+      framework: 'CSL Scenario 3.3 — REEAP Negotiation. 100% conversion-to-cancel is a coaching emergency disguised as a metric.',
+      metrics: [{ l: 'Adj AJS', v: '$539', c: 'bad' }, { l: 'Cancel Conv', v: '100%', c: 'bad' }, { l: 'NPS', v: '100%', c: 'good' }]
+    },
+
+    // COASTAL PORTS
+    {
+      id: 'tm-cp-1', priority: 1, franchiseCode: 'cp', name: 'Joshua Meserve', role: 'CSL', severity: 'urgent',
+      why: 'Adj Resi AJS $485 — lowest in CP, $134 below the $619 standard. Truck+ at 3.33% (vs 12.5% std) — not pitching the upsell at all.',
+      play: '<strong>Pat shadows him for one full shift this week.</strong> Score every close — was the assumptive ask delivered? Was Truck Plus pitched? Document each missed moment.',
+      framework: 'CSL Scenario 1 — Establishing Value + Estimate & Price. Clean ops, weak close = pure sales coaching opportunity.',
+      metrics: [{ l: 'Adj AJS', v: '$485', c: 'bad' }, { l: 'Truck+', v: '3.33%', c: 'bad' }, { l: 'NPS', v: '100%', c: 'good' }, { l: 'Complaint', v: '0%', c: 'good' }]
+    },
+    {
+      id: 'tm-cp-2', priority: 2, franchiseCode: 'cp', name: 'Jason Trostle', role: 'CEL', severity: 'high',
+      why: 'Adj AJS $577 — $42 below standard. 1/6-or-less at 42.86% (vs 30% std). New CEL still on the learning curve, but trending wrong.',
+      play: '<strong>Pat morning huddle.</strong> Set explicit Truck+ goal for the day. CUSTOMER framework refresher with focus on Authentic, Memorable. Pair shadow with Pat himself for 1 shift.',
+      framework: 'CEL CUSTOMER framework — full pass-through. Small franchise means each TM\'s playbook needs to mirror Pat\'s.',
+      metrics: [{ l: 'Adj AJS', v: '$577', c: 'bad' }, { l: '1/6 or Less', v: '42.86%', c: 'bad' }, { l: 'NPS', v: '100%', c: 'good' }]
+    },
+    {
+      id: 'tm-cp-3', priority: 3, franchiseCode: 'cp', name: 'Jonathan Meserve', role: 'CEL', severity: 'medium',
+      why: 'Adj AJS $608 — at the line, $11 below standard. Truck+ 9.62% (just under 12.5% std). Solid but not breaking through.',
+      play: '<strong>Quick mid-shift coaching moment.</strong> Verbal practice on the assumptive ask. One shift goal: Truck+ pitch on every job, not just the obvious ones.',
+      framework: 'CSL Scenario 3.2 — Assumptive Ask. CELs at the standard line need confidence reps, not crisis coaching.',
+      metrics: [{ l: 'Adj AJS', v: '$608' }, { l: 'Truck+', v: '9.62%' }, { l: 'NPS', v: '100%', c: 'good' }]
+    },
+    {
+      id: 'tm-cp-4', priority: 4, franchiseCode: 'cp', name: 'Derek Lee', role: 'CSL', severity: 'medium',
+      why: 'Adj AJS $737 — strong, well above standard. But 1 complaint on 79 jobs (1.27%) just below the 1.50% line. Worth watching, not fixing.',
+      play: '<strong>Pat reviews the one complaint with him.</strong> Was it preventable? What\'s the lesson for the next shift. Light-touch maintenance coaching, no PIP needed.',
+      framework: 'CEL CUSTOMER — pinpoint review. One complaint is a data point, not a pattern. Coaching here is preventive.',
+      metrics: [{ l: 'Adj AJS', v: '$737', c: 'good' }, { l: 'Complaint', v: '1.27%' }, { l: 'Truck+', v: '14.06%', c: 'good' }]
+    },
+    {
+      id: 'tm-cp-5', priority: 5, franchiseCode: 'cp', name: 'Darien Koziarski', role: 'CSL', severity: 'medium',
+      why: 'Adj AJS $694 above standard. Truck+ at 7.32% (below 12.5% std). Solid baseline performer who\'s leaving upsell on the table.',
+      play: '<strong>Pat 30-min Scenario 3.1 refresh.</strong> Specifically the Priority Items step. Commit to 1 Truck+ pitch per job tomorrow.',
+      framework: 'CSL Scenario 3.1 — Priority Items + Estimate & Price. Truck+ rate is the canary on AJS health.',
+      metrics: [{ l: 'Adj AJS', v: '$694', c: 'good' }, { l: 'Truck+', v: '7.32%', c: 'bad' }, { l: 'NPS', v: '100%', c: 'good' }]
+    },
+
+    // CONNECTICUT
+    {
+      id: 'tm-ct-1', priority: 1, franchiseCode: 'ct', name: 'Kenneth Johnson', role: 'CSL', severity: 'urgent',
+      why: 'Adj AJS $507 — $112 below CT $619 standard. Complaint rate 4.88% — 3.7x the 1.30% std. NPS 75%. All three metrics red.',
+      play: '<strong>Tim (DOPD) takes the lead today.</strong> Level 1 PIP conversation. Walk through 5 jobs. Identify the bigger gap — sales mechanics or service quality. Pair with Liciaga ($965 AJS).',
+      framework: 'CSL Performance Accountability — month one PIP. Below 66% Resi AJS triggers documented plan with 30-day target.',
+      metrics: [{ l: 'Adj AJS', v: '$507', c: 'bad' }, { l: 'Complaint', v: '4.88%', c: 'bad' }, { l: 'NPS', v: '75%', c: 'bad' }]
+    },
+    {
+      id: 'tm-ct-2', priority: 2, franchiseCode: 'ct', name: 'Joel Azar', role: 'CSL', severity: 'urgent',
+      why: 'Adj AJS $555 below standard. Complaint 3.6% (2.8x std). NPS 91.3% borderline. Multi-month risk.',
+      play: '<strong>Jakarie or Tim 1:1 before shift.</strong> Pull 5 most recent jobs. Verbal Scenario 3.3 walk-through. If he can\'t demo it cold, back to Scenario 3.2 practice this week.',
+      framework: 'CSL Performance Accountability + Scenario 3.3. CT has 4+ teammates below standard — this is a franchise-wide pattern.',
+      metrics: [{ l: 'Adj AJS', v: '$555', c: 'bad' }, { l: 'Complaint', v: '3.6%', c: 'bad' }, { l: 'NPS', v: '91.3%' }]
+    },
+    {
+      id: 'tm-ct-3', priority: 3, franchiseCode: 'ct', name: 'Brendan Chicano', role: 'CSL', severity: 'urgent',
+      why: 'Adj AJS $546. NPS 70% — 20 points below standard. Complaint 3.7%. Service quality is the bigger fire here, not just sales.',
+      play: '<strong>Tim runs service-focused review.</strong> Listen to 3 detractor calls together. CUSTOMER framework — Memorable, WOW Factor, Etiquette. Commit to 2 picture-perfect moments per shift.',
+      framework: 'CEL CUSTOMER framework — Memorable, Creating Lifelong Customers, Positive Ending. Low NPS at this scale is a service problem.',
+      metrics: [{ l: 'Adj AJS', v: '$546', c: 'bad' }, { l: 'NPS', v: '70%', c: 'bad' }, { l: 'Complaint', v: '3.7%', c: 'bad' }]
+    },
+    {
+      id: 'tm-ct-4', priority: 4, franchiseCode: 'ct', name: 'Esteban Santacruz Pulla', role: 'CSL', severity: 'high',
+      why: 'Adj AJS $533. Cancel conversion 100% — every cancel he touched stayed cancelled. SC Save mechanics completely missing.',
+      play: '<strong>Pair shadow with Ford Chauncey ($1,802 AJS).</strong> Two full days. Set explicit goal: 1 SC Save attempt per cancellation. Document each script attempt.',
+      framework: 'CSL Scenario 3.3 — REEAP Negotiation. 100% conversion-to-cancel means he\'s not even attempting the save.',
+      metrics: [{ l: 'Adj AJS', v: '$533', c: 'bad' }, { l: 'Cancel Conv', v: '100%', c: 'bad' }, { l: 'NPS', v: '92.3%', c: 'good' }]
+    },
+    {
+      id: 'tm-ct-5', priority: 5, franchiseCode: 'ct', name: 'Martin Dinkins', role: 'CSL', severity: 'high',
+      why: 'Adj AJS $513 — second-lowest in CT. Truck+ 3.57% (vs 10% std). Closing small loads only, not pitching upsell. NPS 100% solid.',
+      play: '<strong>Tim 30-min Scenario 3.1 refresher.</strong> Specifically the Priority Items step. Commit to 1 Truck+ pitch per job tomorrow.',
+      framework: 'CSL Scenario 3.1 — Priority Items + Estimate & Price. Service is fine, sales mechanics need rebuilding.',
+      metrics: [{ l: 'Adj AJS', v: '$513', c: 'bad' }, { l: 'Truck+', v: '3.57%', c: 'bad' }, { l: 'NPS', v: '100%', c: 'good' }]
+    }
+  ];
+
+  // ===== STATE =====
+  let currentFilter = 'all';
+  const TODAY_KEY = new Date().toISOString().split('T')[0]; // auto-rolls daily
+  const collapsedFranchises = new Set();
+  const STORAGE_PREFIX = 'nee-coaching:' + TODAY_KEY + ':';
+
+  // ===== STORAGE (localStorage — works on any host) =====
+  function safeGet(key) {
+    try {
+      const raw = localStorage.getItem(STORAGE_PREFIX + key);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+
+  function safeSet(key, value) {
+    try {
+      localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value));
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function safeDelete(key) {
+    try { localStorage.removeItem(STORAGE_PREFIX + key); return true; }
+    catch (e) { return false; }
+  }
+
+  // ===== DATE DISPLAY =====
+  function setTodayDate() {
+    const today = new Date();
+    const opts = { weekday: 'long', month: 'long', day: 'numeric' };
+    document.getElementById('today-date').textContent = today.toLocaleDateString('en-US', opts);
+  }
+
+  // ===== RENDER =====
+  function renderCard(c, state) {
+    return `
+      <div class="tm-card ${state.completed ? 'completed' : c.severity}" data-id="${c.id}">
+        <div class="card-top">
+          <div class="card-id-block">
+            <div class="card-num">${String(c.priority).padStart(2, '0')}</div>
+            <div class="card-info">
+              <div class="card-name">${c.name}<span class="card-role-tag">${c.role}</span></div>
+            </div>
+          </div>
+          <div class="card-tags">
+            ${state.completed
+              ? `<span class="tag tag-done">✓ Coached</span>`
+              : `<span class="tag tag-${c.severity}">${c.severity}</span>`}
+          </div>
+        </div>
+
+        <div class="tm-metrics">
+          ${c.metrics.map(m => `
+            <div class="metric">
+              <div class="metric-label">${m.l}</div>
+              <div class="metric-value ${m.c || ''}">${m.v}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="card-content">
+          <div>
+            <div class="card-block-label">The Why</div>
+            <div class="card-why">${c.why}</div>
+          </div>
+          <div>
+            <div class="card-block-label">The Play</div>
+            <div class="card-play">${c.play}</div>
+          </div>
+        </div>
+
+        ${c.framework ? `
+          <div class="framework-ref">
+            <div class="framework-ref-label">Coaching Anchor</div>
+            ${c.framework}
+          </div>
+        ` : ''}
+
+        <div class="card-actions">
+          <textarea class="notes-area" data-id="${c.id}" placeholder="Coaching notes — what did you discuss, what's the follow-up?">${state.notes || ''}</textarea>
+          <div class="action-row">
+            <span class="save-status" id="save-${c.id}">Saved</span>
+            <span class="meta-info">${state.completed ? `Coached · ${state.completedAt || ''}` : 'Mark complete after the conversation'}</span>
+            <button class="complete-btn ${state.completed ? 'completed' : ''}" data-id="${c.id}">
+              ${state.completed ? '✓ Completed' : 'Mark Coached'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function render() {
+    const dashboard = document.getElementById('dashboard');
+    const grouped = {};
+    FRANCHISES.forEach(f => grouped[f.code] = []);
+    TEAMMATES.forEach(t => grouped[t.franchiseCode].push(t));
+
+    let html = '';
+
+    for (const f of FRANCHISES) {
+      if (currentFilter !== 'all' && currentFilter !== f.code) continue;
+      const cards = grouped[f.code];
+      if (cards.length === 0) continue;
+
+      const cardsWithState = cards.map(c => ({
+        card: c,
+        state: safeGet(c.id) || { completed: false, notes: '', completedAt: '' }
+      }));
+
+      const fDone = cardsWithState.filter(x => x.state.completed).length;
+      const fTotal = cardsWithState.length;
+      const isCollapsed = collapsedFranchises.has(f.code);
+
+      html += `
+        <div class="franchise-group ${isCollapsed ? 'collapsed' : ''}" data-franchise="${f.code}">
+          <div class="franchise-header" data-toggle="${f.code}">
+            <div class="franchise-header-left">
+              <div class="franchise-chip ${f.code}"></div>
+              <div class="franchise-title-block">
+                <div class="franchise-title">${f.name}</div>
+                <div class="franchise-context">${f.context}</div>
+              </div>
+            </div>
+            <div class="franchise-stats">
+              <div class="standards-badge">${f.standards}</div>
+              <div class="franchise-stat">
+                <div class="franchise-stat-value">${fDone}/${fTotal}</div>
+                <div class="franchise-stat-label">Coached</div>
+              </div>
+              <div class="collapse-icon">▼</div>
+            </div>
+          </div>
+          <div class="franchise-cards">
+            ${cardsWithState.map(x => renderCard(x.card, x.state)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    dashboard.innerHTML = html;
+
+    // Global progress against full set
+    let allDone = 0;
+    for (const c of TEAMMATES) {
+      const state = safeGet(c.id);
+      if (state && state.completed) allDone++;
+    }
+    document.getElementById('global-progress-text').textContent = `${allDone} of ${TEAMMATES.length} coached`;
+    document.getElementById('global-progress-fill').style.width = `${(allDone / TEAMMATES.length) * 100}%`;
+
+    bindEvents();
+  }
+
+  function bindEvents() {
+    document.querySelectorAll('.notes-area').forEach(textarea => {
+      let timer;
+      textarea.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          const id = textarea.dataset.id;
+          const existing = safeGet(id) || {};
+          existing.notes = textarea.value;
+          if (safeSet(id, existing)) {
+            const status = document.getElementById(`save-${id}`);
+            if (status) {
+              status.classList.add('show');
+              setTimeout(() => status.classList.remove('show'), 1500);
+            }
+          }
+        }, 600);
+      });
+    });
+
+    document.querySelectorAll('.complete-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        const existing = safeGet(id) || { notes: '' };
+        existing.completed = !existing.completed;
+        existing.completedAt = existing.completed
+          ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          : '';
+        safeSet(id, existing);
+        render();
+      });
+    });
+
+    document.querySelectorAll('.franchise-header').forEach(header => {
+      header.addEventListener('click', (e) => {
+        if (e.target.closest('.complete-btn') || e.target.closest('.notes-area')) return;
+        const code = header.dataset.toggle;
+        if (collapsedFranchises.has(code)) collapsedFranchises.delete(code);
+        else collapsedFranchises.add(code);
+        header.parentElement.classList.toggle('collapsed');
+      });
+    });
+  }
+
+  // ===== CONTROLS =====
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      render();
+    });
+  });
+
+  document.getElementById('expand-all').addEventListener('click', () => {
+    collapsedFranchises.clear();
+    render();
+  });
+
+  document.getElementById('collapse-all').addEventListener('click', () => {
+    FRANCHISES.forEach(f => collapsedFranchises.add(f.code));
+    render();
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    if (!confirm('Reset all coaching for today? Clears completion + notes for all 20 teammates on this device.')) return;
+    for (const c of TEAMMATES) safeDelete(c.id);
+    render();
+  });
+
+  // ===== INIT =====
+  setTodayDate();
+  render();
+</script>
+</body>
+</html>
