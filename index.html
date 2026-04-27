@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <!-- LAST_UPDATED: 2026-04-27T05:47:59Z -->
-=======
-<!-- LAST_UPDATED: 2026-04-27T05:47:59Z -->
->>>>>>> c68b174143ed4421fd52b135a30ee62249d01186
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -222,6 +218,135 @@
   .rick-pick-chat {
     background: linear-gradient(90deg, rgba(167,139,250,0.18), rgba(96,165,250,0.18));
   }
+
+  /* ===== TWO-CARD ROW (PICK + MVP) ===== */
+  .rick-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  @media (max-width: 900px) {
+    .rick-row { grid-template-columns: 1fr; }
+  }
+  .rick-row .rick-pick { margin-bottom: 0; }
+
+  /* ===== REGIONAL MVP CARD ===== */
+  .mvp-pick {
+    padding: 18px 22px;
+    background:
+      radial-gradient(120% 200% at 100% 0%, rgba(245,200,80,0.14), transparent 60%),
+      linear-gradient(180deg, rgba(245,200,80,0.06), rgba(212,162,86,0.04));
+    border: 1px solid rgba(245,200,80,0.32);
+    border-radius: 14px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
+    position: relative;
+    overflow: hidden;
+  }
+  .mvp-pick[hidden] { display: none; }
+  .mvp-pick::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(180deg, #f5c850, #d4a256);
+  }
+  .mvp-pick-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #f5c850;
+    background: rgba(245,200,80,0.12);
+    border: 1px solid rgba(245,200,80,0.3);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .mvp-pick-headline {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .mvp-pick-rationale {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ===== TOP PERFORMERS STRIP (per franchise) ===== */
+  .top-performers {
+    margin: 0 14px 14px 14px;
+    padding: 12px 14px;
+    background: linear-gradient(180deg, rgba(34,197,94,0.06), rgba(34,197,94,0.02));
+    border: 1px solid rgba(34,197,94,0.22);
+    border-radius: 10px;
+  }
+  .top-performers-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #5cb88a;
+    margin-bottom: 8px;
+  }
+  .top-performers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+  }
+  .top-performer {
+    background: rgba(34,197,94,0.05);
+    border: 1px solid rgba(34,197,94,0.15);
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .top-performer:hover {
+    border-color: rgba(34,197,94,0.35);
+    transform: translateY(-1px);
+  }
+  .top-performer-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .top-performer-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .top-performer-role {
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .top-performer-score {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 600;
+    color: #5cb88a;
+    line-height: 1;
+  }
+  .top-performer-score-suffix {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-left: 1px;
+  }
+  .top-performer-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .top-performer-meta span:not(:last-child)::after { content: " · "; color: var(--text-dim); }
+  .franchise-group.collapsed .top-performers { display: none; }
 
   /* ===== CHAT INTRO + DEEP DIVE Q&A ===== */
   .chat-intro {
@@ -1519,15 +1644,23 @@
     </div>
   </section>
 
-  <section class="rick-pick" id="rick-pick" hidden>
-    <div class="rick-pick-badge">Coach Rick's pick of the day</div>
-    <div class="rick-pick-headline" id="rick-pick-headline"></div>
-    <div class="rick-pick-rationale" id="rick-pick-rationale"></div>
-    <div class="rick-pick-action">
-      <button class="rick-pick-btn" id="rick-pick-btn">Open this teammate</button>
-      <button class="rick-pick-chat" id="rick-pick-chat">💬 Talk to Coach Rick about this</button>
-    </div>
-  </section>
+  <div class="rick-row">
+    <section class="rick-pick" id="rick-pick" hidden>
+      <div class="rick-pick-badge">Coach Rick's pick of the day · coach this teammate</div>
+      <div class="rick-pick-headline" id="rick-pick-headline"></div>
+      <div class="rick-pick-rationale" id="rick-pick-rationale"></div>
+      <div class="rick-pick-action">
+        <button class="rick-pick-btn" id="rick-pick-btn">Open this teammate</button>
+        <button class="rick-pick-chat" id="rick-pick-chat">💬 Talk to Coach Rick about this</button>
+      </div>
+    </section>
+
+    <section class="mvp-pick" id="mvp-pick" hidden>
+      <div class="mvp-pick-badge">🏆 Regional MVP of the day · recognize this teammate</div>
+      <div class="mvp-pick-headline" id="mvp-pick-headline"></div>
+      <div class="mvp-pick-rationale" id="mvp-pick-rationale"></div>
+    </section>
+  </div>
 
   <div class="controls-row">
     <div class="filter-bar">
@@ -1663,8 +1796,10 @@
 </div>
 
 <script>
-  // ===== COACH RICK'S PICK OF THE DAY (rewritten daily by the workflow) =====
+  // ===== COACH RICK'S DAILY PICKS (rewritten daily by the workflow) =====
   const COACH_PICK = {"tmId": "tm-bno-1", "headline": "Deven's 29% NPS is costing revenue and reputation.", "rationale": "Deven scores lowest on the list at 63/100 with urgent severity, but the real problem is 29% NPS paired with $438 AJS. That's a teammate actively damaging customer relationships while leaving money on the table. One conversation on CSL Scenario Step 2 (Discovery and Qualification) will unlock both complaint prevention and ticket size growth immediately."};
+  const MVP_PICK = null;
+  const TOP_PERFORMERS = [];
 
   // ===== FRANCHISE STRUCTURE =====
   const FRANCHISES = [
@@ -2162,6 +2297,7 @@
               <div class="collapse-icon">▼</div>
             </div>
           </div>
+          ${renderTopPerformersFor(f.code)}
           <div class="franchise-cards">
             ${cardsWithState.map(x => renderCard(x.card, x.state)).join('')}
           </div>
@@ -2470,10 +2606,51 @@
     document.getElementById('rick-pick-chat').onclick = () => openChat(tm.id);
   }
 
+  // ===== MVP RENDER =====
+  function renderMvpPick() {
+    const block = document.getElementById('mvp-pick');
+    if (!MVP_PICK || !MVP_PICK.tmName) { block.hidden = true; return; }
+    block.hidden = false;
+    const fr = FRANCHISES.find(f => f.code === MVP_PICK.franchiseCode);
+    document.getElementById('mvp-pick-headline').textContent =
+      `${MVP_PICK.headline} (${MVP_PICK.tmName}${fr ? ' · ' + fr.name : ''})`;
+    document.getElementById('mvp-pick-rationale').textContent = MVP_PICK.rationale;
+  }
+
+  // ===== TOP PERFORMERS HELPERS =====
+  function renderTopPerformersFor(code) {
+    const list = TOP_PERFORMERS.filter(p => p.franchiseCode === code);
+    if (!list.length) return '';
+    return `
+      <div class="top-performers">
+        <div class="top-performers-label">⭐ Top performers · recognize this week</div>
+        <div class="top-performers-grid">
+          ${list.map(p => `
+            <div class="top-performer">
+              <div class="top-performer-row">
+                <div>
+                  <div class="top-performer-name">${escapeHtml(p.name)}</div>
+                  <div class="top-performer-role">${escapeHtml(p.role)}</div>
+                </div>
+                <div class="top-performer-score">${p.score}<span class="top-performer-score-suffix">/100</span></div>
+              </div>
+              <div class="top-performer-meta">
+                ${(p.highlights && p.highlights.length)
+                  ? p.highlights.map(h => `<span>${escapeHtml(h)}</span>`).join('')
+                  : `<span>${p.resiJobs} resi jobs</span>`}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
   // ===== INIT =====
   setTodayDate();
   render();
   renderCoachPick();
+  renderMvpPick();
 </script>
 </body>
 </html>

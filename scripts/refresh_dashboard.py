@@ -331,6 +331,40 @@ def pick_worst_5(tms: list[TM]) -> list[TM]:
     return eligible[:5]
 
 
+def pick_top_5(tms: list[TM]) -> list[TM]:
+    """Top 5 performers per franchise by composite score (descending).
+    Tiebreaker: raw AJS dollars (higher = better)."""
+    eligible = [t for t in tms if t.resi_jobs >= MIN_RESI_JOBS]
+    for t in eligible:
+        if not t.sub_scores:  # may not have been scored yet
+            score_tm(t)
+    eligible.sort(key=lambda t: (-t.weighted_score, -(t.resi_ajs or 0)))
+    return eligible[:5]
+
+
+def render_top_performer(tm: TM) -> dict:
+    """Lightweight record for the Top Performers display (no LLM call)."""
+    std = STANDARDS[tm.franchise_code]
+    highlights: list[str] = []
+    if tm.resi_ajs is not None and tm.resi_ajs >= std["ajs"]:
+        highlights.append(f"AJS {fmt_money(tm.resi_ajs)}")
+    if tm.complaint_pct is not None and tm.complaint_pct <= std["complaint"]:
+        highlights.append(f"Complaints {fmt_pct(tm.complaint_pct, 2)}")
+    if tm.nps is not None and tm.nps >= std["nps"]:
+        highlights.append(f"NPS {fmt_pct(tm.nps, 0)}")
+    if tm.gr_pct is not None and tm.gr_pct >= std["gr"]:
+        highlights.append(f"Reviews {fmt_pct(tm.gr_pct, 1)}")
+    return {
+        "id": f"top-{tm.franchise_code}-{tm.name.replace(' ', '-')}",
+        "franchiseCode": tm.franchise_code,
+        "name": tm.name,
+        "role": tm.role,
+        "score": int(round(tm.weighted_score)),
+        "resiJobs": tm.resi_jobs,
+        "highlights": highlights[:3],
+    }
+
+
 # ---------- narrative generation ----------
 
 def fmt_money(v: Optional[float]) -> str:
@@ -715,6 +749,74 @@ the metric pattern and which CSL Scenario step would unlock it."
 Return ONLY valid JSON."""
 
 
+_MVP_PICK_SYSTEM = """You are COACH RICK, master sales coach for the New England Elite \
+1-800-GOT-JUNK? region. You have just reviewed today's TOP PERFORMERS list (top 3-5 \
+per franchise = up to 20 total). Pick the SINGLE TEAMMATE who deserves regional \
+recognition today as Coach Rick's Daily MVP.
+
+"MVP" means: who's setting the standard right now? Either the highest absolute \
+performance, OR the most impressive turnaround at scale, OR consistency across all \
+four metrics that the rest of the region should be modeling.
+
+Your output is a recognition shout-out that any leader can read aloud in a huddle.
+
+VOICE:
+- Warm, energetic, specific. Recognition with substance, not generic praise.
+- NEVER name a coach or manager. Only name the teammate being recognized.
+- Cite the specific number that earned the recognition.
+- No em dashes. No filler.
+
+Return JSON exactly:
+{
+  "tmName": "<name as it appears in the list>",
+  "franchiseCode": "<bno|bso|cp|ct>",
+  "headline": "One short shout-out sentence (under 90 chars).",
+  "rationale": "2-3 sentences. Cite the specific metric(s) that earned this. \
+Frame it as something other teammates can learn from."
+}
+
+Return ONLY valid JSON."""
+
+
+def generate_mvp_pick(top_records: list[dict]) -> Optional[dict]:
+    """Pick today's regional MVP across all four franchises."""
+    client = _ai_client()
+    if client is None or not top_records:
+        return None
+    try:
+        lines = []
+        for r in top_records:
+            lines.append(
+                f"{r['name']} ({r['role']}, {FRANCHISE_NAMES.get(r['franchiseCode'], r['franchiseCode'])}) "
+                f"| score {r['score']}/100 | resi jobs {r['resiJobs']} "
+                f"| highlights: {', '.join(r['highlights']) if r['highlights'] else '(none above standard)'}"
+            )
+        summary = "\n".join(lines)
+        prompt = (
+            "TODAY'S TOP PERFORMERS LIST (top per franchise):\n\n"
+            + summary
+            + "\n\nPick today's regional MVP for recognition."
+        )
+        resp = client.messages.create(
+            model=_AI_MODEL,
+            max_tokens=400,
+            system=_MVP_PICK_SYSTEM,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        raw = resp.content[0].text.strip()
+        if raw.startswith("```"):
+            raw = raw.strip("`")
+            if raw.startswith("json"):
+                raw = raw[4:].strip()
+        data = json.loads(raw)
+        if not all(k in data for k in ("tmName", "franchiseCode", "headline", "rationale")):
+            return None
+        return data
+    except Exception as e:
+        print(f"::warning::MVP pick generation failed: {e}", file=sys.stderr)
+        return None
+
+
 def generate_coach_pick(records: list[dict]) -> Optional[dict]:
     """Pick today's highest-leverage coaching conversation across the whole region."""
     client = _ai_client()
@@ -909,7 +1011,13 @@ def render_teammates(records: list[dict]) -> str:
     return out + "\n  "
 
 
-def update_index_html(records: list[dict], updated_iso: str, coach_pick: Optional[dict] = None) -> None:
+def update_index_html(
+    records: list[dict],
+    updated_iso: str,
+    coach_pick: Optional[dict] = None,
+    top_performers: Optional[list[dict]] = None,
+    mvp_pick: Optional[dict] = None,
+) -> None:
     src = INDEX_HTML.read_text(encoding="utf-8")
 
     # 1. Replace TEAMMATES array body
@@ -925,7 +1033,19 @@ def update_index_html(records: list[dict], updated_iso: str, coach_pick: Optiona
     if pick_pattern.search(src):
         src = pick_pattern.sub(lambda m: m.group(1) + pick_js + ";", src)
 
-    # 3. Update / insert LAST_UPDATED HTML comment near the top
+    # 3. Replace TOP_PERFORMERS constant
+    top_js = json.dumps(top_performers or [], ensure_ascii=False)
+    top_pattern = re.compile(r"(const TOP_PERFORMERS = )(.*?);", re.DOTALL)
+    if top_pattern.search(src):
+        src = top_pattern.sub(lambda m: m.group(1) + top_js + ";", src)
+
+    # 4. Replace MVP_PICK constant
+    mvp_js = json.dumps(mvp_pick or None, ensure_ascii=False)
+    mvp_pattern = re.compile(r"(const MVP_PICK = )(.*?);", re.DOTALL)
+    if mvp_pattern.search(src):
+        src = mvp_pattern.sub(lambda m: m.group(1) + mvp_js + ";", src)
+
+    # 5. Update / insert LAST_UPDATED HTML comment near the top
     last_updated_marker = re.compile(r"<!--\s*LAST_UPDATED:.*?-->", re.IGNORECASE)
     new_comment = f"<!-- LAST_UPDATED: {updated_iso} -->"
     if last_updated_marker.search(src):
@@ -946,6 +1066,7 @@ def main() -> int:
         return 2
 
     all_records: list[dict] = []
+    top_records: list[dict] = []
     for code in ("bno", "bso", "cp", "ct"):
         try:
             tms = fetch_franchise(gc, code)
@@ -985,20 +1106,34 @@ def main() -> int:
                 "deepDive": deep_dive,
                 "metrics": make_metrics(tm),
             })
+        # Top performers per franchise (no LLM needed, fast pure ranking)
+        top = pick_top_5(tms)
+        for tp in top:
+            top_records.append(render_top_performer(tp))
+
         print(f"  {code.upper()}: {len(tms)} TMs read, picked {len(worst)} for coaching "
-              f"(scores: {', '.join(f'{t.weighted_score:.0f}' for t in worst)})", file=sys.stderr)
+              f"(scores: {', '.join(f'{t.weighted_score:.0f}' for t in worst)}); "
+              f"top {len(top)} (scores: {', '.join(f'{t.weighted_score:.0f}' for t in top)})",
+              file=sys.stderr)
 
     if not all_records:
         print("::error::No teammates picked. Refusing to overwrite index.html.", file=sys.stderr)
         return 4
 
-    # Ask Coach Rick to pick today's MVP - the one teammate across all four franchises
-    # whose conversation is the highest-leverage today.
+    # Coach Rick picks today's highest-leverage coaching conversation across the region.
     pick = generate_coach_pick(all_records)
+    # Coach Rick picks today's regional MVP for recognition.
+    mvp = generate_mvp_pick(top_records)
 
     updated_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    update_index_html(all_records, updated_iso, coach_pick=pick)
-    print(f"index.html updated. LAST_UPDATED={updated_iso}, {len(all_records)} TMs written.", file=sys.stderr)
+    update_index_html(
+        all_records, updated_iso,
+        coach_pick=pick,
+        top_performers=top_records,
+        mvp_pick=mvp,
+    )
+    print(f"index.html updated. LAST_UPDATED={updated_iso}, {len(all_records)} TMs written, "
+          f"{len(top_records)} top performers.", file=sys.stderr)
     return 0
 
 
