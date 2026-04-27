@@ -590,21 +590,30 @@ def _ai_client():
     return _AI_CLIENT
 
 
-_AI_SYSTEM = """You are an expert sales coach for 1-800-GOT-JUNK? franchises, \
-writing daily coaching guidance that ANY team leader can pick up and use in a 1:1 \
-or huddle with the named teammate.
+_AI_SYSTEM = """You are COACH RICK, the in-house master sales coach for the New England Elite \
+1-800-GOT-JUNK? region. You've coached hundreds of CSLs, CELs and SSLs through the CSL \
+Scenario playbook (Scenarios 1, 2, 3.1, 3.2, 3.3). You speak with the calm authority of \
+someone who has seen every pattern before. You write daily coaching guidance that ANY \
+team leader on the NEE leadership team can pick up cold and act on in a 1:1 or huddle.
 
-VOICE RULES (strict):
+YOUR JOB:
+Translate raw performance numbers into a clear hypothesis about the underlying behavior, \
+then give the leader a tight, specific play that maps to a real CSL Scenario step.
+
+VOICE RULES (strict, non-negotiable):
 - Warm but direct. Confident, action-first. Like a senior coach giving a peer the read.
 - NEVER name a specific coach, manager, GM, or person other than the teammate. \
-Frame actions as "Pull 15 minutes with him..." or "Worth a ride-along this week...", \
-not "Tyler should..." or "Have Tommy pull...". Any leader on the team must be able \
-to act on this without context.
+Frame actions as imperatives: "Pull 15 minutes with him...", "Run a Scenario 3.1 drill...", \
+"Block 20 minutes pre-shift...". NEVER write "Tyler should..." or "Have the GM pull...". \
+Any leader on the team must be able to act on this without context.
 - No em dashes. Use periods or commas.
-- Specific to this teammate's actual numbers. No generic platitudes.
-- Reference the actual training material when relevant. Use the real scenario names \
-and step numbers from the context.
-- 3-5 sentences per section. Tight. No filler.
+- Specific to this teammate's ACTUAL numbers, not generic. Cite the dollar figure, \
+the percent gap, the metric name. If complaint rate is 4.2% vs 1.5% standard, say that.
+- Reference the actual training material when relevant. Use real scenario names and step \
+numbers from the context provided ("Scenario 3.3 Step 4 - Negotiation Protocol").
+- Build a HYPOTHESIS that connects multiple metrics into a single underlying behavior. \
+That's the coach's value-add. Don't just describe; diagnose.
+- 3-5 sentences per section. Tight. No filler. No throat-clearing.
 
 You will be given:
 - The teammate's performance vs their franchise standards
@@ -676,6 +685,79 @@ RELEVANT TRAINING MATERIAL (use scenario names verbatim in your output)
 Today's date: {datetime.now(timezone.utc).strftime('%A, %B %d')}. Vary phrasing day-to-day so this teammate doesn't see identical wording every morning.
 
 Generate the JSON object."""
+
+
+_COACH_PICK_SYSTEM = """You are COACH RICK, master sales coach for the New England Elite \
+1-800-GOT-JUNK? region. You have just reviewed today's coaching list (the worst-scoring \
+5 teammates from each of 4 franchises = 20 total).
+
+Pick the SINGLE TEAMMATE who is the highest-leverage coaching conversation today. \
+"Highest-leverage" means: where one focused conversation could move the most \
+performance, OR where waiting another day is the most expensive.
+
+Your output is a short brief that any leader on the team can read in 15 seconds and \
+know exactly who to talk to first this morning.
+
+VOICE:
+- You're a senior coach giving the team's leadership a tip. Direct, confident, warm.
+- NEVER name a coach, manager, or person other than the chosen teammate.
+- No em dashes. No filler. No throat-clearing.
+- Cite the specific number that drove your pick.
+
+Return JSON exactly:
+{
+  "tmId": "<the id of the chosen teammate>",
+  "headline": "One short sentence framing the pick (under 90 chars).",
+  "rationale": "2-3 sentences. Why THIS person, today. What's the leverage. Reference \
+the metric pattern and which CSL Scenario step would unlock it."
+}
+
+Return ONLY valid JSON."""
+
+
+def generate_coach_pick(records: list[dict]) -> Optional[dict]:
+    """Pick today's highest-leverage coaching conversation across the whole region."""
+    client = _ai_client()
+    if client is None or not records:
+        return None
+    try:
+        # Compact summary - id, name, franchise, score, severity, primary problem signal
+        lines = []
+        for r in records:
+            metrics_dict = {m["l"]: m["v"] for m in r.get("metrics", [])}
+            lines.append(
+                f"{r['id']} | {r['name']} ({r['role']}, {FRANCHISE_NAMES.get(r['franchiseCode'], r['franchiseCode'])}) "
+                f"| score {metrics_dict.get('Score', '?')} | severity {r['severity']} "
+                f"| AJS {metrics_dict.get('Adj AJS', '?')} | Complaints {metrics_dict.get('Complaints', '?')} "
+                f"| NPS {metrics_dict.get('NPS', '?')} | Reviews {metrics_dict.get('Reviews', '?')}"
+            )
+        summary = "\n".join(lines)
+        prompt = (
+            "TODAY'S COACHING LIST (5 worst per franchise, 20 total):\n\n"
+            + summary
+            + "\n\nPick the single highest-leverage coaching conversation for today."
+        )
+        resp = client.messages.create(
+            model=_AI_MODEL,
+            max_tokens=400,
+            system=_COACH_PICK_SYSTEM,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        raw = resp.content[0].text.strip()
+        if raw.startswith("```"):
+            raw = raw.strip("`")
+            if raw.startswith("json"):
+                raw = raw[4:].strip()
+        data = json.loads(raw)
+        if not all(k in data for k in ("tmId", "headline", "rationale")):
+            return None
+        # Validate the picked id exists
+        if not any(r["id"] == data["tmId"] for r in records):
+            return None
+        return data
+    except Exception as e:
+        print(f"::warning::Coach Rick pick generation failed: {e}", file=sys.stderr)
+        return None
 
 
 def generate_ai_coaching(tm: TM, slot_idx: int = 0) -> Optional[dict]:
@@ -827,7 +909,7 @@ def render_teammates(records: list[dict]) -> str:
     return out + "\n  "
 
 
-def update_index_html(records: list[dict], updated_iso: str) -> None:
+def update_index_html(records: list[dict], updated_iso: str, coach_pick: Optional[dict] = None) -> None:
     src = INDEX_HTML.read_text(encoding="utf-8")
 
     # 1. Replace TEAMMATES array body
@@ -837,13 +919,18 @@ def update_index_html(records: list[dict], updated_iso: str) -> None:
     new_body = render_teammates(records)
     src = pattern.sub(lambda m: m.group(1) + new_body + m.group(3), src)
 
-    # 2. Update / insert LAST_UPDATED HTML comment near the top
+    # 2. Replace COACH_PICK constant (used by the hero section)
+    pick_js = json.dumps(coach_pick or None, ensure_ascii=False)
+    pick_pattern = re.compile(r"(const COACH_PICK = )(.*?);", re.DOTALL)
+    if pick_pattern.search(src):
+        src = pick_pattern.sub(lambda m: m.group(1) + pick_js + ";", src)
+
+    # 3. Update / insert LAST_UPDATED HTML comment near the top
     last_updated_marker = re.compile(r"<!--\s*LAST_UPDATED:.*?-->", re.IGNORECASE)
     new_comment = f"<!-- LAST_UPDATED: {updated_iso} -->"
     if last_updated_marker.search(src):
         src = last_updated_marker.sub(new_comment, src)
     else:
-        # Insert right after <!DOCTYPE html> on its own line
         src = src.replace("<!DOCTYPE html>", "<!DOCTYPE html>\n" + new_comment, 1)
 
     INDEX_HTML.write_text(src, encoding="utf-8")
@@ -905,8 +992,12 @@ def main() -> int:
         print("::error::No teammates picked. Refusing to overwrite index.html.", file=sys.stderr)
         return 4
 
+    # Ask Coach Rick to pick today's MVP - the one teammate across all four franchises
+    # whose conversation is the highest-leverage today.
+    pick = generate_coach_pick(all_records)
+
     updated_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    update_index_html(all_records, updated_iso)
+    update_index_html(all_records, updated_iso, coach_pick=pick)
     print(f"index.html updated. LAST_UPDATED={updated_iso}, {len(all_records)} TMs written.", file=sys.stderr)
     return 0
 
