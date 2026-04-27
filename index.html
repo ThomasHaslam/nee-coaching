@@ -2260,6 +2260,16 @@
   }
 
   .footer-utility { margin-top: 14px; }
+  .footer-stamp {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    letter-spacing: 0.4px;
+  }
+  .footer-stamp .stale {
+    color: var(--high);
+    font-weight: 600;
+  }
 
   .reset-link {
     background: transparent;
@@ -2658,7 +2668,10 @@
 
   <footer class="footer">
     <div>NEE Coaching</div>
+    <div class="footer-stamp" id="footer-stamp">Loading...</div>
     <div class="footer-utility">
+      <a class="reset-link" href="docs/HOW-TO-USE.pdf" target="_blank" rel="noopener">📘 How to use</a>
+      <span style="color: var(--border-bright)">·</span>
       <button class="reset-link" id="expand-all">⤢ Expand All</button>
       <span style="color: var(--border-bright)">·</span>
       <button class="reset-link" id="collapse-all">⤡ Collapse All</button>
@@ -4145,15 +4158,91 @@
   }
   window.addEventListener('hashchange', applyRoute);
 
-  // ===== INIT =====
-  setTodayDate();
-  render();
-  renderMvpPick();
-  renderMotivationalMessage();
-  renderTop5Regional();
-  renderHuddleBrief();
-  initChatView();
-  applyRoute();
+  // ===== INIT (defensive - if anything throws, show a visible error so the page is never blank) =====
+  function showInitError(stage, err) {
+    console.error('[init failed at ' + stage + ']', err);
+    const dash = document.getElementById('dashboard');
+    if (dash) {
+      dash.innerHTML = `
+        <div style="margin: 16px auto; max-width: 720px; padding: 18px 22px;
+                    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.45);
+                    border-radius: 12px; color: var(--text);">
+          <div style="font-weight: 700; color: #ef4444; margin-bottom: 6px;">
+            Something glitched while building today's view.
+          </div>
+          <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">
+            Stage: ${stage}. The data is on the page, the script just hit a snag turning it into the dashboard.
+            This is almost always fixed by a hard refresh.
+          </div>
+          <button onclick="location.reload(true)" style="background: linear-gradient(90deg,#a78bfa,#60a5fa);
+                  color:#0a0e1a; border:none; padding:8px 16px; border-radius:6px; font-weight:700; cursor:pointer;">
+            ↻ Hard refresh
+          </button>
+          <details style="margin-top: 10px; font-size: 11px; color: var(--text-dim);">
+            <summary style="cursor: pointer;">Error detail</summary>
+            <pre style="white-space: pre-wrap; margin-top: 6px;">${(err && err.message) || err}</pre>
+          </details>
+        </div>`;
+    }
+  }
+  function safeCall(stage, fn) {
+    try { fn(); }
+    catch (err) { showInitError(stage, err); }
+  }
+
+  // Footer "last refreshed" stamp — reads the LAST_UPDATED HTML comment so
+  // leaders can tell at a glance if the daily refresh ran. Flags stale data.
+  function renderFooterStamp() {
+    try {
+      const stamp = document.getElementById('footer-stamp');
+      if (!stamp) return;
+      const m = document.documentElement.outerHTML.match(/<!--\s*LAST_UPDATED:\s*([^\s]+)\s*-->/);
+      if (!m) {
+        stamp.textContent = 'Last refresh time unknown.';
+        return;
+      }
+      const updated = new Date(m[1]);
+      const ageH = (Date.now() - updated.getTime()) / 3600000;
+      const ageStr = ageH < 1
+        ? 'just now'
+        : ageH < 24
+          ? Math.round(ageH) + 'h ago'
+          : Math.round(ageH / 24) + 'd ago';
+      const localStr = updated.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      const stale = ageH > 30;  // workflow runs every weekday at 5am ET; >30h = missed a run
+      stamp.innerHTML = stale
+        ? `<span class="stale">⚠ Data ${ageStr} (last refresh ${localStr}).</span> The 5am refresh may have missed.`
+        : `Data refreshed ${ageStr} (${localStr}).`;
+    } catch (e) {
+      // Don't let the stamp itself break the page
+      console.error('footer stamp failed:', e);
+    }
+  }
+
+  safeCall('setTodayDate',           setTodayDate);
+  safeCall('renderFooterStamp',      renderFooterStamp);
+  safeCall('render',                 render);
+  safeCall('renderMvpPick',          renderMvpPick);
+  safeCall('renderMotivationalMessage', renderMotivationalMessage);
+  safeCall('renderTop5Regional',     renderTop5Regional);
+  safeCall('renderHuddleBrief',      renderHuddleBrief);
+  safeCall('initChatView',           initChatView);
+  safeCall('applyRoute',             applyRoute);
+
+  // ===== STALE-PAGE AUTO RELOAD =====
+  // The daily refresh runs at 5am ET. If a leader has the page open for hours
+  // across the refresh, they'd be looking at yesterday's data. Reload silently
+  // every 4 hours when the tab is visible to pick up new content.
+  const PAGE_LOAD_MS = Date.now();
+  const STALE_AFTER_MS = 4 * 60 * 60 * 1000;  // 4 hours
+  setInterval(() => {
+    if (document.visibilityState !== 'visible') return;
+    if (Date.now() - PAGE_LOAD_MS < STALE_AFTER_MS) return;
+    // Don't interrupt an active chat
+    const overlay = document.getElementById('chat-overlay');
+    if (overlay && overlay.classList.contains('is-open')) return;
+    location.reload();
+  }, 5 * 60 * 1000);  // check every 5 min
 </script>
 </body>
 </html>

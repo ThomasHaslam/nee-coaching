@@ -35,17 +35,30 @@ jobs:
       - name: Commit and push if index.html changed
         id: commit
         run: |
+          set -e
           git config user.name "nee-coaching-bot"
           git config user.email "actions@users.noreply.github.com"
-          if git diff --quiet -- index.html; then
+          if git diff --quiet -- index.html roster.json 2>/dev/null; then
             echo "No changes to commit."
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          git add index.html
+          git add index.html roster.json 2>/dev/null || git add index.html
           git commit -m "Refresh dashboard data $(date -u +'%Y-%m-%d %H:%MZ')"
-          git push
-          echo "changed=true" >> "$GITHUB_OUTPUT"
+          # Push with retry-on-conflict. If someone else pushed in the window between
+          # our checkout and our push, rebase our refresh commit on top and try again.
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt."
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "Push attempt $attempt failed; pulling with rebase and retrying."
+            git pull --rebase origin main || { echo "Rebase failed."; exit 1; }
+            sleep 2
+          done
+          echo "::error::Push failed after 5 attempts."
+          exit 1
 
       - name: Deploy to Cloudflare Pages
         if: ${{ steps.commit.outputs.changed == 'true' || github.event_name == 'workflow_dispatch' }}
