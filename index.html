@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0e1a">
@@ -3821,6 +3821,30 @@
     document.getElementById('chat-sidebar-backdrop').classList.remove('is-open');
   }
 
+  // ===== MOBILE KEYBOARD HANDLING =====
+  // When the on-screen keyboard opens, the visual viewport shrinks but the layout viewport
+  // stays the same, which pushes the chat input below the keyboard. This handler resizes
+  // the chat container to match the visual viewport so the input stays reachable.
+  function adjustChatHeightForKeyboard() {
+    const view = document.getElementById('view-chat');
+    if (!view || view.hidden) return;
+    if (!isMobile()) {
+      view.style.removeProperty('height');
+      return;
+    }
+    const vv = window.visualViewport;
+    const visibleH = vv ? vv.height : window.innerHeight;
+    // 130px reserves room for the header + nav above the chat. Tweak if header height changes.
+    const target = Math.max(360, visibleH - 130);
+    view.style.height = target + 'px';
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', adjustChatHeightForKeyboard);
+    window.visualViewport.addEventListener('scroll', adjustChatHeightForKeyboard);
+  }
+  window.addEventListener('resize', adjustChatHeightForKeyboard);
+  window.addEventListener('orientationchange', adjustChatHeightForKeyboard);
+
   // Hook up sidebar controls
   function initChatView() {
     const search = document.getElementById('roster-search');
@@ -3854,6 +3878,15 @@
           e.preventDefault();
           form.requestSubmit();
         }
+      });
+      // When focus opens the keyboard, give layout a moment then resize + scroll
+      // the input into view. Belt-and-suspenders for iOS Safari and Android Chrome.
+      input.addEventListener('focus', () => {
+        if (!isMobile()) return;
+        setTimeout(() => {
+          adjustChatHeightForKeyboard();
+          input.scrollIntoView({ block: 'end', behavior: 'smooth' });
+        }, 200);
       });
     }
     // Mobile drawer wiring
@@ -3891,6 +3924,12 @@
       if (!CHAT_MAIN_TM && CHAT_MAIN_HISTORY.length === 0) {
         selectGeneralMode();
       }
+      // Size the chat to the visible viewport (handles mobile keyboard / browser chrome)
+      requestAnimationFrame(adjustChatHeightForKeyboard);
+    } else {
+      // Leaving chat view - clear any inline height we set so dashboard scrolls normally
+      const view = document.getElementById('view-chat');
+      if (view) view.style.removeProperty('height');
     }
   }
   window.addEventListener('hashchange', applyRoute);
