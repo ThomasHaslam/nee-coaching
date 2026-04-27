@@ -914,9 +914,13 @@ VOICE
 - Specific imagery beats abstraction. "The truck pulls up at 9am" beats "execution matters."
 - One memorable line. The kind of sentence the leader could repeat at the huddle and have \
 the team feel it. Contrast. Surprise. Hard truth said with care.
-- Reference today's reality LIGHTLY if it sharpens the point: the urgent count, the top \
-scores, the day of the week. Don't force it.
 - No em dashes. No questions to the reader. Just say it.
+
+DO NOT START WITH A STATUS UPDATE
+The first line is NOT "Monday. X teammates need help." That's a daily standup ping, not a \
+motivational message. The first line is a TRUTH. Lead with the principle, not the headcount. \
+You can mention today's count or day-of-week LATER in the body if it sharpens the point. But \
+the headline must stand on its own as wisdom even if today's numbers were different.
 
 WHAT TO AVOID
 - Corporate cheerleader energy. No "let's crush it." No "synergy." No "alignment."
