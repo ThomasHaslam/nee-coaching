@@ -153,8 +153,13 @@
   .hero-stat-open .hero-stat-num   { color: var(--accent-bright); }
 
   @media (max-width: 720px) {
+    .container { padding: 16px 14px 60px; }
+    .header { flex-direction: column; align-items: flex-start; gap: 8px; padding-bottom: 12px; }
     .hero { grid-template-columns: 1fr; gap: 18px; padding: 18px 18px; }
     .hero-line { font-size: 24px; }
+    .top-nav { width: 100%; }
+    .top-nav-tab { flex: 1; justify-content: center; padding: 10px 8px; font-size: 12px; }
+    .top-nav-tab .nav-label-long { display: none; }
   }
 
   /* ===== COACH RICK PICK ===== */
@@ -480,10 +485,69 @@
     height: calc(100vh - 220px);
     min-height: 540px;
     margin-bottom: 24px;
+    position: relative;
   }
   .view-chat[hidden] { display: none; }
+
+  /* MOBILE: sidebar becomes a slide-in drawer over the chat */
   @media (max-width: 860px) {
-    .view-chat { grid-template-columns: 1fr; height: auto; }
+    .view-chat {
+      grid-template-columns: 1fr;
+      gap: 0;
+      /* dvh = dynamic viewport height; accounts for mobile browser chrome */
+      height: calc(100dvh - 130px);
+      min-height: 0;
+    }
+    .chat-sidebar {
+      position: absolute;
+      top: 0; bottom: 0; left: 0;
+      width: 88%;
+      max-width: 320px;
+      z-index: 50;
+      transform: translateX(-105%);
+      transition: transform 0.22s ease;
+      box-shadow: 8px 0 24px -8px rgba(0,0,0,0.5);
+    }
+    .chat-sidebar.is-open { transform: translateX(0); }
+    .chat-sidebar-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 12, 22, 0.55);
+      backdrop-filter: blur(2px);
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+    }
+    .chat-sidebar-backdrop.is-open { opacity: 1; pointer-events: auto; }
+    .chat-main { width: 100%; height: 100%; }
+    .chat-main-head { padding: 12px 14px; }
+    .chat-main-tm-name { font-size: 18px; }
+    .chat-main-tm-meta { font-size: 11px; gap: 8px; }
+    .chat-main-thread { padding: 14px; }
+    .chat-main-form { padding: 10px 12px; }
+    .chat-main-input {
+      font-size: 16px; /* prevents iOS auto-zoom on focus */
+    }
+    .chat-main-foot { font-size: 9px; padding: 6px 12px 10px 12px; }
+  }
+  /* Roster toggle: visible on mobile only */
+  .chat-main-roster-toggle {
+    display: none;
+    background: rgba(167,139,250,0.14);
+    border: 1px solid rgba(167,139,250,0.35);
+    color: var(--text);
+    font-weight: 600;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    min-height: 38px;
+  }
+  .chat-main-roster-toggle:active { transform: scale(0.97); }
+  @media (max-width: 860px) {
+    .chat-main-roster-toggle { display: inline-flex; align-items: center; gap: 6px; }
   }
 
   .chat-sidebar {
@@ -2245,7 +2309,7 @@
 
   <nav class="top-nav" role="tablist">
     <a href="#/" class="top-nav-tab active" id="nav-dashboard" role="tab">📊 Dashboard</a>
-    <a href="#/chat" class="top-nav-tab" id="nav-chat" role="tab">💬 Coach Rick · Full Chat</a>
+    <a href="#/chat" class="top-nav-tab" id="nav-chat" role="tab">💬 Coach Rick<span class="nav-label-long"> · Full Chat</span></a>
   </nav>
 
   <div id="view-dashboard">
@@ -2392,7 +2456,8 @@
   </div><!-- /view-dashboard -->
 
   <section id="view-chat" class="view-chat" hidden>
-    <aside class="chat-sidebar">
+    <div class="chat-sidebar-backdrop" id="chat-sidebar-backdrop" aria-hidden="true"></div>
+    <aside class="chat-sidebar" id="chat-sidebar">
       <div class="chat-sidebar-head">
         <div class="chat-sidebar-title">Coach Rick</div>
         <div class="chat-sidebar-sub">Pick any teammate to start coaching</div>
@@ -2421,6 +2486,7 @@
 
     <main class="chat-main">
       <div class="chat-main-head" id="chat-main-head">
+        <button type="button" class="chat-main-roster-toggle" id="chat-main-roster-toggle" aria-label="Show roster">📋 Roster</button>
         <div class="chat-main-mode-tag" id="chat-main-mode-tag">🌐 General Coaching · Leadership, Training, Development</div>
         <div class="chat-main-tm-name" id="chat-main-headline">Ask Coach Rick anything.</div>
         <div class="chat-main-tm-meta">
@@ -3582,6 +3648,7 @@
       b.onclick = () => {
         if (b.dataset.id === '__general__') selectGeneralMode();
         else selectChatTm(b.dataset.id);
+        if (isMobile()) closeSidebarDrawer();
       };
     });
   }
@@ -3753,6 +3820,17 @@
     }
   }
 
+  // ===== MOBILE DRAWER =====
+  function isMobile() { return window.matchMedia('(max-width: 860px)').matches; }
+  function openSidebarDrawer() {
+    document.getElementById('chat-sidebar').classList.add('is-open');
+    document.getElementById('chat-sidebar-backdrop').classList.add('is-open');
+  }
+  function closeSidebarDrawer() {
+    document.getElementById('chat-sidebar').classList.remove('is-open');
+    document.getElementById('chat-sidebar-backdrop').classList.remove('is-open');
+  }
+
   // Hook up sidebar controls
   function initChatView() {
     const search = document.getElementById('roster-search');
@@ -3788,6 +3866,16 @@
         }
       });
     }
+    // Mobile drawer wiring
+    const toggle = document.getElementById('chat-main-roster-toggle');
+    if (toggle) toggle.addEventListener('click', openSidebarDrawer);
+    const backdrop = document.getElementById('chat-sidebar-backdrop');
+    if (backdrop) backdrop.addEventListener('click', closeSidebarDrawer);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.getElementById('chat-sidebar').classList.contains('is-open')) {
+        closeSidebarDrawer();
+      }
+    });
   }
 
   // ===== VIEW ROUTER =====
