@@ -42,6 +42,7 @@ FRANCHISE_NAMES = {
 }
 
 # Standards per franchise: AJS $, 1/6 max%, Truck+ min%, complaint max%, NPS min%, GR min%
+# NPS goal 90%, Google Reviews capture goal 25%.
 STANDARDS = {
     "bno": {"ajs": 725, "loss": 33.0, "truck": 10.0, "complaint": 1.50, "nps": 90.0, "gr": 25.0},
     "bso": {"ajs": 725, "loss": 33.0, "truck": 10.0, "complaint": 1.50, "nps": 90.0, "gr": 25.0},
@@ -49,8 +50,11 @@ STANDARDS = {
     "ct":  {"ajs": 619, "loss": 35.0, "truck": 10.0, "complaint": 1.30, "nps": 90.0, "gr": 25.0},
 }
 
-# Weighted score weights (must sum to 1.0). Lower weighted score = worse performer.
-WEIGHTS = {"ajs": 0.50, "complaint": 0.20, "nps": 0.15, "gr": 0.15}
+# Raw weights as specified by leadership: 50 / 30 / 15 / 15 (sums to 110).
+# Normalized internally so composite score is always 0-100.
+_RAW_WEIGHTS = {"ajs": 50.0, "complaint": 30.0, "nps": 15.0, "gr": 15.0}
+_W_TOTAL = sum(_RAW_WEIGHTS.values())
+WEIGHTS = {k: v / _W_TOTAL for k, v in _RAW_WEIGHTS.items()}
 
 COACHES = {
     "bno": ["Richard", "Tyler"],
@@ -246,19 +250,29 @@ def fetch_franchise(gc: gspread.Client, code: str) -> list[TM]:
 # ---------- weighted scoring ----------
 
 def _sub_score_higher_better(value: Optional[float], standard: float) -> Optional[float]:
-    """Score where higher value = better. 100 = at standard. Capped 0-130."""
+    """
+    Score where higher = better (AJS, NPS, Reviews).
+    At-or-above standard = 100 (capped, no extra credit).
+    Below standard = proportional fraction of 100.
+    """
     if value is None or standard <= 0:
         return None
-    return max(0.0, min(130.0, (value / standard) * 100.0))
+    if value >= standard:
+        return 100.0
+    return max(0.0, (value / standard) * 100.0)
 
 
 def _sub_score_lower_better(value: Optional[float], standard: float) -> Optional[float]:
-    """Score where lower value = better (e.g., complaints). 100 = at standard."""
+    """
+    Score where lower = better (Complaints).
+    At-or-below standard = 100 (capped, no extra credit).
+    Above standard = proportional drop.
+    """
     if value is None or standard <= 0:
         return None
-    if value <= 0:
-        return 130.0  # better than perfect
-    return max(0.0, min(130.0, (standard / value) * 100.0))
+    if value <= standard:
+        return 100.0
+    return max(0.0, (standard / value) * 100.0)
 
 
 def score_tm(tm: TM) -> None:
@@ -272,26 +286,25 @@ def score_tm(tm: TM) -> None:
     }
     tm.sub_scores = {k: v for k, v in sub.items() if v is not None}
 
-    # Reweight available metrics so missing data doesn't deflate score artificially
+    # Reweight available metrics so missing data doesn't deflate the composite artificially
     weight_present = sum(WEIGHTS[k] for k, v in sub.items() if v is not None)
     if weight_present == 0:
         tm.weighted_score = 100.0
     else:
         tm.weighted_score = sum(
-            (sub[k] * WEIGHTS[k] / weight_present) for k in sub if sub[k] is not None
+            sub[k] * WEIGHTS[k] / weight_present for k in sub if sub[k] is not None
         )
+    # Hard cap at 100 (no over-100 scores)
+    tm.weighted_score = min(100.0, tm.weighted_score)
 
-    # Identify the dominant problem area (lowest sub-score)
+    # Identify the dominant problem area (lowest sub-score below 100)
     below = {k: v for k, v in tm.sub_scores.items() if v < 100}
-    if below:
-        tm.primary_issue = min(below, key=below.get)
-    else:
-        tm.primary_issue = ""
+    tm.primary_issue = min(below, key=below.get) if below else ""
 
-    # Map score to severity bucket
-    if tm.weighted_score < 60:
+    # Severity bucket
+    if tm.weighted_score < 70:
         tm.severity = "urgent"
-    elif tm.weighted_score < 80:
+    elif tm.weighted_score < 90:
         tm.severity = "high"
     else:
         tm.severity = "medium"
@@ -301,7 +314,13 @@ def pick_worst_5(tms: list[TM]) -> list[TM]:
     eligible = [t for t in tms if t.resi_jobs >= MIN_RESI_JOBS]
     for t in eligible:
         score_tm(t)
-    eligible.sort(key=lambda t: t.weighted_score)  # ascending = worst first
+    # Primary sort: composite score ascending (worst first)
+    # Tiebreaker: count of metrics below standard, then raw AJS gap (deeper gap = worse)
+    def _rank_key(t: TM) -> tuple:
+        below_count = sum(1 for v in t.sub_scores.values() if v < 100)
+        ajs_gap = (STANDARDS[t.franchise_code]["ajs"] - (t.resi_ajs or 0))
+        return (t.weighted_score, -below_count, -ajs_gap)
+    eligible.sort(key=_rank_key)
     return eligible[:5]
 
 
@@ -329,83 +348,112 @@ def _stable_pick(seq: list[str], tm: TM) -> str:
 
 def make_why(tm: TM) -> str:
     """
-    Build a why narrative anchored on the dominant problem, with secondary observations.
-    Voice: short, punchy, warm but direct. No em dashes.
+    Build a why narrative anchored on the dominant problem.
+    Voice: warm, observational, coaching-style. Frames data as patterns
+    worth understanding, not verdicts. No em dashes.
     """
     std = STANDARDS[tm.franchise_code]
     score = tm.weighted_score
     parts: list[str] = []
 
-    # Lead with score context for severity
-    if score < 50:
-        opener_pool = [
-            f"Composite {score:.0f}/100. Multi-front problem.",
-            f"Score {score:.0f}/100. He's bleeding on more than one axis.",
-            f"Composite {score:.0f}. Whole picture is red.",
+    # Lead with composite framing
+    if score < 60:
+        openers = [
+            f"Composite at {score:.0f}/100. There's more than one thing going on here, worth taking the time to understand the whole picture before picking a focus.",
+            f"Score {score:.0f}/100. A few signals are pointing the same direction, which usually means there's a single underlying habit driving it rather than three separate issues.",
         ]
-        parts.append(_stable_pick(opener_pool, tm))
-    elif score < 75:
-        opener_pool = [
-            f"Score {score:.0f}/100. One real problem, a few smaller leaks.",
-            f"Composite {score:.0f}. Not a crisis yet, but trending wrong.",
+        parts.append(_stable_pick(openers, tm))
+    elif score < 80:
+        openers = [
+            f"Composite {score:.0f}/100. One area is doing most of the work pulling the score down. Worth zeroing in on that before broadening.",
+            f"At {score:.0f}/100. The headline number isn't a crisis, but there's a pattern that's consistent enough to be worth a conversation.",
         ]
-        parts.append(_stable_pick(opener_pool, tm))
+        parts.append(_stable_pick(openers, tm))
+    else:
+        openers = [
+            f"Composite {score:.0f}/100. He's close to the line on most things and slightly under on one. A small course-correction kind of week.",
+        ]
+        parts.append(_stable_pick(openers, tm))
 
-    # Anchor on dominant issue
+    # Anchor on the dominant issue with a coaching framing
     primary = tm.primary_issue
     if primary == "ajs" and tm.resi_ajs is not None:
         gap = std["ajs"] - tm.resi_ajs
-        if gap > 100:
-            parts.append(f"Adj Resi AJS {fmt_money(tm.resi_ajs)}. That's ${gap:.0f} under {fmt_money(std['ajs'])}. The close isn't landing.")
+        if gap > 150:
+            ajs_lines = [
+                f"Adjusted Resi AJS is sitting at {fmt_money(tm.resi_ajs)}, which is roughly ${gap:.0f} under our {fmt_money(std['ajs'])} mark. When AJS slides this far, it's almost always something in the close softening, not effort. Worth listening for whether the assumptive ask is still happening.",
+                f"AJS at {fmt_money(tm.resi_ajs)}. The gap to {fmt_money(std['ajs'])} is real and it's been growing. Usually the answer lives in one of two places: he's hesitating on the assumptive ask, or Priority Items is getting skipped under pressure.",
+            ]
+            parts.append(_stable_pick(ajs_lines, tm))
         else:
-            parts.append(f"Adj Resi AJS {fmt_money(tm.resi_ajs)}, ${gap:.0f} short of {fmt_money(std['ajs'])}. Hovering at the line.")
+            ajs_lines = [
+                f"AJS at {fmt_money(tm.resi_ajs)}, about ${gap:.0f} short of {fmt_money(std['ajs'])}. He's right at the line, which is the trickiest place to coach because the natural pull is to leave it alone. Worth a small conversation before it widens.",
+                f"Adj Resi AJS {fmt_money(tm.resi_ajs)}. The gap is closeable in a single shift if it's a confidence dip. Worth asking what's been on his mind.",
+            ]
+            parts.append(_stable_pick(ajs_lines, tm))
     elif primary == "complaint" and tm.complaint_pct is not None:
         ratio = tm.complaint_pct / std["complaint"]
         if ratio >= 3:
-            parts.append(f"Complaints at {tm.complaint_pct:.2f}%. That's {ratio:.1f}x the {std['complaint']:.2f}% line. Customers are leaving angry.")
+            comp_lines = [
+                f"Complaint rate at {tm.complaint_pct:.2f}%, which is {ratio:.1f}x our {std['complaint']:.2f}% line. At his volume that's not noise, it's a pattern. Customers are walking away unhappy more often than the rest of the team and it's worth understanding what they're telling us specifically.",
+                f"Complaints at {tm.complaint_pct:.2f}%, well past the {std['complaint']:.2f}% mark. The number is loud enough that the answer is probably in the actual feedback, not in another sales conversation. Worth pulling the recent ones and reading them together.",
+            ]
+            parts.append(_stable_pick(comp_lines, tm))
         else:
-            parts.append(f"Complaint rate {tm.complaint_pct:.2f}%, {ratio:.1f}x our {std['complaint']:.2f}% mark. Quality is slipping.")
+            comp_lines = [
+                f"Complaint rate sitting at {tm.complaint_pct:.2f}%, about {ratio:.1f}x our {std['complaint']:.2f}% standard. Not alarm-level yet, but the trend is the part to pay attention to. Sometimes it's pace, sometimes tone, sometimes the close that lands wrong.",
+                f"Complaints at {tm.complaint_pct:.2f}% (standard {std['complaint']:.2f}%). At this volume, even a couple of negative experiences can move the number. Worth checking whether they cluster around a time of day or job type.",
+            ]
+            parts.append(_stable_pick(comp_lines, tm))
     elif primary == "nps" and tm.nps is not None:
-        gap = std["nps"] - tm.nps
-        if tm.nps < 70:
-            parts.append(f"NPS {tm.nps:.0f}%. {gap:.0f} points below standard. Customers aren't recommending him.")
-        elif tm.nps < 80:
-            parts.append(f"NPS at {tm.nps:.0f}%, {gap:.0f} points off. Service execution is breaking.")
-        else:
-            parts.append(f"NPS {tm.nps:.0f}%. Right at the line, not under it yet.")
+        nps_lines = [
+            f"NPS at {tm.nps:.0f}% (goal {std['nps']:.0f}%). Customers are responding but not enthusiastically. That gap usually points to one of three things: pace felt rushed, communication broke somewhere, or the close came across as salesy.",
+            f"NPS sitting at {tm.nps:.0f}%, under our {std['nps']:.0f}% goal. Worth listening to a couple of recent calls before deciding what to coach. The story tends to be in the customer's words, not the number.",
+        ]
+        parts.append(_stable_pick(nps_lines, tm))
     elif primary == "gr" and tm.gr_pct is not None:
-        parts.append(f"Google Reviews capture at {tm.gr_pct:.1f}% (standard {std['gr']:.0f}%). The ask isn't happening on the truck.")
+        gr_lines = [
+            f"Google Reviews capture at {tm.gr_pct:.1f}% (goal {std['gr']:.0f}%). When the capture rate is the lagging metric, it's almost always the same root cause: the ask isn't happening on the truck, or it's happening so quietly the customer doesn't notice it.",
+            f"Reviews capture at {tm.gr_pct:.1f}%, well under our {std['gr']:.0f}% mark. Most people don't drop the ask because they don't want to. They drop it because they don't have a script that feels natural in their own voice.",
+        ]
+        parts.append(_stable_pick(gr_lines, tm))
 
-    # Add 1-2 secondary observations (skip the primary, dedupe)
-    secondary_pool: list[str] = []
-
+    # 1-2 supporting observations, framed as context not verdicts
+    secondary: list[str] = []
     if primary != "ajs" and tm.resi_ajs is not None and tm.resi_ajs < std["ajs"]:
         gap = std["ajs"] - tm.resi_ajs
-        secondary_pool.append(f"AJS {fmt_money(tm.resi_ajs)} (${gap:.0f} under).")
+        secondary.append(f"Worth noting AJS is also under, at {fmt_money(tm.resi_ajs)} (${gap:.0f} below {fmt_money(std['ajs'])}).")
     if primary != "complaint" and tm.complaint_pct is not None and tm.complaint_pct > std["complaint"]:
-        secondary_pool.append(f"Complaints {tm.complaint_pct:.2f}% (vs {std['complaint']:.2f}% std).")
+        secondary.append(f"Complaints sit at {tm.complaint_pct:.2f}% (vs {std['complaint']:.2f}% goal), which compounds the picture.")
     if primary != "nps" and tm.nps is not None and tm.nps < std["nps"]:
-        secondary_pool.append(f"NPS {tm.nps:.0f}% (under {std['nps']:.0f}%).")
+        secondary.append(f"NPS at {tm.nps:.0f}% adds to the customer-side signal.")
     if primary != "gr" and tm.gr_pct is not None and tm.gr_pct < std["gr"]:
-        secondary_pool.append(f"Reviews capture {tm.gr_pct:.1f}% (vs {std['gr']:.0f}%).")
+        secondary.append(f"Reviews capture {tm.gr_pct:.1f}% trails the goal too.")
 
+    # Mention extreme save/cancel situations explicitly
     if tm.cancel_conv_pct is not None and tm.cancel_conv_pct >= 99.5:
-        secondary_pool.append("Cancel conversion 100%. Every save attempt failed.")
+        secondary.append("Worth flagging: cancel conversion at 100%, meaning the SC Save isn't being attempted.")
     if tm.truck_pct is not None and tm.truck_pct < std["truck"]:
-        secondary_pool.append(f"Truck+ {tm.truck_pct:.1f}% (vs {std['truck']:.1f}% std).")
+        secondary.append(f"Truck+ at {tm.truck_pct:.1f}% (vs {std['truck']:.1f}% std) is another thread worth pulling.")
 
-    parts.extend(secondary_pool[:2])
+    parts.extend(secondary[:2])
 
-    # Volume context (last beat)
+    # Volume context (last beat) - establishes the signal is real
     if tm.resi_jobs > 0:
-        parts.append(f"Sample: {tm.resi_jobs} resi jobs.")
+        vol_lines = [
+            f"Signal sits on {tm.resi_jobs} resi jobs, so it's a real read.",
+            f"This is across {tm.resi_jobs} resi jobs, not a small-sample story.",
+            f"{tm.resi_jobs} resi jobs of data behind it.",
+        ]
+        parts.append(_stable_pick(vol_lines, tm))
 
     return " ".join(parts)
 
 
 def make_play(tm: TM, slot_idx: int) -> str:
     """
-    Build a play action. Coach rotates per slot. Voice: short, action-first.
+    Build a play action in coaching voice. Frame as suggestions and approaches,
+    not commands. Coach rotates per slot.
     """
     std = STANDARDS[tm.franchise_code]
     coach = pick_coach(tm.franchise_code, slot_idx)
@@ -413,45 +461,45 @@ def make_play(tm: TM, slot_idx: int) -> str:
 
     if tm.cancel_conv_pct is not None and tm.cancel_conv_pct >= 99.5:
         actions = [
-            f"<strong>{coach} runs Scenario 3.3 verbal practice today.</strong> Pull one actual cancel from this week. Replay it line by line. Have him script the SC Save out loud before next shift.",
-            f"<strong>{coach} pairs him with a strong closer for two shifts.</strong> Goal: one documented save attempt per cancel. Track it on paper.",
+            f"<strong>Worth {coach} pulling 15 minutes with him on Scenario 3.3.</strong> Take one real cancel from this week and walk through it together, line by line. Have him script the SC Save in his own words before the next shift, so it sounds natural rather than rehearsed.",
+            f"<strong>{coach} could pair him with a strong closer for two shifts.</strong> Sometimes seeing the save attempt happen up close shifts the mindset more than another conversation does. The goal is one documented attempt per cancel, even if it doesn't land.",
         ]
         return _stable_pick(actions, tm)
 
     if primary == "complaint":
         actions = [
-            f"<strong>{coach} pre-shift sit-down.</strong> Pull the 3 most recent detractors. Walk through what got missed. Have him personally call 2 customers back tomorrow.",
-            f"<strong>{coach} runs a service ride-along this week.</strong> Watch the 4-6pm hour. Score Punctual + Etiquette + Memorable. Debrief same day.",
-            f"<strong>{coach} pulls the complaint logs together with him.</strong> Identify the pattern: pace, language, or close? One focus, one shift.",
+            f"<strong>Worth {coach} sitting down with him before next shift.</strong> Pull the recent detractors and read them together, less as accountability and more as curiosity. The pattern tends to surface on its own. Pick one thing to focus on for the week, not three.",
+            f"<strong>{coach} could ride along this week, focused on the late-afternoon hours.</strong> Fatigue is when service usually starts costing. Watch Punctual, Etiquette, Memorable in real time and debrief same-day. Fresh signal lands better than next-morning notes.",
+            f"<strong>Worth a short conversation with {coach} about what he's hearing from customers.</strong> Sometimes the gap between intent and how it's landing is invisible from inside the truck. The ask is, what would he change if he could rerun the last shift?",
         ]
         return _stable_pick(actions, tm)
 
     if primary == "nps":
         actions = [
-            f"<strong>{coach} listens to 3 detractor calls with him this week.</strong> CUSTOMER framework: Memorable, WOW Factor, Positive Ending. Commit to 2 picture-perfect moments per shift.",
-            f"<strong>{coach} blocks 30 minutes for a service review.</strong> Replay the worst 2 NPS responses. Where did the experience break? Concrete fix per job tomorrow.",
+            f"<strong>Worth {coach} listening to 2-3 recent calls with him this week.</strong> Not for blame, just to hear what the customer heard. CUSTOMER framework gives a clean lens: Memorable, WOW Factor, Positive Ending. Pick one to commit to per shift.",
+            f"<strong>{coach} could block 30 minutes for a service review.</strong> Replay the worst couple of NPS responses together. Where did the experience break? One concrete change per job, not a list of five.",
         ]
         return _stable_pick(actions, tm)
 
     if primary == "gr":
         actions = [
-            f"<strong>{coach} 15-min huddle on the review ask.</strong> Practice the script out loud. Goal: every job tomorrow gets the ask, no exceptions. Track on paper.",
-            f"<strong>{coach} ride-along, focus on the closeout moment.</strong> Listen for whether the review request happens. Coach the words in the moment, not after.",
+            f"<strong>Worth a 15-minute huddle with {coach} on the review ask itself.</strong> Practice the words out loud, in his voice. Most people drop the ask because the script feels stiff, not because they don't want to. Track on paper for a week to see what shifts.",
+            f"<strong>{coach} could ride along and focus specifically on the closeout moment.</strong> Listen for whether the ask happens, and how it's framed. Coaching the words in the moment lands differently than telling him about it after.",
         ]
         return _stable_pick(actions, tm)
 
     # AJS-led (or fallback)
     if tm.resi_ajs is not None and (std["ajs"] - tm.resi_ajs) > 100:
         actions = [
-            f"<strong>{coach} 1:1 today.</strong> Frame as Level 1 PIP. Walk 3 recent shifts together. Pair shadow with a top closer next 2 shifts. 15-day target back to {fmt_money(std['ajs'])}.",
-            f"<strong>{coach} pre-shift today, then shadow tomorrow.</strong> Verbal Scenario 3.1 walk-through. Identify whether it's Priority Items or the Assumptive Ask that's leaking.",
+            f"<strong>Worth {coach} carving out a 1:1 today.</strong> Walk through 3 recent shifts together, less as a PIP framing and more as 'help me understand where this slipped.' If it's confidence, pair shadow with a top closer for two shifts. If it's process, run Scenario 3.1 verbally. 15-day target back to {fmt_money(std['ajs'])}.",
+            f"<strong>{coach} pre-shift today, then a shadow tomorrow.</strong> Listen specifically for whether the assumptive ask is still landing. AJS dips at this scale almost always live in the close, not in effort or knowledge.",
         ]
         return _stable_pick(actions, tm)
 
     actions = [
-        f"<strong>{coach} morning huddle.</strong> Explicit AJS goal for the day. Track each job's upsell attempt on paper. Review at EOD.",
-        f"<strong>{coach} mid-shift check-in.</strong> One job pulled apart together: was Priority Items delivered? Was Truck+ pitched? Adjust on the next call.",
-        f"<strong>{coach} 20-min Scenario 3.1 refresher.</strong> Priority Items step specifically. One Truck+ pitch per job tomorrow, no exceptions.",
+        f"<strong>Worth {coach} catching him in a morning huddle.</strong> Explicit AJS goal for the day, written down. Have him track each job's upsell attempt on paper. Review at EOD, not as a scorecard, more as a 'what did we learn' conversation.",
+        f"<strong>{coach} could do a mid-shift check-in.</strong> Pull one job apart together: was Priority Items delivered? Was Truck+ pitched? Adjust on the next call. Small in-the-moment coaching tends to compound faster than end-of-week reviews.",
+        f"<strong>Worth a 20-minute Scenario 3.1 refresher with {coach}.</strong> Specifically the Priority Items step. The ask: one Truck+ pitch per job tomorrow, with him keeping his own count.",
     ]
     return _stable_pick(actions, tm)
 
@@ -460,21 +508,19 @@ def make_framework(tm: TM) -> str:
     primary = tm.primary_issue
 
     if tm.cancel_conv_pct is not None and tm.cancel_conv_pct >= 99.5:
-        return "CSL Scenario 3.3: REEAP Negotiation. 100% conversion-to-cancel means he's not even attempting the save."
+        return "CSL Scenario 3.3: REEAP Negotiation Protocol. A 100% conversion-to-cancel rate usually means the save isn't being attempted, not that it's being attempted badly."
     if primary == "complaint":
-        return "CEL CUSTOMER + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or not landing."
+        return "CEL CUSTOMER framework + CSL Scenario 1. The 5-Star Service Agenda is either not being delivered or it's being delivered without landing. The feedback usually tells us which."
     if primary == "nps":
-        if tm.nps is not None and tm.nps < 70:
-            return "CEL CUSTOMER framework: Memorable, Creating Lifelong Customers, Positive Ending. NPS this low is a service-quality fire, not a sales one."
-        return "CEL CUSTOMER framework: back half (Memorable, Genuine, Positive Ending). Customers are leaving lukewarm."
+        return "CEL CUSTOMER framework, focused on the back half: Memorable, Genuine, Positive Ending. Customers leaving lukewarm tend to mean the experience peaked too early."
     if primary == "gr":
-        return "CSL Scenario 3.2 close + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask is the lever."
+        return "CSL Scenario 3.2 (close) + CEL CUSTOMER (Ask). Reviews don't happen by accident. The ask, in the customer's window of warmth, is the lever."
     if primary == "ajs":
         std = STANDARDS[tm.franchise_code]
         if tm.resi_ajs is not None and tm.resi_ajs < std["ajs"] - 100:
-            return "CSL Performance Accountability: Level 1 PIP. Below 66% Resi AJS one month triggers a documented 30-day plan."
-        return "CSL Scenario 3.1: Priority Items + Estimate & Price. AJS dips usually live in the close, not the truck."
-    return "CSL Scenario 3.2: Estimate & Price + Assumptive Ask. Maintenance coaching focused on consistency."
+            return "CSL Performance Accountability: Level 1 PIP territory. Below 66% Resi AJS for one month triggers a documented 30-day plan, but worth a coaching conversation first."
+        return "CSL Scenario 3.1: Priority Items + Estimate & Price. AJS dips at this scale usually live in the close, not in the work itself."
+    return "CSL Scenario 3.2: Estimate & Price + Assumptive Ask. Maintenance coaching, focused on consistency rather than correction."
 
 
 def make_metrics(tm: TM) -> list[dict]:
