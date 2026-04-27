@@ -180,53 +180,67 @@ def auth_gspread() -> gspread.Client:
     return gspread.authorize(creds)
 
 
+def _looks_like_label(raw_name: str) -> bool:
+    """Detect rows that are headers / standards / labels, not actual TM names."""
+    upper = raw_name.upper().strip()
+    if upper in {"CEL", "CSL", "SSL", "STANDARDS", "TEAMMATE", "NAME"}:
+        return True
+    if upper.startswith("OUR ") or "STANDARD" in upper:
+        return True
+    if upper.startswith("ANNUAL PLAN") or upper.startswith("MONTHLY"):
+        return True
+    if upper.startswith("ZZZZZ"):
+        return True
+    if upper.startswith("DIVERTED") or upper.startswith("RECYCL") or upper.startswith("DONAT"):
+        return True
+    if upper.startswith("TOTAL") or upper.startswith("AVERAGE") or upper.startswith("AVG"):
+        return True
+    # Rows that are clearly framework / headline text, not names
+    if upper.startswith("WE ") or upper.startswith("THIS ") or upper.startswith("THE "):
+        return True
+    return False
+
+
 def read_section(rows: list[list[str]], name_col_idx: int, role: str, code: str) -> list[TM]:
     """
-    Parse a left-to-right TM block. Layout (offset from name_col_idx):
-      +0 name
-      +6 RESI AJS ($)
-      +5 RESI JOBS (count)
-      +8 1/6 OR LESS (%)
+    Parse a vertical TM block. Layout (offset from name_col_idx):
+      +0  name
+      +5  RESI JOBS (count)
+      +6  RESI AJS ($)
+      +8  1/6 OR LESS (%)
       +10 RESI TRUCK+ (%)
+      +14 GOOGLE REVIEWS (%)
       +18 NPS (%)
       +20 TTM CANCEL CONVERSION (%)
       +22 TTM COMPLAINTS (%)
 
-    Digital Whiteboard repeats the data in a second section further down (alphabetical
-    list, possibly different time window). We only want the first section, so we stop
-    when we hit any signal of the standards block or a re-heading.
+    Digital Whiteboard often has multiple data sections (sorted view + alphabetical
+    view + historical) all in the same column. We scan the ENTIRE sheet, parse every
+    row that looks like a TM, and de-duplicate by name. When a teammate appears
+    multiple times we keep the row with the most RESI JOBS (most complete data).
     """
-    tms: list[TM] = []
-    consecutive_blank = 0
+    tms_by_name: dict[str, TM] = {}
     for r in rows:
         def cell(off: int) -> str:
             return r[name_col_idx + off] if name_col_idx + off < len(r) else ""
 
         raw_name = cell(0).strip()
         if not raw_name:
-            consecutive_blank += 1
-            # Many blank rows in a row = end of this section
-            if consecutive_blank >= 4:
-                break
             continue
-        consecutive_blank = 0
-
-        # Stop on re-heading or standards block
-        upper = raw_name.upper()
-        if upper in {"CEL", "CSL", "SSL", "STANDARDS", "TEAMMATE"}:
-            break
-        if upper.startswith("OUR ") or "STANDARD" in upper or upper.startswith("ANNUAL PLAN"):
-            break
-        # ZZZZZ is just an in-section divider — keep reading
-        if upper.startswith("ZZZZZ"):
+        if _looks_like_label(raw_name):
+            continue
+        # A real teammate name is two words minimum (Last, First or First Last)
+        if len(raw_name) < 3:
             continue
 
         resi_ajs = parse_money(cell(6))
         resi_jobs = parse_int(cell(5))
+        # Skip rows that have no real performance data (avoids picking up the
+        # alphabetical employee list at column A which has term flags but no metrics).
         if resi_ajs is None and resi_jobs in (None, 0):
             continue
 
-        tms.append(TM(
+        tm = TM(
             franchise_code=code,
             name=display_name(raw_name),
             role=role,
@@ -238,20 +252,26 @@ def read_section(rows: list[list[str]], name_col_idx: int, role: str, code: str)
             cancel_conv_pct=parse_pct(cell(20)),
             complaint_pct=parse_pct(cell(22)),
             gr_pct=parse_pct(cell(14)),
-        ))
-    return tms
+        )
+
+        existing = tms_by_name.get(tm.name)
+        if existing is None or (tm.resi_jobs > existing.resi_jobs):
+            tms_by_name[tm.name] = tm
+    return list(tms_by_name.values())
 
 
 def fetch_franchise(gc: gspread.Client, code: str) -> list[TM]:
     sh = gc.open_by_key(SHEET_IDS[code])
     ws = sh.worksheet("Digital Whiteboard")
-    # Pull a generous range; rows beyond data are skipped naturally
-    grid = ws.get_values("A1:AY120")
+    # Scan the entire used range so we catch teammates regardless of how far down
+    # the sheet they appear. Sheets typically max at ~228 rows; pull the lot.
+    last_row = max(250, ws.row_count)
+    grid = ws.get_values(f"A1:AY{last_row}")
 
-    # Section starts at row 5 (1-indexed) = index 4
+    # Skip the top rows that are headers (rows 1-4)
     body = grid[4:]
-    cels = read_section(body, name_col_idx=4, role="CEL", code=code)   # E
-    csls = read_section(body, name_col_idx=28, role="CSL", code=code)  # AC
+    cels = read_section(body, name_col_idx=4, role="CEL", code=code)   # column E
+    csls = read_section(body, name_col_idx=28, role="CSL", code=code)  # column AC
     return cels + csls
 
 
