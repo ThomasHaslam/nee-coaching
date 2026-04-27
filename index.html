@@ -71,37 +71,36 @@
 
   /* ===== HERO ===== */
   .hero {
-    margin: 4px auto 24px auto;
-    padding: 22px 26px;
+    margin: 4px auto 18px auto;
+    padding: 18px 22px;
     background:
-      radial-gradient(120% 200% at 0% 0%, rgba(212, 162, 86, 0.10), transparent 60%),
-      radial-gradient(120% 200% at 100% 100%, rgba(96, 165, 250, 0.08), transparent 55%),
+      radial-gradient(120% 200% at 0% 0%, rgba(245, 179, 66, 0.09), transparent 55%),
+      radial-gradient(120% 200% at 100% 100%, rgba(96, 165, 250, 0.07), transparent 55%),
       linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
-    border: 1px solid rgba(212, 162, 86, 0.18);
-    border-radius: 16px;
+    border: 1px solid rgba(245, 179, 66, 0.18);
+    border-radius: 14px;
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-    gap: 28px;
+    gap: 24px;
     align-items: center;
     box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
   }
   .hero-greeting {
-    font-family: var(--display);
-    font-size: 14px;
+    font-size: 11px;
     color: var(--accent);
-    letter-spacing: 1.5px;
+    letter-spacing: 1.6px;
     text-transform: uppercase;
-    margin-bottom: 6px;
-    opacity: 0.95;
+    font-weight: 700;
+    margin-bottom: 4px;
   }
   .hero-line {
     font-family: var(--display);
-    font-size: 30px;
+    font-size: 24px;
     color: var(--text);
     font-weight: 500;
     letter-spacing: -0.2px;
-    line-height: 1.2;
-    margin-bottom: 8px;
+    line-height: 1.25;
+    margin-bottom: 6px;
   }
   .hero-sub {
     color: var(--text-muted);
@@ -488,6 +487,8 @@
     position: relative;
   }
   .view-chat[hidden] { display: none; }
+  /* Default (desktop): backdrop is hidden completely so it doesn't consume grid space */
+  .chat-sidebar-backdrop { display: none; }
 
   /* MOBILE: sidebar becomes a slide-in drawer over the chat */
   @media (max-width: 860px) {
@@ -510,6 +511,7 @@
     }
     .chat-sidebar.is-open { transform: translateX(0); }
     .chat-sidebar-backdrop {
+      display: block;
       position: absolute;
       inset: 0;
       background: rgba(8, 12, 22, 0.55);
@@ -559,18 +561,19 @@
     overflow: hidden;
   }
   .chat-sidebar-head {
-    padding: 16px 18px;
+    padding: 12px 16px;
     border-bottom: 1px solid var(--border);
     background: linear-gradient(180deg, rgba(167,139,250,0.10), transparent);
   }
   .chat-sidebar-title {
-    font-family: var(--display);
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--violet-bright);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
   }
   .chat-sidebar-sub {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-dim);
     margin-top: 2px;
   }
@@ -596,19 +599,19 @@
   .chat-sidebar-filters {
     display: flex;
     gap: 4px;
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
   }
   .roster-filter {
     flex: 1;
-    min-width: 40px;
+    min-width: 0;
     background: transparent;
     border: 1px solid var(--border);
-    color: var(--text-muted);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 6px 8px;
+    color: var(--text-dim);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 5px 4px;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
@@ -739,34 +742,16 @@
     overflow: hidden;
   }
   .chat-main-head {
-    padding: 18px 22px;
+    padding: 14px 20px;
     border-bottom: 1px solid var(--border);
     background: linear-gradient(90deg, rgba(167,139,250,0.10), rgba(96,165,250,0.05));
-  }
-  .chat-main-empty-state {
-    text-align: center;
-    padding: 48px 20px;
-  }
-  .chat-main-empty-icon {
-    font-size: 56px;
-    opacity: 0.6;
-    margin-bottom: 16px;
-  }
-  .chat-main-empty-title {
-    font-family: var(--display);
-    font-size: 24px;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
-  .chat-main-empty-sub {
-    font-size: 13px;
-    color: var(--text-muted);
   }
   .chat-main-tm-name {
     font-family: var(--display);
     font-size: 22px;
     font-weight: 500;
     color: var(--text);
+    line-height: 1.2;
   }
   .chat-main-tm-meta {
     font-size: 12px;
@@ -2459,8 +2444,8 @@
     <div class="chat-sidebar-backdrop" id="chat-sidebar-backdrop" aria-hidden="true"></div>
     <aside class="chat-sidebar" id="chat-sidebar">
       <div class="chat-sidebar-head">
-        <div class="chat-sidebar-title">Coach Rick</div>
-        <div class="chat-sidebar-sub">Pick any teammate to start coaching</div>
+        <div class="chat-sidebar-title">Roster</div>
+        <div class="chat-sidebar-sub">Worst score first. Filter by franchise or search by name.</div>
       </div>
       <div class="chat-sidebar-search">
         <input type="text" id="roster-search" placeholder="Search teammates..." autocomplete="off"/>
