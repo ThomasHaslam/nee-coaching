@@ -1201,39 +1201,25 @@ def update_index_html(
     new_body = render_teammates(records)
     src = pattern.sub(lambda m: m.group(1) + new_body + m.group(3), src)
 
-    # 2. Replace COACH_PICK (legacy, kept for backwards-compat with stale HTML)
-    pick_js = json.dumps(coach_pick or None, ensure_ascii=False)
-    pick_pattern = re.compile(r"(const COACH_PICK = )(.*?);", re.DOTALL)
-    if pick_pattern.search(src):
-        src = pick_pattern.sub(lambda m: m.group(1) + pick_js + ";", src)
+    # Helper: replace a single-line `const NAME = <value>;` declaration safely.
+    # Critical: anchor `;` to end-of-line so a `;` inside a string value can't
+    # accidentally terminate the match and leave stale content behind.
+    def replace_const(html: str, name: str, value_js: str) -> str:
+        # ^(prefix)(any chars, lazily)(;)([trailing whitespace + optional comment])$
+        pat = re.compile(
+            rf"^([ \t]*const {re.escape(name)} = ).+?;([ \t]*(?://[^\n]*)?)$",
+            re.MULTILINE,
+        )
+        if pat.search(html):
+            return pat.sub(lambda m: m.group(1) + value_js + ";" + m.group(2), html)
+        return html
 
-    # 3. Replace TOP_PERFORMERS constant
-    top_js = json.dumps(top_performers or [], ensure_ascii=False)
-    top_pattern = re.compile(r"(const TOP_PERFORMERS = )(.*?);", re.DOTALL)
-    if top_pattern.search(src):
-        src = top_pattern.sub(lambda m: m.group(1) + top_js + ";", src)
-
-    # 4. Replace MOTIVATIONAL_MESSAGE constant (replaces old MVP_PICK)
-    msg_js = json.dumps(motivational_message or None, ensure_ascii=False)
-    msg_pattern = re.compile(r"(const MOTIVATIONAL_MESSAGE = )(.*?);", re.DOTALL)
-    if msg_pattern.search(src):
-        src = msg_pattern.sub(lambda m: m.group(1) + msg_js + ";", src)
-    # Backwards-compat: also clear the old MVP_PICK constant if it still exists
-    mvp_pattern = re.compile(r"(const MVP_PICK = )(.*?);", re.DOTALL)
-    if mvp_pattern.search(src):
-        src = mvp_pattern.sub(lambda m: m.group(1) + "null;", src)
-
-    # 5. Replace HUDDLE_BRIEF constant
-    huddle_js = json.dumps(huddle_brief or None, ensure_ascii=False)
-    huddle_pattern = re.compile(r"(const HUDDLE_BRIEF = )(.*?);", re.DOTALL)
-    if huddle_pattern.search(src):
-        src = huddle_pattern.sub(lambda m: m.group(1) + huddle_js + ";", src)
-
-    # 6. Replace TOP_5_REGIONAL constant
-    top5_js = json.dumps(top_5_regional or [], ensure_ascii=False)
-    top5_pattern = re.compile(r"(const TOP_5_REGIONAL = )(.*?);", re.DOTALL)
-    if top5_pattern.search(src):
-        src = top5_pattern.sub(lambda m: m.group(1) + top5_js + ";", src)
+    src = replace_const(src, "COACH_PICK",          json.dumps(coach_pick or None, ensure_ascii=False))
+    src = replace_const(src, "TOP_PERFORMERS",      json.dumps(top_performers or [], ensure_ascii=False))
+    src = replace_const(src, "MOTIVATIONAL_MESSAGE", json.dumps(motivational_message or None, ensure_ascii=False))
+    src = replace_const(src, "MVP_PICK",            "null")  # deprecated, force-null
+    src = replace_const(src, "HUDDLE_BRIEF",        json.dumps(huddle_brief or None, ensure_ascii=False))
+    src = replace_const(src, "TOP_5_REGIONAL",      json.dumps(top_5_regional or [], ensure_ascii=False))
 
     # 5. Update / insert LAST_UPDATED HTML comment near the top
     last_updated_marker = re.compile(r"<!--\s*LAST_UPDATED:.*?-->", re.IGNORECASE)
