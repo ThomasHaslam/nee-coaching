@@ -95,14 +95,26 @@ Any leader on the team must be able to act on this without context.
 - Reference the actual training material when relevant. Use real scenario names and step numbers.
 - 1-3 short paragraphs is usually enough. Use bullet points only when listing concrete actions.
 
+ADAPT YOUR COACHING TO THE TEAMMATE'S TIER:
+- ELITE (score 95+): Recognition first. Ask what's working so other teammates can model it. \
+Growth is about consistency, leadership reps, and stretch goals (mentoring, harder calls).
+- SOLID (80-94): Light-touch maintenance. One small course-correction. Don't over-coach.
+- WATCH (65-79): Curious, observational. Diagnose the pattern with them. One focused habit shift.
+- URGENT (under 65): Direct, structured. Frame as Level 1 PIP territory if AJS is the driver. \
+Pair shadow + scripted practice. 15-day target back to standard.
+
+If the leader asks about a top performer, lead with what to recognize and what to learn from them. \
+If the leader asks about a struggling teammate, lead with the most likely root cause and a concrete \
+first step.
+
 WHAT YOU KNOW:
 You have the full CSL Scenario library (Scenarios 1, 2, 3.1, 3.2, 3.3) committed to memory. \
 You will be given the relevant excerpts in every prompt. Treat them as authoritative.
 
 You will also receive:
-- The teammate's current performance data (metrics vs franchise standards)
-- The current daily AI-generated coaching write-up (Why / Play / Anchor)
-- Prior chat history in this conversation
+- The teammate's current performance data (metrics vs franchise standards) - sometimes the basic \
+roster snapshot only, sometimes the full daily coaching write-up
+- Any prior chat history in this conversation
 
 If the question is something you cannot answer from this context, say so directly and suggest \
 what additional info would help. Never invent training material, metrics, or teammate background.`;
@@ -122,12 +134,25 @@ function buildPrompt(tm, history, question) {
       history.slice(-8).map(m => `[${(m.role || 'user').toUpperCase()}] ${m.text}`).join('\n\n')
     : '';
 
+  // Derive tier from score if not already set
+  let tier = tm.tier;
+  if (!tier) {
+    const scoreMetric = (tm.metrics || []).find(m => m.l === 'Score');
+    const scoreNum = scoreMetric ? parseInt(String(scoreMetric.v).split('/')[0], 10) : null;
+    if (scoreNum !== null && Number.isFinite(scoreNum)) {
+      tier = scoreNum >= 95 ? 'elite' : scoreNum >= 80 ? 'solid' : scoreNum >= 65 ? 'watch' : 'urgent';
+    } else {
+      tier = '(unknown)';
+    }
+  }
+
   return `TEAMMATE PROFILE
 Name: ${tm.name}
 Role: ${tm.role}
 Franchise: ${tm.franchiseName || tm.franchiseCode}
-Severity today: ${tm.severity}
-Priority slot today: ${tm.priority || ''}
+Tier: ${tier} (use the matching coaching posture from the system prompt)
+Severity today: ${tm.severity || '(daily picks list only - this teammate not on it today)'}
+Priority slot today: ${tm.priority || '(not on today\'s coaching list)'}
 
 PERFORMANCE METRICS THIS PERIOD
 ${metricsLines}

@@ -37,6 +37,7 @@ except ImportError:
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 INDEX_HTML = REPO_ROOT / "index.html"
+ROSTER_JSON = REPO_ROOT / "roster.json"
 
 SHEET_IDS = {
     "bno": "1wNbp3pshBKqh3T5J2yLAM_5ukWo_MGjXRAarYoGz7tY",
@@ -340,6 +341,48 @@ def pick_top_5(tms: list[TM]) -> list[TM]:
             score_tm(t)
     eligible.sort(key=lambda t: (-t.weighted_score, -(t.resi_ajs or 0)))
     return eligible[:5]
+
+
+def render_roster_entry(tm: TM) -> dict:
+    """Lightweight roster record for the full-team view. No LLM-generated text."""
+    if not tm.sub_scores:
+        score_tm(tm)
+    std = STANDARDS[tm.franchise_code]
+    metrics: list[dict] = []
+    metrics.append({"l": "Score", "v": f"{int(round(tm.weighted_score))}/100"})
+    if tm.resi_ajs is not None:
+        cls = "bad" if tm.resi_ajs < std["ajs"] else "good"
+        metrics.append({"l": "Adj AJS", "v": f"${tm.resi_ajs:,.0f}", "c": cls})
+    if tm.complaint_pct is not None:
+        cls = "bad" if tm.complaint_pct > std["complaint"] else "good"
+        metrics.append({"l": "Complaints", "v": f"{tm.complaint_pct:.2f}%", "c": cls})
+    if tm.nps is not None:
+        cls = "bad" if tm.nps < std["nps"] else "good"
+        metrics.append({"l": "NPS", "v": f"{tm.nps:.0f}%", "c": cls})
+    if tm.gr_pct is not None:
+        cls = "bad" if tm.gr_pct < std["gr"] else "good"
+        metrics.append({"l": "Reviews", "v": f"{tm.gr_pct:.1f}%", "c": cls})
+
+    # Tier classification for adaptive coaching
+    if tm.weighted_score >= 95:
+        tier = "elite"
+    elif tm.weighted_score >= 80:
+        tier = "solid"
+    elif tm.weighted_score >= 65:
+        tier = "watch"
+    else:
+        tier = "urgent"
+
+    return {
+        "id": f"roster-{tm.franchise_code}-{tm.name.replace(' ', '-').replace(',', '')}",
+        "franchiseCode": tm.franchise_code,
+        "name": tm.name,
+        "role": tm.role,
+        "score": int(round(tm.weighted_score)),
+        "tier": tier,
+        "resiJobs": tm.resi_jobs,
+        "metrics": metrics,
+    }
 
 
 def render_top_performer(tm: TM) -> dict:
@@ -1157,12 +1200,19 @@ def main() -> int:
 
     all_records: list[dict] = []
     top_records: list[dict] = []
+    roster_records: list[dict] = []
     for code in ("bno", "bso", "cp", "ct"):
         try:
             tms = fetch_franchise(gc, code)
         except Exception as e:
             print(f"::error::Failed to read {code.upper()} sheet: {e}", file=sys.stderr)
             return 3
+
+        # Full roster (every eligible TM with sub-scores) for the chat sidebar
+        eligible = [t for t in tms if t.resi_jobs >= MIN_RESI_JOBS]
+        for t in eligible:
+            score_tm(t)
+            roster_records.append(render_roster_entry(t))
 
         worst = pick_worst_5(tms)
         for i, tm in enumerate(worst, start=1):
@@ -1222,6 +1272,13 @@ def main() -> int:
         mvp_pick=mvp,
         huddle_brief=huddle,
     )
+    # Write the full roster as a separate JSON the chat view loads at runtime.
+    # Sorted worst-first so leaders see who needs help when scrolling the sidebar.
+    roster_records.sort(key=lambda r: r["score"])
+    ROSTER_JSON.write_text(json.dumps({
+        "updated": updated_iso,
+        "teammates": roster_records,
+    }, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"index.html updated. LAST_UPDATED={updated_iso}, {len(all_records)} TMs written, "
           f"{len(top_records)} top performers.", file=sys.stderr)
     return 0

@@ -18,21 +18,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0e1a;
-    --bg-card: #111827;
-    --bg-elevated: #1a2236;
-    --bg-section: #0f1524;
-    --border: #1f2a44;
-    --border-bright: #2d3a5c;
-    --text: #e8ecf5;
-    --text-muted: #8a96b3;
-    --text-dim: #5a6481;
-    --accent: #d4a256;
-    --accent-bright: #e8b870;
-    --urgent: #e25c5c;
-    --high: #e89640;
-    --done: #5cb88a;
-    --info: #6ba6d4;
+    --bg: #0b1020;
+    --bg-card: #141b2e;
+    --bg-elevated: #1d2640;
+    --bg-section: #131a2c;
+    --border: #2a3554;
+    --border-bright: #3d4a6e;
+    --text: #f2f5fb;
+    --text-muted: #a3b0cf;
+    --text-dim: #6f7d9f;
+    --accent: #f5b342;
+    --accent-bright: #ffc864;
+    --accent-glow: rgba(245, 179, 66, 0.35);
+    --violet: #a78bfa;
+    --violet-bright: #c4b5fd;
+    --violet-glow: rgba(167, 139, 250, 0.35);
+    --info: #60a5fa;
+    --info-bright: #93c5fd;
+    --info-glow: rgba(96, 165, 250, 0.35);
+    --urgent: #ef4444;
+    --high: #f59e0b;
+    --done: #34d399;
+    --done-glow: rgba(52, 211, 153, 0.35);
     --display: 'Cormorant Garamond', Georgia, serif;
     --body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
@@ -48,8 +55,9 @@
     min-height: 100vh;
     line-height: 1.5;
     background-image:
-      radial-gradient(at 20% 0%, rgba(212, 162, 86, 0.05) 0%, transparent 50%),
-      radial-gradient(at 80% 100%, rgba(92, 184, 138, 0.03) 0%, transparent 50%);
+      radial-gradient(at 12% -5%, rgba(245, 179, 66, 0.10) 0%, transparent 45%),
+      radial-gradient(at 88% 5%, rgba(167, 139, 250, 0.08) 0%, transparent 45%),
+      radial-gradient(at 50% 100%, rgba(96, 165, 250, 0.07) 0%, transparent 55%);
     overflow-x: hidden;
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
@@ -414,6 +422,313 @@
     color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 1px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ===== UNIVERSAL BUTTON / FOCUS POLISH ===== */
+  button:active { transform: scale(0.98); }
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  details:focus-visible {
+    outline: 2px solid var(--violet);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* ===== TOP NAV ===== */
+  .top-nav {
+    display: flex;
+    gap: 4px;
+    margin: 4px 0 22px 0;
+    padding: 4px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: fit-content;
+  }
+  .top-nav-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    border: 1px solid transparent;
+  }
+  .top-nav-tab:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+  .top-nav-tab:active { transform: scale(0.97); }
+  .top-nav-tab.active {
+    background: linear-gradient(90deg, rgba(167,139,250,0.20), rgba(96,165,250,0.20));
+    color: var(--text);
+    border-color: rgba(167,139,250,0.35);
+    box-shadow: 0 0 12px -4px var(--violet-glow);
+  }
+
+  /* ===== DEDICATED CHAT VIEW ===== */
+  body.view-chat-active { overflow: hidden; }
+  .view-chat {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 16px;
+    height: calc(100vh - 220px);
+    min-height: 540px;
+    margin-bottom: 24px;
+  }
+  .view-chat[hidden] { display: none; }
+  @media (max-width: 860px) {
+    .view-chat { grid-template-columns: 1fr; height: auto; }
+  }
+
+  .chat-sidebar {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .chat-sidebar-head {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(167,139,250,0.10), transparent);
+  }
+  .chat-sidebar-title {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .chat-sidebar-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .chat-sidebar-search {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  #roster-search {
+    width: 100%;
+    background: var(--bg-section);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 13px;
+    padding: 8px 12px;
+    transition: border-color 0.15s ease;
+  }
+  #roster-search:focus {
+    outline: none;
+    border-color: var(--violet);
+  }
+  .chat-sidebar-filters {
+    display: flex;
+    gap: 4px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .roster-filter {
+    flex: 1;
+    min-width: 40px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .roster-filter:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+  .roster-filter.active {
+    background: rgba(167,139,250,0.18);
+    color: var(--text);
+    border-color: rgba(167,139,250,0.45);
+  }
+  .chat-sidebar-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px;
+  }
+  .roster-empty {
+    padding: 24px 18px;
+    color: var(--text-dim);
+    font-size: 12px;
+    text-align: center;
+  }
+  .roster-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text);
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 2px;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .roster-row:hover {
+    background: rgba(167,139,250,0.08);
+    border-color: rgba(167,139,250,0.2);
+  }
+  .roster-row.selected {
+    background: rgba(167,139,250,0.14);
+    border-color: rgba(167,139,250,0.5);
+    box-shadow: 0 0 12px -4px var(--violet-glow);
+  }
+  .roster-row-main {
+    flex: 1;
+    min-width: 0;
+  }
+  .roster-row-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .roster-row-meta {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 2px;
+  }
+  .roster-row-score {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+  .roster-row-score.tier-elite  { color: var(--done); }
+  .roster-row-score.tier-solid  { color: var(--info); }
+  .roster-row-score.tier-watch  { color: var(--high); }
+  .roster-row-score.tier-urgent { color: var(--urgent); }
+  .chat-sidebar-foot {
+    padding: 10px 14px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  /* Chat main panel */
+  .chat-main {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .chat-main-head {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(90deg, rgba(167,139,250,0.10), rgba(96,165,250,0.05));
+  }
+  .chat-main-empty-state {
+    text-align: center;
+    padding: 48px 20px;
+  }
+  .chat-main-empty-icon {
+    font-size: 56px;
+    opacity: 0.6;
+    margin-bottom: 16px;
+  }
+  .chat-main-empty-title {
+    font-family: var(--display);
+    font-size: 24px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .chat-main-empty-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .chat-main-tm-name {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .chat-main-tm-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .chat-main-tm-meta strong { color: var(--text); }
+  .chat-main-thread {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chat-main-form {
+    display: flex;
+    gap: 8px;
+    padding: 14px 18px;
+    border-top: 1px solid var(--border);
+  }
+  .chat-main-input {
+    flex: 1;
+    background: var(--bg-section);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 14px;
+    padding: 10px 14px;
+    resize: none;
+    line-height: 1.5;
+    transition: border-color 0.15s ease;
+  }
+  .chat-main-input:focus { outline: none; border-color: rgba(167,139,250,0.6); }
+  .chat-main-input:disabled { opacity: 0.5; cursor: not-allowed; }
+  .chat-main-send {
+    background: linear-gradient(90deg, var(--violet), var(--info));
+    color: #0b1020;
+    border: none;
+    border-radius: 8px;
+    padding: 0 22px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+    box-shadow: 0 0 16px -4px var(--violet-glow);
+  }
+  .chat-main-send:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px -2px var(--violet-glow);
+  }
+  .chat-main-send:disabled { opacity: 0.4; cursor: not-allowed; }
+  .chat-main-foot {
+    padding: 8px 18px 12px 18px;
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
     border-top: 1px solid var(--border);
   }
 
@@ -1893,6 +2208,13 @@
     </div>
   </header>
 
+  <nav class="top-nav" role="tablist">
+    <a href="#/" class="top-nav-tab active" id="nav-dashboard" role="tab">📊 Dashboard</a>
+    <a href="#/chat" class="top-nav-tab" id="nav-chat" role="tab">💬 Coach Rick · Full Chat</a>
+  </nav>
+
+  <div id="view-dashboard">
+
   <section class="hero">
     <div class="hero-left">
       <div class="hero-greeting" id="hero-greeting">Good morning.</div>
@@ -2032,14 +2354,60 @@
 
   <div id="dashboard"></div>
 
+  </div><!-- /view-dashboard -->
+
+  <section id="view-chat" class="view-chat" hidden>
+    <aside class="chat-sidebar">
+      <div class="chat-sidebar-head">
+        <div class="chat-sidebar-title">Coach Rick</div>
+        <div class="chat-sidebar-sub">Pick any teammate to start coaching</div>
+      </div>
+      <div class="chat-sidebar-search">
+        <input type="text" id="roster-search" placeholder="Search teammates..." autocomplete="off"/>
+      </div>
+      <div class="chat-sidebar-filters" id="roster-filters">
+        <button class="roster-filter active" data-fr="all">All</button>
+        <button class="roster-filter" data-fr="bno">BNO</button>
+        <button class="roster-filter" data-fr="bso">BSO</button>
+        <button class="roster-filter" data-fr="cp">CP</button>
+        <button class="roster-filter" data-fr="ct">CT</button>
+      </div>
+      <div class="chat-sidebar-list" id="roster-list">
+        <div class="roster-empty">Loading roster...</div>
+      </div>
+      <div class="chat-sidebar-foot" id="roster-foot"></div>
+    </aside>
+
+    <main class="chat-main">
+      <div class="chat-main-head" id="chat-main-head">
+        <div class="chat-main-empty-state">
+          <div class="chat-main-empty-icon">💬</div>
+          <div class="chat-main-empty-title">Ready when you are.</div>
+          <div class="chat-main-empty-sub">Pick a teammate from the left, or use Cmd+K to search the whole region.</div>
+        </div>
+      </div>
+      <div class="chat-main-thread" id="chat-main-thread"></div>
+      <form class="chat-main-form" id="chat-main-form">
+        <textarea
+          class="chat-main-input"
+          id="chat-main-input"
+          placeholder="Ask Coach Rick anything about the selected teammate..."
+          rows="2"
+          disabled></textarea>
+        <button type="submit" class="chat-main-send" id="chat-main-send" disabled>Send</button>
+      </form>
+      <div class="chat-main-foot" id="chat-main-foot">Powered by Claude. Coach Rick has the full CSL Scenario library and this teammate's data.</div>
+    </main>
+  </section>
+
   <footer class="footer">
     <div>NEE Coaching</div>
     <div class="footer-utility">
-      <button class="reset-link" id="expand-all">Expand All</button>
+      <button class="reset-link" id="expand-all">⤢ Expand All</button>
       <span style="color: var(--border-bright)">·</span>
-      <button class="reset-link" id="collapse-all">Collapse All</button>
+      <button class="reset-link" id="collapse-all">⤡ Collapse All</button>
       <span style="color: var(--border-bright)">·</span>
-      <button class="reset-link" id="reset-btn">Reset for new day</button>
+      <button class="reset-link" id="reset-btn">↻ Reset for new day</button>
     </div>
   </footer>
 </div>
@@ -3112,11 +3480,225 @@
     }
   });
 
+  // ===== FULL ROSTER (loaded from /roster.json) =====
+  let ROSTER = [];                  // [{id, franchiseCode, name, role, score, tier, resiJobs, metrics}]
+  let ROSTER_FILTER = 'all';
+  let ROSTER_QUERY = '';
+  let CHAT_MAIN_TM = null;          // currently selected TM in dedicated chat
+  let CHAT_MAIN_HISTORY = [];
+
+  async function loadRoster() {
+    try {
+      const r = await fetch('roster.json', { cache: 'no-store' });
+      if (!r.ok) return;
+      const d = await r.json();
+      ROSTER = (d.teammates || []).map(tm => ({
+        ...tm,
+        franchiseName: franchiseNameByCode(tm.franchiseCode),
+      }));
+      const foot = document.getElementById('roster-foot');
+      if (foot) foot.textContent = `${ROSTER.length} teammates · updated ${(d.updated || '').slice(0, 10)}`;
+      renderRoster();
+    } catch (e) {
+      console.error('Failed to load roster:', e);
+    }
+  }
+
+  function renderRoster() {
+    const list = document.getElementById('roster-list');
+    if (!list) return;
+    const q = ROSTER_QUERY.toLowerCase().trim();
+    const filtered = ROSTER.filter(t => {
+      if (ROSTER_FILTER !== 'all' && t.franchiseCode !== ROSTER_FILTER) return false;
+      if (q && !t.name.toLowerCase().includes(q) && !t.role.toLowerCase().includes(q)) return false;
+      return true;
+    });
+    if (!filtered.length) {
+      list.innerHTML = `<div class="roster-empty">No teammates match.</div>`;
+      return;
+    }
+    list.innerHTML = filtered.map(t => `
+      <button class="roster-row ${CHAT_MAIN_TM && CHAT_MAIN_TM.id === t.id ? 'selected' : ''}" data-id="${t.id}">
+        <div class="roster-row-main">
+          <div class="roster-row-name">${escapeHtml(t.name)}</div>
+          <div class="roster-row-meta">${escapeHtml(t.role)} · ${escapeHtml(t.franchiseName || t.franchiseCode)} · ${t.resiJobs} jobs</div>
+        </div>
+        <div class="roster-row-score tier-${t.tier}">${t.score}</div>
+      </button>
+    `).join('');
+    list.querySelectorAll('.roster-row').forEach(b => {
+      b.onclick = () => selectChatTm(b.dataset.id);
+    });
+  }
+
+  async function selectChatTm(rosterId) {
+    const tm = ROSTER.find(t => t.id === rosterId);
+    if (!tm) return;
+    // Merge richer daily picks data if this TM happens to be on today's worst-5 list
+    const daily = TEAMMATES.find(d => d.name === tm.name && d.franchiseCode === tm.franchiseCode);
+    CHAT_MAIN_TM = daily ? { ...tm, ...daily, score: tm.score, tier: tm.tier } : tm;
+    CHAT_MAIN_HISTORY = loadChatHistory(tm.id);
+
+    // Update header
+    const head = document.getElementById('chat-main-head');
+    head.innerHTML = `
+      <div class="chat-main-tm-name">${escapeHtml(tm.name)}</div>
+      <div class="chat-main-tm-meta">
+        <span><strong>${escapeHtml(tm.role)}</strong></span>
+        <span>${escapeHtml(tm.franchiseName || tm.franchiseCode)}</span>
+        <span>Score <strong>${tm.score}/100</strong></span>
+        <span>Tier <strong>${escapeHtml(tm.tier)}</strong></span>
+        <span>${tm.resiJobs} resi jobs</span>
+      </div>
+    `;
+
+    // Enable input
+    const input = document.getElementById('chat-main-input');
+    const send = document.getElementById('chat-main-send');
+    input.disabled = false;
+    send.disabled = false;
+    input.focus();
+
+    renderRoster();
+    renderChatMainThread();
+
+    // Detect API availability
+    const ok = await detectChatApi();
+    const foot = document.getElementById('chat-main-foot');
+    if (ok) {
+      foot.textContent = `Coach Rick has full CSL Scenario library + ${tm.name}'s data. Multi-turn history saved on this device.`;
+    } else {
+      foot.textContent = 'Free-form chat needs Cloudflare Pages deployment. See worker/DEPLOY.md.';
+      input.disabled = true;
+      send.disabled = true;
+    }
+  }
+
+  function renderChatMainThread() {
+    const thread = document.getElementById('chat-main-thread');
+    if (!CHAT_MAIN_TM) { thread.innerHTML = ''; return; }
+
+    if (CHAT_MAIN_HISTORY.length === 0) {
+      const tier = CHAT_MAIN_TM.tier;
+      const tierLine = tier === 'elite'
+        ? `${CHAT_MAIN_TM.name} is in the elite tier (${CHAT_MAIN_TM.score}/100). Ask what's working so the team can model it.`
+        : tier === 'urgent'
+          ? `${CHAT_MAIN_TM.name} is at the urgent tier (${CHAT_MAIN_TM.score}/100). Ask for the root cause and a 7-day plan.`
+          : `${CHAT_MAIN_TM.name} is at the ${tier} tier (${CHAT_MAIN_TM.score}/100). Ask anything.`;
+      thread.innerHTML = `
+        <div class="chat-msg chat-msg-bot">${escapeHtml(tierLine)}</div>
+      `;
+      return;
+    }
+
+    thread.innerHTML = CHAT_MAIN_HISTORY
+      .map(m => `<div class="chat-msg chat-msg-${m.role === 'user' ? 'user' : (m.role === 'error' ? 'error' : 'bot')}">${escapeHtml(m.text)}</div>`)
+      .join('');
+    thread.scrollTop = thread.scrollHeight;
+  }
+
+  async function sendChatMain(question) {
+    if (!CHAT_MAIN_TM) return;
+    const q = (question || '').trim();
+    if (!q) return;
+
+    const send = document.getElementById('chat-main-send');
+    CHAT_MAIN_HISTORY.push({ role: 'user', text: q });
+    CHAT_MAIN_HISTORY.push({ role: 'bot', text: 'Coach Rick is thinking...' });
+    renderChatMainThread();
+    send.disabled = true;
+
+    try {
+      const r = await fetch(CHAT_API_PATH, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          teammate: CHAT_MAIN_TM,
+          history: CHAT_MAIN_HISTORY.slice(0, -2),
+          question: q,
+        }),
+      });
+      const data = await r.json();
+      CHAT_MAIN_HISTORY.pop();
+      if (!r.ok || data.error) {
+        CHAT_MAIN_HISTORY.push({ role: 'error', text: data.error || `Request failed (${r.status}).` });
+      } else {
+        CHAT_MAIN_HISTORY.push({ role: 'bot', text: data.reply || '(no reply)' });
+      }
+    } catch (e) {
+      CHAT_MAIN_HISTORY.pop();
+      CHAT_MAIN_HISTORY.push({ role: 'error', text: 'Network error: ' + (e && e.message ? e.message : 'unknown') });
+    } finally {
+      send.disabled = false;
+      saveChatHistory(CHAT_MAIN_TM.id, CHAT_MAIN_HISTORY);
+      renderChatMainThread();
+    }
+  }
+
+  // Hook up sidebar controls
+  function initChatView() {
+    const search = document.getElementById('roster-search');
+    if (search) {
+      search.addEventListener('input', () => {
+        ROSTER_QUERY = search.value;
+        renderRoster();
+      });
+    }
+    document.querySelectorAll('.roster-filter').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.roster-filter').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        ROSTER_FILTER = b.dataset.fr;
+        renderRoster();
+      });
+    });
+    const form = document.getElementById('chat-main-form');
+    const input = document.getElementById('chat-main-input');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const q = input.value;
+        input.value = '';
+        sendChatMain(q);
+      });
+    }
+    if (input) {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          form.requestSubmit();
+        }
+      });
+    }
+  }
+
+  // ===== VIEW ROUTER =====
+  function applyRoute() {
+    const isChat = location.hash === '#/chat';
+    document.getElementById('view-dashboard').hidden = isChat;
+    document.getElementById('view-chat').hidden = !isChat;
+    document.body.classList.toggle('view-chat-active', isChat);
+    document.getElementById('nav-dashboard').classList.toggle('active', !isChat);
+    document.getElementById('nav-chat').classList.toggle('active', isChat);
+    if (isChat) {
+      // Lazy-load roster the first time we open chat view
+      if (!ROSTER.length) loadRoster();
+      // If a TM was opened from the modal previously, focus them
+      if (CHAT_TM && !CHAT_MAIN_TM) {
+        const rosterMatch = ROSTER.find(r => r.name === CHAT_TM.name && r.franchiseCode === CHAT_TM.franchiseCode);
+        if (rosterMatch) selectChatTm(rosterMatch.id);
+      }
+    }
+  }
+  window.addEventListener('hashchange', applyRoute);
+
   // ===== INIT =====
   setTodayDate();
   render();
   renderMvpPick();
   renderHuddleBrief();
+  initChatView();
+  applyRoute();
 </script>
 </body>
 </html>
