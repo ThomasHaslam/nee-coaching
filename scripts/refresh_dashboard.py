@@ -23,7 +23,14 @@ from google.oauth2.service_account import Credentials
 
 # Allow importing sibling modules whether the script is run from repo root or scripts/
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from training_kb import QUOTES, METRIC_ANCHORS, quote_for, scenario_label  # noqa: E402
+from training_kb import QUOTES, METRIC_ANCHORS, quote_for, all_quotes_for, scenario_label  # noqa: E402
+
+# Optional LLM-driven coaching: enabled only if ANTHROPIC_API_KEY is set.
+try:
+    import anthropic  # type: ignore
+    _ANTHROPIC_AVAILABLE = True
+except ImportError:
+    _ANTHROPIC_AVAILABLE = False
 
 
 # ---------- config ----------
@@ -580,6 +587,126 @@ def make_framework(tm: TM) -> str:
     return f"{a['ref']}. {a['rationale']}"
 
 
+# ---------- AI coaching (optional, requires Anthropic API key) ----------
+
+# Cache the client across calls
+_AI_CLIENT = None
+_AI_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-haiku-4-5-20251001")
+
+
+def _ai_client():
+    global _AI_CLIENT
+    if _AI_CLIENT is None and _ANTHROPIC_AVAILABLE and os.environ.get("ANTHROPIC_API_KEY"):
+        _AI_CLIENT = anthropic.Anthropic()
+    return _AI_CLIENT
+
+
+_AI_SYSTEM = """You are an expert sales coach for 1-800-GOT-JUNK?, writing daily \
+coaching guidance for franchise leaders to use in 1:1 conversations with their teammates \
+(CSLs, CELs, SSLs).
+
+Voice rules (strict):
+- Warm, genuine, observational. Never robotic, never lecturing.
+- No em dashes. Use periods or commas instead.
+- Coach-style: frame as suggestions and observations, not commands.
+- Specific to this teammate's actual numbers. No generic platitudes.
+- Reference the actual training material when relevant. Use the real scenario names \
+and step numbers from the context provided.
+- Brief but substantive. 3-5 sentences per section.
+
+You will be given:
+- The teammate's performance vs their franchise's standards
+- The dominant problem area
+- Excerpts from the actual CSL Scenario training material that maps to that problem
+- The franchise's coach name
+
+Return JSON with exactly these keys:
+{
+  "why":   "3-5 sentences. What the data is telling us, and what the most likely \
+underlying behavior is. Anchor on the dominant problem. Add 1-2 supporting observations.",
+  "play":  "3-5 sentences. A specific coaching action the named coach can take this week. \
+Reference the relevant training step or script when it fits. Be concrete: time, what to \
+look at, what to practice. Lead with 'Worth ...' or '<Coach> could ...' rather than commands.",
+  "rationale": "2-3 sentences. Why this specific training step is the right anchor for \
+this specific teammate's pattern."
+}
+
+Return ONLY valid JSON. No prose outside the object."""
+
+
+def _ai_prompt(tm: TM, coach: str) -> str:
+    std = STANDARDS[tm.franchise_code]
+    franchise_name = FRANCHISE_NAMES[tm.franchise_code]
+
+    quotes = all_quotes_for(_resolve_anchor_key(tm))
+    training_block = "\n\n".join(
+        f"--- {scenario_label(q)} ---\n{q['text']}" for q in quotes[:3]
+    )
+
+    metrics_block = (
+        f"  Adjusted Resi AJS: {fmt_money(tm.resi_ajs)} (standard {fmt_money(std['ajs'])})\n"
+        f"  Complaint rate:    {fmt_pct(tm.complaint_pct, 2)} (max {std['complaint']:.2f}%)\n"
+        f"  NPS:               {fmt_pct(tm.nps, 0)} (min {std['nps']:.0f}%)\n"
+        f"  Reviews capture:   {fmt_pct(tm.gr_pct, 1)} (min {std['gr']:.0f}%)\n"
+        f"  TTM cancel conv:   {fmt_pct(tm.cancel_conv_pct, 1) if tm.cancel_conv_pct is not None else 'n/a'}\n"
+        f"  Truck+ rate:       {fmt_pct(tm.truck_pct, 1) if tm.truck_pct is not None else 'n/a'}\n"
+        f"  Resi jobs:         {tm.resi_jobs}\n"
+        f"  Composite score:   {tm.weighted_score:.0f}/100\n"
+        f"  Severity:          {tm.severity}"
+    )
+
+    return f"""TEAMMATE
+  Name:      {tm.name}
+  Role:      {tm.role}
+  Franchise: {franchise_name}
+  Coach:     {coach}
+
+PERFORMANCE THIS PERIOD
+{metrics_block}
+
+DOMINANT PROBLEM
+  {tm.primary_issue or 'mixed'}
+
+RELEVANT TRAINING MATERIAL (use these scenario names verbatim in your output)
+{training_block}
+
+Today's date: {datetime.now(timezone.utc).strftime('%A, %B %d')}. Vary phrasing day-to-day so this teammate doesn't see identical wording every morning.
+
+Generate the JSON object."""
+
+
+def generate_ai_coaching(tm: TM, slot_idx: int) -> Optional[dict]:
+    """
+    Use Claude to generate why / play / rationale for this teammate.
+    Returns None if the API isn't available or the call fails.
+    """
+    client = _ai_client()
+    if client is None:
+        return None
+
+    coach = pick_coach(tm.franchise_code, slot_idx)
+    try:
+        resp = client.messages.create(
+            model=_AI_MODEL,
+            max_tokens=1000,
+            system=_AI_SYSTEM,
+            messages=[{"role": "user", "content": _ai_prompt(tm, coach)}],
+        )
+        raw = resp.content[0].text.strip()
+        # Strip code fences if present
+        if raw.startswith("```"):
+            raw = raw.strip("`")
+            if raw.startswith("json"):
+                raw = raw[4:].strip()
+        data = json.loads(raw)
+        if not all(k in data for k in ("why", "play", "rationale")):
+            return None
+        return data
+    except Exception as e:
+        print(f"::warning::AI coaching generation failed for {tm.name}: {e}", file=sys.stderr)
+        return None
+
+
 def make_score_breakdown(tm: TM) -> str:
     """
     Plain-text breakdown for the score badge tooltip. Shows each sub-score,
@@ -674,6 +801,7 @@ def render_teammates(records: list[dict]) -> str:
                 return "{ " + ", ".join(pairs) + " }"
             metrics_js = ", ".join(_metric_js(m) for m in tm["metrics"])
             anchor_js = json.dumps(tm.get("anchor", {}), ensure_ascii=False)
+            source_js = json.dumps(tm.get("anchorSource", "template"))
             chunks.append(
                 "    {\n"
                 f"      id: {json.dumps(tm['id'])}, priority: {tm['priority']}, "
@@ -684,6 +812,7 @@ def render_teammates(records: list[dict]) -> str:
                 f"      play: {json.dumps(tm['play'])},\n"
                 f"      framework: {json.dumps(tm['framework'])},\n"
                 f"      anchor: {anchor_js},\n"
+                f"      anchorSource: {source_js},\n"
                 f"      metrics: [{metrics_js}]\n"
                 "    },"
             )
@@ -734,6 +863,19 @@ def main() -> int:
 
         worst = pick_worst_5(tms)
         for i, tm in enumerate(worst, start=1):
+            anchor = make_anchor(tm)
+
+            ai = generate_ai_coaching(tm, slot_idx=i - 1)
+            if ai:
+                why = ai["why"]
+                play = ai["play"]
+                anchor["rationale"] = ai["rationale"]
+                anchor_source = "ai"
+            else:
+                why = make_why(tm)
+                play = make_play(tm, slot_idx=i - 1)
+                anchor_source = "template"
+
             all_records.append({
                 "id": f"tm-{code}-{i}",
                 "priority": i,
@@ -741,10 +883,11 @@ def main() -> int:
                 "name": tm.name,
                 "role": tm.role,
                 "severity": tm.severity,
-                "why": make_why(tm),
-                "play": make_play(tm, slot_idx=i - 1),
+                "why": why,
+                "play": play,
                 "framework": make_framework(tm),
-                "anchor": make_anchor(tm),
+                "anchor": anchor,
+                "anchorSource": anchor_source,
                 "metrics": make_metrics(tm),
             })
         print(f"  {code.upper()}: {len(tms)} TMs read, picked {len(worst)} for coaching "
