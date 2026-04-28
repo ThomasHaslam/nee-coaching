@@ -620,7 +620,79 @@ team. Sixty seconds, what's the current routine?
 
 You're Coach Rick. Talk like Coach Rick.`;
 
-function buildPrompt(tm, history, question) {
+// Render the leader's accumulated memory into a compact block for the prompt.
+// Only emits a block if there's actually something to show.
+function formatMemoryBlock({ tmNotes, generalNotes, feedback, profile, teammate }) {
+  const parts = [];
+
+  // Leader profile (their preferences/style/context)
+  if (profile && (profile.displayName || profile.style || profile.contextNotes)) {
+    let p = "LEADER PROFILE\n";
+    if (profile.displayName) p += `Name: ${profile.displayName}\n`;
+    if (profile.style) p += `How they want you to coach: ${profile.style}\n`;
+    if (profile.contextNotes) p += `Background context: ${profile.contextNotes}\n`;
+    parts.push(p.trim());
+  }
+
+  // Notes about THIS specific teammate (most recent 12)
+  if (teammate && tmNotes && tmNotes.length) {
+    const recent = tmNotes.slice(-12);
+    let p = `LEADER'S PRIOR NOTES ABOUT ${teammate.name || "this teammate"} (most recent first; use these, don't ignore them)\n`;
+    p += recent.slice().reverse().map(n =>
+      `- [${(n.ts || "").slice(0, 10)}] ${n.text}`
+    ).join("\n");
+    parts.push(p);
+  }
+
+  // Team-level notes the leader has shared (most recent 8)
+  if (generalNotes && generalNotes.length) {
+    const recent = generalNotes.slice(-8);
+    let p = "LEADER'S GENERAL TEAM NOTES (most recent first)\n";
+    p += recent.slice().reverse().map(n =>
+      `- [${(n.ts || "").slice(0, 10)}] ${n.text}`
+    ).join("\n");
+    parts.push(p);
+  }
+
+  // Recent feedback patterns - what they liked / pushed back on
+  if (feedback && feedback.length) {
+    const ups = feedback.filter(f => f.rating === "up").slice(-4);
+    const downs = feedback.filter(f => f.rating === "down").slice(-4);
+    if (ups.length || downs.length) {
+      let p = "LEADER FEEDBACK ON YOUR PRIOR REPLIES (treat as preference signal)\n";
+      if (downs.length) {
+        p += "Recently flagged as off-target:\n";
+        p += downs.slice().reverse().map(f =>
+          `- Q: "${(f.question || "").slice(0, 100)}" | reply opener: "${(f.replyExcerpt || "").slice(0, 80)}..."` +
+          (f.comment ? ` | their comment: "${f.comment}"` : "")
+        ).join("\n");
+        p += "\n";
+      }
+      if (ups.length) {
+        p += "Recently affirmed as on-target:\n";
+        p += ups.slice().reverse().map(f =>
+          `- Q: "${(f.question || "").slice(0, 100)}" | reply opener: "${(f.replyExcerpt || "").slice(0, 80)}..."`
+        ).join("\n");
+      }
+      parts.push(p.trim());
+    }
+  }
+
+  if (parts.length === 0) return "";
+
+  return `\n\n========== WHAT THIS LEADER HAS TOLD YOU BEFORE ==========
+The leader you're talking to has built up a memory with you over time. Use it.
+- Reference their past notes by paraphrasing, not by quoting timestamps.
+- If a new question contradicts something they told you before, ASK about it.
+- If their feedback shows they push back on a certain style, adjust.
+- Notes about the teammate are evidence; treat them as ground truth from the leader's eyes.
+
+${parts.join("\n\n")}
+========== END LEADER MEMORY ==========\n`;
+}
+
+
+function buildPrompt(tm, history, question, memoryBlock = "") {
   const trainingLib = TRAINING_QUOTES.map(q => `--- ${q.ref} ---\n${q.text}`).join('\n\n');
   const leadershipLib = LEADERSHIP_LIBRARY
     .map(f => `### ${f.name} (${f.source})\nWhen to use: ${f.use}\n${f.text}`)
@@ -666,7 +738,7 @@ ${standardLib}
 LEADERSHIP WISDOM (use these IDEAS, in plain words. NEVER say the framework name or the author.
 Strip the academic shell. Keep the truth underneath.)
 ${leadershipLib}
-${histBlock}
+${memoryBlock}${histBlock}
 
 LEADER'S QUESTION:
 ${question}
@@ -725,7 +797,7 @@ ${standardLib}
 LEADERSHIP WISDOM (use these IDEAS, in plain words. NEVER say a framework name or an author's
 name. Strip the academic shell. Keep the truth underneath.)
 ${leadershipLib}
-${histBlock}
+${memoryBlock}${histBlock}
 
 LEADER'S QUESTION:
 ${question}
@@ -768,13 +840,31 @@ export async function onRequest({ request, env }) {
   let body;
   try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400, origin); }
 
-  const { teammate, history, question } = body || {};
+  const { teammate, history, question, leaderId } = body || {};
   if (!question || typeof question !== 'string') {
     return json({ error: 'Missing question' }, 400, origin);
   }
   // teammate is optional - omit it for general leadership questions
 
-  const userPrompt = buildPrompt(teammate, history, question);
+  // Pull this leader's accumulated memory if KV is bound + leaderId provided
+  let memoryBlock = "";
+  try {
+    if (env.RICK_MEMORY && leaderId && /^[a-z0-9\-]{8,64}$/i.test(leaderId)) {
+      const tmKey = teammate && teammate.id ? teammate.id : "__general__";
+      const [tmNotes, generalNotes, feedback, profile] = await Promise.all([
+        env.RICK_MEMORY.get(`leader:${leaderId}:notes:${tmKey}`).then(v => v ? JSON.parse(v) : []),
+        env.RICK_MEMORY.get(`leader:${leaderId}:notes:__general__`).then(v => v ? JSON.parse(v) : []),
+        env.RICK_MEMORY.get(`leader:${leaderId}:feedback`).then(v => v ? JSON.parse(v) : []),
+        env.RICK_MEMORY.get(`leader:${leaderId}:profile`).then(v => v ? JSON.parse(v) : null),
+      ]);
+      memoryBlock = formatMemoryBlock({ tmNotes, generalNotes, feedback, profile, teammate });
+    }
+  } catch (e) {
+    // Memory failures should never block a chat reply
+    console.error("memory read failed:", e);
+  }
+
+  const userPrompt = buildPrompt(teammate, history, question, memoryBlock);
 
   try {
     const upstream = await fetch('https://api.anthropic.com/v1/messages', {

@@ -973,6 +973,127 @@
     border-top: 1px solid var(--border);
   }
 
+  /* ===== RICK MEMORY (notes + feedback) ===== */
+  .rick-notes-panel {
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(245,179,66,0.06), transparent);
+  }
+  .rick-notes-panel summary {
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .rick-notes-panel summary::-webkit-details-marker { display: none; }
+  .rick-notes-icon { font-size: 16px; }
+  .rick-notes-title {
+    flex: 1;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .rick-notes-count {
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+  .rick-notes-body {
+    padding: 4px 18px 14px 18px;
+  }
+  .rick-notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  .rick-note-item {
+    background: rgba(245,179,66,0.05);
+    border-left: 2px solid var(--accent);
+    padding: 6px 10px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .rick-note-ts {
+    display: block;
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-bottom: 3px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+  }
+  .rick-notes-form {
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  #rick-notes-input {
+    flex: 1;
+    background: var(--bg-section);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 13px;
+    padding: 8px 10px;
+    resize: vertical;
+    line-height: 1.45;
+  }
+  #rick-notes-input:focus {
+    outline: none;
+    border-color: rgba(245,179,66,0.55);
+  }
+  .rick-notes-save {
+    background: rgba(245,179,66,0.15);
+    border: 1px solid rgba(245,179,66,0.45);
+    color: var(--accent);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .rick-notes-save:hover { background: rgba(245,179,66,0.25); }
+  .rick-notes-save:active { transform: scale(0.97); }
+  .rick-notes-empty {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-style: italic;
+    padding: 4px 0;
+  }
+
+  /* Feedback buttons after each bot reply */
+  .chat-feedback {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: -6px;
+    margin-bottom: 4px;
+    padding-left: 4px;
+  }
+  .chat-feedback-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  }
+  .chat-feedback-btn:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+  .chat-feedback-btn.up.active   { background: rgba(52,211,153,0.18); color: var(--done); border-color: rgba(52,211,153,0.45); }
+  .chat-feedback-btn.down.active { background: rgba(239,68,68,0.18);  color: var(--urgent); border-color: rgba(239,68,68,0.45); }
+  .chat-feedback-saved { font-size: 10px; color: var(--text-dim); margin-left: 4px; }
+
   /* ===== PRINT STYLESHEET ===== */
   @media print {
     body { background: white; color: black; }
@@ -2651,6 +2772,23 @@
           <span>Coaching philosophy · 1:1 prep · PIP design · huddle facilitation · CSL Scenarios · recognition · culture · difficult conversations</span>
         </div>
       </div>
+
+      <!-- Notes panel: leader-input observations Rick remembers across sessions -->
+      <details class="rick-notes-panel" id="rick-notes-panel">
+        <summary>
+          <span class="rick-notes-icon">🧠</span>
+          <span class="rick-notes-title">What you've told Rick about <span id="rick-notes-target">your team</span></span>
+          <span class="rick-notes-count" id="rick-notes-count"></span>
+        </summary>
+        <div class="rick-notes-body">
+          <div class="rick-notes-list" id="rick-notes-list"></div>
+          <form class="rick-notes-form" id="rick-notes-form">
+            <textarea id="rick-notes-input" rows="2" placeholder="Tell Rick something he should remember. Examples: 'Brendan's daughter has a recital this week.' / 'BSO complaints cluster in late afternoon.' / 'I prefer direct coaching over hedging.'"></textarea>
+            <button type="submit" class="rick-notes-save">Save note</button>
+          </form>
+        </div>
+      </details>
+
       <div class="chat-main-thread" id="chat-main-thread"></div>
       <form class="chat-main-form" id="chat-main-form">
         <textarea
@@ -3348,8 +3486,56 @@
   // Real chat works on Cloudflare Pages (auto-detects /api/chat on same origin).
   // On GitHub Pages or preview, falls back to the pre-generated deep-dive only.
   const CHAT_API_PATH = "/api/chat";
+  const MEMORY_API_PATH = "/api/memory";
   // Legacy: external worker URL fallback (only used if user pasted one in)
   const CHAT_WORKER_URL = "";
+
+  // ===== LEADER ID =====
+  // Anonymous per-device identity so each leader gets their OWN Coach Rick
+  // memory: notes, feedback, profile. Generated once, kept in localStorage.
+  function getLeaderId() {
+    let id = null;
+    try { id = localStorage.getItem("nee-coaching:leader-id"); } catch {}
+    if (id && /^[a-z0-9\-]{8,64}$/i.test(id)) return id;
+    const r = crypto.getRandomValues(new Uint8Array(16));
+    r[6] = (r[6] & 0x0f) | 0x40;
+    r[8] = (r[8] & 0x3f) | 0x80;
+    const h = Array.from(r, b => b.toString(16).padStart(2, "0")).join("");
+    id = `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;
+    try { localStorage.setItem("nee-coaching:leader-id", id); } catch {}
+    return id;
+  }
+  const LEADER_ID = getLeaderId();
+
+  // ===== MEMORY API HELPERS =====
+  async function memoryGet(params) {
+    const qs = new URLSearchParams({ leaderId: LEADER_ID, ...params }).toString();
+    try {
+      const r = await fetch(MEMORY_API_PATH + "?" + qs);
+      if (!r.ok) return null;
+      return await r.json();
+    } catch { return null; }
+  }
+  async function memoryPost(payload) {
+    try {
+      const r = await fetch(MEMORY_API_PATH, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ leaderId: LEADER_ID, ...payload }),
+      });
+      return await r.json();
+    } catch { return null; }
+  }
+  async function saveTmNote({ tmId, tmName, tmRole, franchiseCode, text }) {
+    return memoryPost({ kind: "note", tmId: tmId || "__general__", tmName, tmRole, franchiseCode, text });
+  }
+  async function saveFeedback({ tmId, tmName, question, replyExcerpt, rating, comment }) {
+    return memoryPost({ kind: "feedback", tmId, tmName, question, replyExcerpt, rating, comment });
+  }
+  async function loadTmNotes(tmId) {
+    const r = await memoryGet({ tmId: tmId || "__general__" });
+    return (r && r.notes) || [];
+  }
 
   const SUGGESTED_PROMPTS = [
     "Give me a 60-second 1:1 script.",
@@ -3561,6 +3747,7 @@
           teammate: CHAT_TM,
           history: CHAT_HISTORY.slice(0, -2),  // exclude latest user msg + thinking placeholder
           question: q,
+          leaderId: LEADER_ID,
         }),
       });
       const data = await r.json();
@@ -3884,11 +4071,12 @@
 
     renderRoster();
     renderChatMainThread();
+    renderRickNotesPanel();
 
     const ok = await detectChatApi();
     const foot = document.getElementById('chat-main-foot');
     if (ok) {
-      foot.textContent = 'Powered by Claude. Coach Rick has the full CSL Scenario library + your roster context.';
+      foot.textContent = 'Powered by Claude. Coach Rick has the full CSL Scenario library + your roster + saved notes.';
     } else {
       foot.textContent = 'Free-form chat needs Cloudflare Pages deployment. See worker/DEPLOY.md.';
       input.disabled = true;
@@ -3929,12 +4117,13 @@
 
     renderRoster();
     renderChatMainThread();
+    renderRickNotesPanel();
 
     // Detect API availability
     const ok = await detectChatApi();
     const foot = document.getElementById('chat-main-foot');
     if (ok) {
-      foot.textContent = `Coach Rick has full CSL Scenario library + ${tm.name}'s data. Multi-turn history saved on this device.`;
+      foot.textContent = `Coach Rick has full CSL Scenario library + ${tm.name}'s data + your saved notes. Multi-turn history saved on this device.`;
     } else {
       foot.textContent = 'Free-form chat needs Cloudflare Pages deployment. See worker/DEPLOY.md.';
       input.disabled = true;
@@ -3952,6 +4141,59 @@
     "What are the most common Scenario 1 mistakes?",
     "Give me a culture-building idea I can run this week.",
   ];
+
+  // Render the leader's saved notes about the currently-selected TM (or general)
+  async function renderRickNotesPanel() {
+    const panel = document.getElementById('rick-notes-panel');
+    const list = document.getElementById('rick-notes-list');
+    const target = document.getElementById('rick-notes-target');
+    const count = document.getElementById('rick-notes-count');
+    if (!panel || !list || !target) return;
+
+    target.textContent = CHAT_MAIN_TM ? CHAT_MAIN_TM.name : 'your team';
+    list.innerHTML = '<div class="rick-notes-empty">Loading...</div>';
+
+    const tmId = CHAT_MAIN_TM ? CHAT_MAIN_TM.id : '__general__';
+    const notes = await loadTmNotes(tmId);
+    if (!notes.length) {
+      list.innerHTML = '<div class="rick-notes-empty">No notes yet. Anything you tell Rick here will inform every future answer.</div>';
+      count.textContent = '';
+    } else {
+      // Newest first, max 10 visible
+      const recent = notes.slice(-10).reverse();
+      list.innerHTML = recent.map(n => `
+        <div class="rick-note-item">
+          <span class="rick-note-ts">${escapeHtml((n.ts || '').slice(0, 10))}</span>
+          ${escapeHtml(n.text)}
+        </div>
+      `).join('');
+      count.textContent = `${notes.length} note${notes.length === 1 ? '' : 's'}`;
+    }
+  }
+
+  // Hook the notes form once
+  function initRickNotesForm() {
+    const form = document.getElementById('rick-notes-form');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('rick-notes-input');
+      const text = (input.value || '').trim();
+      if (!text) return;
+      const tmCtx = CHAT_MAIN_TM
+        ? { tmId: CHAT_MAIN_TM.id, tmName: CHAT_MAIN_TM.name, tmRole: CHAT_MAIN_TM.role, franchiseCode: CHAT_MAIN_TM.franchiseCode }
+        : { tmId: '__general__' };
+      const result = await saveTmNote({ ...tmCtx, text });
+      if (result && result.ok) {
+        input.value = '';
+        if (typeof showToast === 'function') showToast('Saved. Rick will remember this.');
+        renderRickNotesPanel();
+      } else if (typeof showToast === 'function') {
+        showToast('Could not save the note. Try again.');
+      }
+    });
+  }
 
   function renderChatMainThread() {
     const thread = document.getElementById('chat-main-thread');
@@ -3986,9 +4228,47 @@
       return;
     }
 
+    // Render messages, with feedback buttons under each Rick reply (bot, not error)
     thread.innerHTML = CHAT_MAIN_HISTORY
-      .map(m => `<div class="chat-msg chat-msg-${m.role === 'user' ? 'user' : (m.role === 'error' ? 'error' : 'bot')}">${escapeHtml(m.text)}</div>`)
+      .map((m, idx) => {
+        const cls = m.role === 'user' ? 'user' : (m.role === 'error' ? 'error' : 'bot');
+        const msg = `<div class="chat-msg chat-msg-${cls}">${escapeHtml(m.text)}</div>`;
+        // Feedback only for committed bot replies (not the "thinking..." placeholder)
+        if (cls !== 'bot' || /thinking\.\.\.$/.test(m.text)) return msg;
+        const upActive = m.feedback === 'up' ? 'active' : '';
+        const downActive = m.feedback === 'down' ? 'active' : '';
+        const saved = m.feedback ? '<span class="chat-feedback-saved">Thanks. Rick uses this to calibrate.</span>' : '';
+        return msg + `
+          <div class="chat-feedback" data-idx="${idx}">
+            <span class="chat-feedback-saved" style="margin-right:4px;">Was this useful?</span>
+            <button type="button" class="chat-feedback-btn up ${upActive}" data-rating="up" title="Helpful">👍</button>
+            <button type="button" class="chat-feedback-btn down ${downActive}" data-rating="down" title="Off-target">👎</button>
+            ${saved}
+          </div>`;
+      })
       .join('');
+
+    // Wire feedback buttons
+    thread.querySelectorAll('.chat-feedback').forEach(wrap => {
+      const idx = parseInt(wrap.dataset.idx, 10);
+      wrap.querySelectorAll('.chat-feedback-btn').forEach(btn => {
+        btn.onclick = async () => {
+          const rating = btn.dataset.rating;
+          const replyMsg = CHAT_MAIN_HISTORY[idx];
+          const userMsg = CHAT_MAIN_HISTORY[idx - 1];
+          if (!replyMsg || !userMsg) return;
+          replyMsg.feedback = rating;
+          renderChatMainThread();
+          await saveFeedback({
+            tmId: CHAT_MAIN_TM ? CHAT_MAIN_TM.id : '__general__',
+            tmName: CHAT_MAIN_TM ? CHAT_MAIN_TM.name : '',
+            question: userMsg.text || '',
+            replyExcerpt: (replyMsg.text || '').slice(0, 200),
+            rating,
+          });
+        };
+      });
+    });
     thread.scrollTop = thread.scrollHeight;
   }
 
@@ -4006,6 +4286,7 @@
     const payload = {
       history: CHAT_MAIN_HISTORY.slice(0, -2),
       question: q,
+      leaderId: LEADER_ID,
     };
     if (CHAT_MAIN_TM) payload.teammate = CHAT_MAIN_TM;
 
@@ -4069,6 +4350,7 @@
 
   // Hook up sidebar controls
   function initChatView() {
+    initRickNotesForm();
     const search = document.getElementById('roster-search');
     if (search) {
       search.addEventListener('input', () => {
