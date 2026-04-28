@@ -216,6 +216,246 @@ const LEADERSHIP_LIBRARY = [
   },
 ];
 
+// ===== THE STANDARD FOR EVERY JOB (NEE Service Delivery Playbook) =====
+// 11-phase customer-experience standard. Imported from the official NEE doc.
+// Coach Rick uses these to diagnose where on a job a teammate is breaking the
+// standard and to give specific, by-phase coaching. The 4 Commercial Service
+// Standards (Efficiency, Communication, Documentation, Professionalism) sit
+// underneath all 11 phases as the categorical lens.
+
+const STANDARD_FOR_EVERY_JOB = {
+  brand_purpose: "Making space for possibility. We're not just removing junk; we're helping people create fresh starts. Every customer interaction is a chance to facilitate someone's transformation.",
+  commercial_standards: [
+    { name: "Efficiency",      def: "Maximize revenue per hour without sacrificing safety or quality. Move with purpose, plan the route, respect the customer's time. Not rushing; deliberate." },
+    { name: "Communication",   def: "Convey value to the customer and set realistic expectations. Nothing is a surprise; everything feels purposeful." },
+    { name: "Documentation",   def: "Operational integrity that protects the franchise. Clear photos, detailed notes, correct payment processing. If it isn't documented, it didn't happen." },
+    { name: "Professionalism", def: "Give the customer confidence we are the experts. They trust us to interact with their customers, employees, and represent their brand." },
+  ],
+  phases: [
+    {
+      n: 1, name: "The Call Ahead",
+      objective: "Set clear expectations, establish professionalism, begin building trust before arrival.",
+      pillars: ["Communication", "Professionalism"],
+      prohibited: [
+        "Discussing or quoting pricing",
+        "Providing exact arrival time unless within 10 minutes",
+        "Monotone, rushed, or transactional tone",
+        "Over-talking or dominating the call",
+        "Loud music or background noise",
+        "Slang or casual language",
+        "Talking over the customer or rushing past their pause",
+        "Ending the call before the customer does",
+        "Skipping the call entirely",
+      ],
+      required: [
+        "Place the call 30 minutes before arrival",
+        "Upbeat, confident, professional tone",
+        "State clearly you are with 1-800-GOT-JUNK?",
+        "Introduce yourself and your partner by name",
+        "Address customer with prefix and last name",
+        "Pause after they speak before responding",
+        "Ask questions to understand their priorities and end goal",
+        "Elaborate on specific items we CAN take",
+        "Provide a 15-minute arrival window",
+        "Communicate immediately if arrival time changes",
+        "Ask their preferred parking spot and how they want to be notified on arrival",
+        "End with a positive, reassuring phrase",
+      ],
+      residential: "Lead with warmth and energy. Build trust and rapport. Clarify the project and identify value drivers.",
+      commercial: "Respect for the business's time. Confirm site access, contact name, arrival logistics. Calm, clear, business-to-business.",
+    },
+    {
+      n: 2, name: "Truck Arrival",
+      objective: "Arrive professionally, controlled, and with intent. The first physical impression.",
+      pillars: ["Professionalism", "Efficiency"],
+      prohibited: [
+        "Backing in without a spotter",
+        "Idling longer than necessary or blocking traffic",
+        "Loud music audible from outside the truck",
+        "Slamming doors, jumping out, frantic energy",
+        "Eating, vaping, or smoking visible to the customer",
+        "Phones in hand on approach",
+        "Showing up dirty or with untucked uniform",
+      ],
+      required: [
+        "Arrive within the 15-minute window",
+        "Park where the customer asked",
+        "Use a spotter for any backing maneuver",
+        "Calm, deliberate exit from the truck",
+        "Clean, complete uniform; both teammates aligned",
+        "Take 30 seconds to reset your headspace before approach",
+      ],
+    },
+    {
+      n: 3, name: "Walk-up and Greeting",
+      objective: "Make a memorable, professional first in-person impression.",
+      pillars: ["Professionalism", "Communication"],
+      prohibited: [
+        "Walking up looking at your phone",
+        "Mumbling, weak handshake, no eye contact",
+        "Using only first names (no Mr./Ms.)",
+        "Asking 'are you the homeowner?' or other transactional openers",
+        "Failing to introduce your partner",
+      ],
+      required: [
+        "Eye contact, smile, firm handshake",
+        "Greet using prefix and last name",
+        "Reintroduce yourself and partner",
+        "Lead with a sincere 'thank you for choosing 1-800-GOT-JUNK?'",
+        "Confirm you have the right time and project",
+      ],
+    },
+    {
+      n: 4, name: "Initial Walk-Through",
+      objective: "Identify all items, surface hidden volume, build a complete picture before the bid.",
+      pillars: ["Communication", "Professionalism"],
+      prohibited: [
+        "Skipping rooms or areas",
+        "Quoting price during the walk-through",
+        "Looking at your phone or distracted",
+        "Disagreeing with the customer about what is junk",
+        "Failing to ask if there is anything else",
+      ],
+      required: [
+        "Lead the walk-through, customer follows",
+        "See every item with your own eyes",
+        "Ask 'is there anything else, even if you're not sure yet?' at every stop",
+        "Identify the customer's true end goal (not just the items)",
+        "Note hazardous, oversized, or special items",
+        "Plant the seed for additional items: closets, attics, basements",
+      ],
+    },
+    {
+      n: 5, name: "The Estimate",
+      objective: "Present a confident, all-inclusive price tied to the value they will receive.",
+      pillars: ["Communication", "Professionalism"],
+      prohibited: [
+        "Mentioning the minimum charge before the truck-load price",
+        "Hedging with 'maybe' or 'probably'",
+        "Quoting before the full walk-through",
+        "Giving a single point estimate when a range fits",
+        "Apologizing for the price",
+      ],
+      required: [
+        "Confidence is everything; memorize the price list",
+        "Lead with the full-truck price first",
+        "Frame the bid in terms of the customer's value keys (Time, Space, Effort)",
+        "Use Plus 1 / Plus 2 ranges when appropriate",
+        "Pair the bid with the Assumptive Ask immediately, no pause",
+        "Paint the picture of the completed project",
+      ],
+    },
+    {
+      n: 6, name: "Preparation, Removal, and Truck Loading",
+      objective: "Move efficiently and safely; protect the customer's property.",
+      pillars: ["Efficiency", "Professionalism"],
+      prohibited: [
+        "Dragging items across floors or carpets",
+        "Stacking the truck loose / disorganized",
+        "Phones out during loading",
+        "Loud or vulgar language",
+        "Skipping floor protection where needed",
+      ],
+      required: [
+        "Lay down floor protection before items move",
+        "Communicate the loading plan to your partner",
+        "Tetris the truck (every cubic foot earns revenue)",
+        "Pace = purpose, not panic",
+        "Update the customer mid-job if anything changes",
+      ],
+    },
+    {
+      n: 7, name: "Cleanup",
+      objective: "Leave the space cleaner than we found it. The detail customers tell their friends about.",
+      pillars: ["Professionalism", "Documentation"],
+      prohibited: [
+        "Leaving debris, dust, scuff marks, or scratches",
+        "Stacking items poorly in adjacent areas",
+        "Skipping the broom",
+      ],
+      required: [
+        "Sweep and broom every area we touched",
+        "Wipe visible dust or marks",
+        "Reset furniture or doors to original positions",
+        "Final visual scan with the customer's eyes",
+      ],
+    },
+    {
+      n: 8, name: "Final Walk-Through",
+      objective: "Confirm satisfaction before pricing the job. Catch any miss before money changes hands.",
+      pillars: ["Communication", "Professionalism"],
+      prohibited: [
+        "Skipping the final walk-through",
+        "Asking 'we good?' instead of inviting real feedback",
+        "Rushing the customer through it",
+      ],
+      required: [
+        "Lead the final walk-through with the customer",
+        "Visit every area we worked in",
+        "Ask: 'Is this the result you were hoping for?'",
+        "Resolve any miss BEFORE pricing the job",
+        "Confirm the project goal was met (not just items removed)",
+      ],
+    },
+    {
+      n: 9, name: "Before and After Photos",
+      objective: "Document the transformation. Protect the franchise. Build marketing assets.",
+      pillars: ["Documentation"],
+      prohibited: [
+        "Skipping photos because the customer 'said it was fine'",
+        "Photos with people, faces, or identifying info without permission",
+        "Blurry, dark, or angled-wrong photos",
+        "Forgetting the after photo after the truck pulls away",
+      ],
+      required: [
+        "Before photo of every space we'll touch",
+        "After photo of every space we touched",
+        "Same angle, same framing, before vs after",
+        "Well-lit, clear, professional",
+        "Upload to the system before leaving the property",
+      ],
+    },
+    {
+      n: 10, name: "Pricing and Payment",
+      objective: "Close the bid cleanly. Collect payment professionally. No surprises.",
+      pillars: ["Communication", "Documentation"],
+      prohibited: [
+        "Apologizing for the price",
+        "Adjusting the bid without supervisor approval",
+        "Failing to itemize what's included",
+        "Letting the customer leave without payment confirmation",
+        "Payment processing errors (skipped fields, wrong amount)",
+      ],
+      required: [
+        "Restate the bid with confidence and the value keys",
+        "Walk through what's included (labor, taxes, donations, recycling, etc.)",
+        "Process payment cleanly on first attempt",
+        "Get signature where required",
+        "Provide a thorough receipt: thank you with team names, detailed item breakdown, fees, discounts. NO 'Standard Junk Removal' line.",
+      ],
+    },
+    {
+      n: 11, name: "Goodbye and Close",
+      objective: "End the experience with a positive, memorable note. Open the door to reviews and referrals.",
+      pillars: ["Communication", "Professionalism"],
+      prohibited: [
+        "Leaving without saying goodbye",
+        "Walking off mid-conversation",
+        "Forgetting the review ask",
+        "Awkward or transactional close ('alright, see ya')",
+      ],
+      required: [
+        "Thank the customer by name",
+        "Confirm everything went well one more time",
+        "Ask for the Google Review specifically and naturally",
+        "Hand them the door hanger / referral coupon",
+        "Walk out with the same energy you walked in with",
+        "Wave goodbye from the truck",
+      ],
+    },
+  ],
+};
+
 const TRAINING_QUOTES = [
   {
     ref: "Scenario 1 Step 4 - Estimate & Price (Rules of the Range)",
@@ -385,6 +625,23 @@ function buildPrompt(tm, history, question) {
   const leadershipLib = LEADERSHIP_LIBRARY
     .map(f => `### ${f.name} (${f.source})\nWhen to use: ${f.use}\n${f.text}`)
     .join('\n\n');
+
+  // The Standard for Every Job - 11-phase service delivery playbook (NEE official)
+  const sfej = STANDARD_FOR_EVERY_JOB;
+  const standardLib =
+    `BRAND PURPOSE: ${sfej.brand_purpose}\n\n` +
+    `THE FOUR COMMERCIAL SERVICE STANDARDS (the lens beneath every phase):\n` +
+    sfej.commercial_standards.map(s => `- ${s.name}: ${s.def}`).join('\n') +
+    `\n\nTHE 11 PHASES OF A JOB (this is the on-site standard - cite phase numbers when ` +
+    `diagnosing where a teammate is breaking down):\n\n` +
+    sfej.phases.map(p =>
+      `Phase ${p.n} - ${p.name} [${p.pillars.join(', ')}]\n` +
+      `Objective: ${p.objective}\n` +
+      `Prohibited: ${p.prohibited.join('; ')}\n` +
+      `Required: ${p.required.join('; ')}` +
+      (p.residential ? `\nResidential: ${p.residential}` : '') +
+      (p.commercial ? `\nCommercial: ${p.commercial}` : '')
+    ).join('\n\n');
   const histBlock = (history && history.length)
     ? '\n\nPRIOR EXCHANGES IN THIS CONVERSATION:\n' +
       history.slice(-8).map(m => `[${(m.role || 'user').toUpperCase()}] ${m.text}`).join('\n\n')
@@ -401,6 +658,10 @@ any other leadership / development topic.)
 
 CSL SCENARIO PLAYBOOK (cite exact step numbers when relevant - this is the team's actual training)
 ${trainingLib}
+
+THE STANDARD FOR EVERY JOB (NEE service delivery playbook; cite phase numbers like "Phase 5 - The
+Estimate" when diagnosing where a teammate is breaking the standard)
+${standardLib}
 
 LEADERSHIP WISDOM (use these IDEAS, in plain words. NEVER say the framework name or the author.
 Strip the academic shell. Keep the truth underneath.)
@@ -456,6 +717,10 @@ ${anchorBlock}
 
 CSL SCENARIO PLAYBOOK (cite exact step numbers when relevant - the team's actual training)
 ${trainingLib}
+
+THE STANDARD FOR EVERY JOB (NEE service delivery playbook; cite phase numbers like "Phase 5 - The
+Estimate" when diagnosing where this teammate is breaking the standard)
+${standardLib}
 
 LEADERSHIP WISDOM (use these IDEAS, in plain words. NEVER say a framework name or an author's
 name. Strip the academic shell. Keep the truth underneath.)
