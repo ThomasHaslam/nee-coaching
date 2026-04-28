@@ -1,0 +1,77 @@
+name: Coach Rick · Autonomous Improvement
+
+# Runs after the daily data refresh. Rick reviews accumulated feedback + notes and
+# proposes 0-3 small improvements. Every change passes a validation gauntlet pre-commit
+# and a smoke test post-deploy. Failures auto-revert.
+#
+# KILL SWITCH: set the repo variable COACH_RICK_AUTONOMY=on to enable.
+# Anything else (or unset) makes the script exit cleanly without changes.
+
+on:
+  # Weekdays at 6:30am ET (10:30 UTC during daylight saving) - 90 min after the data refresh
+  schedule:
+    - cron: "30 10 * * 1-5"
+  # Manual trigger from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Hard limit: only one autonomous run at a time, never overlap with the data refresh
+concurrency:
+  group: site-mutations
+  cancel-in-progress: false
+
+jobs:
+  rick-improve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # need history for revert
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node (for syntax checks)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run autonomous improvement
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL || 'claude-haiku-4-5-20251001' }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Kill switch: must equal "on" for the script to do anything.
+          COACH_RICK_AUTONOMY: ${{ vars.COACH_RICK_AUTONOMY || 'off' }}
+        run: |
+          set -e
+          echo "Autonomy mode: $COACH_RICK_AUTONOMY"
+          python scripts/rick_autonomous.py
+
+      - name: Deploy to Cloudflare Pages (if changes were made)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::warning::Cloudflare secrets not set - skipping Pages deploy"
+            exit 0
+          fi
+          # Only deploy if HEAD commit author is rick-bot (i.e. Rick made changes this run)
+          if git log -1 --format='%an' | grep -q "coach-rick-bot"; then
+            npx -y wrangler@latest pages deploy . \
+              --project-name=nee-coaching \
+              --branch=main \
+              --commit-dirty=true
+          else
+            echo "No Rick commits on HEAD; skipping deploy."
+          fi

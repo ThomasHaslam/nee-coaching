@@ -409,6 +409,124 @@
     overflow: hidden;
     transition: border-color 0.2s ease;
   }
+
+  /* ===== RICK'S AUTONOMOUS IMPROVEMENT LOG ===== */
+  .rick-log-panel {
+    margin: 0 auto 16px auto;
+    background:
+      radial-gradient(120% 200% at 100% 0%, rgba(167,139,250,0.10), transparent 55%),
+      linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+    border: 1px solid rgba(167,139,250,0.32);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .rick-log-panel summary {
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .rick-log-panel summary::-webkit-details-marker { display: none; }
+  .rick-log-icon { font-size: 20px; }
+  .rick-log-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--violet-bright);
+  }
+  .rick-log-count {
+    flex: 1;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .rick-log-toggle {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+  }
+  .rick-log-panel[open] .rick-log-toggle { display: none; }
+  .rick-log-body {
+    padding: 0 22px 18px 22px;
+    border-top: 1px solid var(--border);
+  }
+  .rick-log-intro {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+    max-width: 80ch;
+  }
+  .rick-log-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .rick-log-entry {
+    background: rgba(167,139,250,0.05);
+    border: 1px solid rgba(167,139,250,0.18);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+  .rick-log-entry-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .rick-log-entry-summary {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+  .rick-log-entry-status {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  .rick-log-entry-status.applied        { background: rgba(52,211,153,0.16); color: var(--done); }
+  .rick-log-entry-status.no_changes     { background: rgba(255,255,255,0.06); color: var(--text-dim); }
+  .rick-log-entry-status.no_proposal    { background: rgba(255,255,255,0.06); color: var(--text-dim); }
+  .rick-log-entry-status.all_rejected   { background: rgba(245,158,11,0.16); color: var(--high); }
+  .rick-log-entry-status.validator_failed { background: rgba(239,68,68,0.16); color: var(--urgent); }
+  .rick-log-entry-status.auto_reverted  { background: rgba(239,68,68,0.16); color: var(--urgent); }
+  .rick-log-entry-status.rejected_budget { background: rgba(245,158,11,0.16); color: var(--high); }
+  .rick-log-entry-rationale {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  .rick-log-entry-edits {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+  .rick-log-entry-ts {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .rick-log-empty {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+    padding: 20px 0;
+    text-align: center;
+  }
   .huddle-brief[hidden] { display: none; }
   .huddle-brief[open] { border-color: rgba(96,165,250,0.55); }
   .huddle-brief summary {
@@ -2612,6 +2730,23 @@
     <ol class="top5-region-list" id="top5-region-list"></ol>
   </section>
 
+  <details class="rick-log-panel" id="rick-log-panel">
+    <summary>
+      <span class="rick-log-icon">🤖</span>
+      <span class="rick-log-title">Coach Rick · Autonomous Improvement Log</span>
+      <span class="rick-log-count" id="rick-log-count"></span>
+      <span class="rick-log-toggle">tap to read</span>
+    </summary>
+    <div class="rick-log-body" id="rick-log-body">
+      <div class="rick-log-intro">
+        Each morning Rick reviews accumulated leader feedback, your saved notes, and his own past changes,
+        then makes 0-3 small improvements to the site. Every change passes a validation gauntlet before
+        commit and a smoke test after deploy. Anything that fails either gauntlet auto-reverts.
+      </div>
+      <div class="rick-log-list" id="rick-log-list">Loading...</div>
+    </div>
+  </details>
+
   <details class="huddle-brief" id="huddle-brief" hidden>
     <summary>
       <span class="huddle-brief-icon">📣</span>
@@ -3860,6 +3995,42 @@
   }
 
   // ===== HUDDLE BRIEF RENDER =====
+  // Renders Coach Rick's autonomous improvement log. Reads scripts/rick_improvement_log.json
+  // (committed by the autonomous workflow each run) and shows the last ~10 entries.
+  async function renderRickLog() {
+    const list = document.getElementById('rick-log-list');
+    const count = document.getElementById('rick-log-count');
+    if (!list) return;
+    let entries = [];
+    try {
+      const r = await fetch('scripts/rick_improvement_log.json', { cache: 'no-store' });
+      if (r.ok) entries = await r.json();
+    } catch {}
+    if (!Array.isArray(entries) || entries.length === 0) {
+      list.innerHTML = '<div class="rick-log-empty">No autonomous changes yet. Rick runs daily once enabled.</div>';
+      if (count) count.textContent = '';
+      return;
+    }
+    if (count) count.textContent = entries.length + ' run' + (entries.length === 1 ? '' : 's');
+    const recent = entries.slice(-10).reverse();
+    list.innerHTML = recent.map(e => {
+      const ts = (e.started || '').slice(0, 10);
+      const status = (e.status || 'unknown').replace(/_/g, ' ');
+      const editsHtml = (e.edits || []).map(ed =>
+        '<div>↳ <strong>' + escapeHtml(ed.file || '') + '</strong>: ' + escapeHtml(ed.why || '') + '</div>'
+      ).join('');
+      return `<div class="rick-log-entry">
+        <div class="rick-log-entry-head">
+          <div class="rick-log-entry-summary">${escapeHtml(e.summary || '(no summary)')}</div>
+          <span class="rick-log-entry-status ${escapeHtml(e.status || '')}">${escapeHtml(status)}</span>
+        </div>
+        ${e.rationale ? `<div class="rick-log-entry-rationale">${escapeHtml(e.rationale)}</div>` : ''}
+        ${editsHtml ? `<div class="rick-log-entry-edits">${editsHtml}</div>` : ''}
+        <div class="rick-log-entry-ts">${escapeHtml(ts)}</div>
+      </div>`;
+    }).join('');
+  }
+
   function renderHuddleBrief() {
     const el = document.getElementById('huddle-brief');
     if (!HUDDLE_BRIEF || !HUDDLE_BRIEF.headline) { el.hidden = true; return; }
@@ -4506,6 +4677,7 @@
   safeCall('renderMotivationalMessage', renderMotivationalMessage);
   safeCall('renderTop5Regional',     renderTop5Regional);
   safeCall('renderHuddleBrief',      renderHuddleBrief);
+  safeCall('renderRickLog',          renderRickLog);
   safeCall('initChatView',           initChatView);
   safeCall('applyRoute',             applyRoute);
 
