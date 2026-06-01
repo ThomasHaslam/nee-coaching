@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-29T12:20:23Z",
+  "updated": "2026-06-01T15:05:16Z",
   "teammates": [
     {
       "id": "roster-ct-Kenneth-Johnson",
@@ -21,7 +21,7 @@
         },
         {
           "l": "Complaints",
-          "v": "6.70%",
+          "v": "2.10%",
           "c": "bad"
         },
         {
@@ -37,48 +37,13 @@
       ]
     },
     {
-      "id": "roster-bso-Alberto-Cedeno",
-      "franchiseCode": "bso",
-      "name": "Alberto Cedeno",
-      "role": "CEL",
-      "score": 20,
-      "tier": "urgent",
-      "resiJobs": 54,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "20/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$688",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "80%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "24.1%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
       "id": "roster-bso-George-Tompkins",
       "franchiseCode": "bso",
       "name": "George Tompkins",
       "role": "CEL",
       "score": 20,
       "tier": "urgent",
-      "resiJobs": 20,
+      "resiJobs": 25,
       "metrics": [
         {
           "l": "Score",
@@ -86,112 +51,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$684",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "75%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "15.0%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Felix-Cadet",
-      "franchiseCode": "bso",
-      "name": "Felix Cadet",
-      "role": "CEL",
-      "score": 20,
-      "tier": "urgent",
-      "resiJobs": 15,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "20/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$660",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "67%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "13.3%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Dylan-McCue",
-      "franchiseCode": "bso",
-      "name": "Dylan McCue",
-      "role": "CEL",
-      "score": 20,
-      "tier": "urgent",
-      "resiJobs": 71,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "20/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$623",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "75%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "21.1%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Patrik-Chan-Jr",
-      "franchiseCode": "bso",
-      "name": "Patrik Chan Jr",
-      "role": "CEL",
-      "score": 20,
-      "tier": "urgent",
-      "resiJobs": 38,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "20/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$562",
+          "v": "$702",
           "c": "bad"
         },
         {
@@ -206,7 +66,112 @@
         },
         {
           "l": "Reviews",
-          "v": "23.7%",
+          "v": "16.0%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Dylan-McCue",
+      "franchiseCode": "bso",
+      "name": "Dylan McCue",
+      "role": "CEL",
+      "score": 20,
+      "tier": "urgent",
+      "resiJobs": 73,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "20/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$641",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "75%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "20.6%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Felix-Cadet",
+      "franchiseCode": "bso",
+      "name": "Felix Cadet",
+      "role": "CEL",
+      "score": 20,
+      "tier": "urgent",
+      "resiJobs": 21,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "20/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$607",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "78%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "19.1%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Edward-Marroquin",
+      "franchiseCode": "bso",
+      "name": "Edward Marroquin",
+      "role": "CSL",
+      "score": 20,
+      "tier": "urgent",
+      "resiJobs": 74,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "20/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$704",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "80%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "23.0%",
           "c": "bad"
         }
       ]
@@ -218,7 +183,7 @@
       "role": "CSL",
       "score": 20,
       "tier": "urgent",
-      "resiJobs": 76,
+      "resiJobs": 83,
       "metrics": [
         {
           "l": "Score",
@@ -226,7 +191,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$564",
+          "v": "$555",
           "c": "bad"
         },
         {
@@ -241,7 +206,7 @@
         },
         {
           "l": "Reviews",
-          "v": "21.1%",
+          "v": "19.3%",
           "c": "bad"
         }
       ]
@@ -323,7 +288,7 @@
       "role": "CSL",
       "score": 20,
       "tier": "urgent",
-      "resiJobs": 47,
+      "resiJobs": 58,
       "metrics": [
         {
           "l": "Score",
@@ -331,7 +296,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$511",
+          "v": "$507",
           "c": "bad"
         },
         {
@@ -346,43 +311,8 @@
         },
         {
           "l": "Reviews",
-          "v": "19.1%",
+          "v": "15.5%",
           "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Byron-Goforth",
-      "franchiseCode": "ct",
-      "name": "Byron Goforth",
-      "role": "CSL",
-      "score": 30,
-      "tier": "urgent",
-      "resiJobs": 62,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "30/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$617",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "1.40%",
-          "c": "bad"
-        },
-        {
-          "l": "NPS",
-          "v": "95%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "32.3%",
-          "c": "good"
         }
       ]
     },
@@ -393,7 +323,7 @@
       "role": "CSL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 50,
+      "resiJobs": 53,
       "metrics": [
         {
           "l": "Score",
@@ -401,7 +331,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$668",
+          "v": "$676",
           "c": "bad"
         },
         {
@@ -416,19 +346,19 @@
         },
         {
           "l": "Reviews",
-          "v": "20.0%",
+          "v": "20.8%",
           "c": "bad"
         }
       ]
     },
     {
-      "id": "roster-bno-Ashawda-Nelson",
+      "id": "roster-bno-Carlos-Rivera",
       "franchiseCode": "bno",
-      "name": "Ashawda Nelson",
+      "name": "Carlos Rivera",
       "role": "CSL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 41,
+      "resiJobs": 44,
       "metrics": [
         {
           "l": "Score",
@@ -436,42 +366,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$642",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "19.5%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bno-Kervantz-Justine",
-      "franchiseCode": "bno",
-      "name": "Kervantz Justine",
-      "role": "CSL",
-      "score": 35,
-      "tier": "urgent",
-      "resiJobs": 35,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "35/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$637",
+          "v": "$657",
           "c": "bad"
         },
         {
@@ -487,6 +382,76 @@
         {
           "l": "Reviews",
           "v": "11.4%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bno-Ashawda-Nelson",
+      "franchiseCode": "bno",
+      "name": "Ashawda Nelson",
+      "role": "CSL",
+      "score": 35,
+      "tier": "urgent",
+      "resiJobs": 43,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "35/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$648",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "18.6%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bno-Kervantz-Justine",
+      "franchiseCode": "bno",
+      "name": "Kervantz Justine",
+      "role": "CSL",
+      "score": 35,
+      "tier": "urgent",
+      "resiJobs": 39,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "35/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$638",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "10.3%",
           "c": "bad"
         }
       ]
@@ -522,41 +487,6 @@
         {
           "l": "Reviews",
           "v": "13.0%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bno-Carlos-Rivera",
-      "franchiseCode": "bno",
-      "name": "Carlos Rivera",
-      "role": "CSL",
-      "score": 35,
-      "tier": "urgent",
-      "resiJobs": 40,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "35/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$627",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "12.5%",
           "c": "bad"
         }
       ]
@@ -603,7 +533,7 @@
       "role": "CSL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 42,
+      "resiJobs": 56,
       "metrics": [
         {
           "l": "Score",
@@ -611,7 +541,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$550",
+          "v": "$560",
           "c": "bad"
         },
         {
@@ -626,42 +556,7 @@
         },
         {
           "l": "Reviews",
-          "v": "16.7%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bno-Timothy-Blanchette",
-      "franchiseCode": "bno",
-      "name": "Timothy Blanchette",
-      "role": "CSL",
-      "score": 35,
-      "tier": "urgent",
-      "resiJobs": 46,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "35/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$498",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "15.2%",
+          "v": "19.6%",
           "c": "bad"
         }
       ]
@@ -673,7 +568,7 @@
       "role": "CSL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 48,
+      "resiJobs": 53,
       "metrics": [
         {
           "l": "Score",
@@ -681,7 +576,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$496",
+          "v": "$514",
           "c": "bad"
         },
         {
@@ -696,7 +591,42 @@
         },
         {
           "l": "Reviews",
-          "v": "18.8%",
+          "v": "20.8%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bno-Timothy-Blanchette",
+      "franchiseCode": "bno",
+      "name": "Timothy Blanchette",
+      "role": "CSL",
+      "score": 35,
+      "tier": "urgent",
+      "resiJobs": 54,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "35/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$488",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "14.8%",
           "c": "bad"
         }
       ]
@@ -778,7 +708,7 @@
       "role": "CEL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 57,
+      "resiJobs": 64,
       "metrics": [
         {
           "l": "Score",
@@ -786,7 +716,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$680",
+          "v": "$691",
           "c": "bad"
         },
         {
@@ -801,7 +731,7 @@
         },
         {
           "l": "Reviews",
-          "v": "19.3%",
+          "v": "18.8%",
           "c": "bad"
         }
       ]
@@ -842,13 +772,13 @@
       ]
     },
     {
-      "id": "roster-bso-Justin-O'Keeffe",
+      "id": "roster-bso-Alberto-Cedeno",
       "franchiseCode": "bso",
-      "name": "Justin O'Keeffe",
+      "name": "Alberto Cedeno",
       "role": "CEL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 22,
+      "resiJobs": 60,
       "metrics": [
         {
           "l": "Score",
@@ -856,77 +786,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$654",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "50%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "31.8%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Joan-Aponte",
-      "franchiseCode": "bso",
-      "name": "Joan Aponte",
-      "role": "CEL",
-      "score": 35,
-      "tier": "urgent",
-      "resiJobs": 23,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "35/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$649",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "17.4%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Jeffrey-Veras-Jr",
-      "franchiseCode": "bso",
-      "name": "Jeffrey Veras Jr",
-      "role": "CEL",
-      "score": 35,
-      "tier": "urgent",
-      "resiJobs": 67,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "35/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$637",
+          "v": "$669",
           "c": "bad"
         },
         {
@@ -941,7 +801,112 @@
         },
         {
           "l": "Reviews",
-          "v": "25.4%",
+          "v": "25.0%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Joan-Aponte",
+      "franchiseCode": "bso",
+      "name": "Joan Aponte",
+      "role": "CEL",
+      "score": 35,
+      "tier": "urgent",
+      "resiJobs": 30,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "35/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$650",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "20.0%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Shayne-Kerpash",
+      "franchiseCode": "bso",
+      "name": "Shayne Kerpash",
+      "role": "CEL",
+      "score": 35,
+      "tier": "urgent",
+      "resiJobs": 45,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "35/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$644",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "13.3%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Jeffrey-Veras-Jr",
+      "franchiseCode": "bso",
+      "name": "Jeffrey Veras Jr",
+      "role": "CEL",
+      "score": 35,
+      "tier": "urgent",
+      "resiJobs": 77,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "35/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$641",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "77%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "26.0%",
           "c": "good"
         }
       ]
@@ -1017,41 +982,6 @@
       ]
     },
     {
-      "id": "roster-bso-Shayne-Kerpash",
-      "franchiseCode": "bso",
-      "name": "Shayne Kerpash",
-      "role": "CEL",
-      "score": 35,
-      "tier": "urgent",
-      "resiJobs": 39,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "35/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$617",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "12.8%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
       "id": "roster-bso-Aaron-Coletti",
       "franchiseCode": "bso",
       "name": "Aaron Coletti",
@@ -1087,13 +1017,13 @@
       ]
     },
     {
-      "id": "roster-bso-Scott-Bowen",
+      "id": "roster-bso-Woody-Fanfan",
       "franchiseCode": "bso",
-      "name": "Scott Bowen",
+      "name": "Woody Fanfan",
       "role": "CEL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 70,
+      "resiJobs": 74,
       "metrics": [
         {
           "l": "Score",
@@ -1101,7 +1031,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$574",
+          "v": "$588",
           "c": "bad"
         },
         {
@@ -1116,7 +1046,42 @@
         },
         {
           "l": "Reviews",
-          "v": "10.0%",
+          "v": "24.3%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Scott-Bowen",
+      "franchiseCode": "bso",
+      "name": "Scott Bowen",
+      "role": "CEL",
+      "score": 35,
+      "tier": "urgent",
+      "resiJobs": 80,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "35/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$579",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "12.5%",
           "c": "bad"
         }
       ]
@@ -1157,13 +1122,83 @@
       ]
     },
     {
+      "id": "roster-bso-Patrik-Chan-Jr",
+      "franchiseCode": "bso",
+      "name": "Patrik Chan Jr",
+      "role": "CEL",
+      "score": 35,
+      "tier": "urgent",
+      "resiJobs": 43,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "35/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$556",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "83%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "25.6%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Nicholas-Becker",
+      "franchiseCode": "bso",
+      "name": "Nicholas Becker",
+      "role": "CEL",
+      "score": 35,
+      "tier": "urgent",
+      "resiJobs": 34,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "35/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$459",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "20.6%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
       "id": "roster-bso-Walton-Davis-Jr.",
       "franchiseCode": "bso",
       "name": "Walton Davis Jr.",
       "role": "CEL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 29,
+      "resiJobs": 35,
       "metrics": [
         {
           "l": "Score",
@@ -1171,7 +1206,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$393",
+          "v": "$415",
           "c": "bad"
         },
         {
@@ -1186,42 +1221,7 @@
         },
         {
           "l": "Reviews",
-          "v": "10.3%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Francisco-Patzan",
-      "franchiseCode": "bso",
-      "name": "Francisco Patzan",
-      "role": "CSL",
-      "score": 35,
-      "tier": "urgent",
-      "resiJobs": 50,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "35/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$722",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "12.0%",
+          "v": "11.4%",
           "c": "bad"
         }
       ]
@@ -1233,7 +1233,7 @@
       "role": "CSL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 63,
+      "resiJobs": 71,
       "metrics": [
         {
           "l": "Score",
@@ -1241,7 +1241,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$716",
+          "v": "$711",
           "c": "bad"
         },
         {
@@ -1256,7 +1256,7 @@
         },
         {
           "l": "Reviews",
-          "v": "12.7%",
+          "v": "15.5%",
           "c": "bad"
         }
       ]
@@ -1268,7 +1268,7 @@
       "role": "CSL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 90,
+      "resiJobs": 101,
       "metrics": [
         {
           "l": "Score",
@@ -1276,7 +1276,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$692",
+          "v": "$679",
           "c": "bad"
         },
         {
@@ -1291,7 +1291,7 @@
         },
         {
           "l": "Reviews",
-          "v": "15.6%",
+          "v": "15.8%",
           "c": "bad"
         }
       ]
@@ -1303,7 +1303,7 @@
       "role": "CSL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 48,
+      "resiJobs": 50,
       "metrics": [
         {
           "l": "Score",
@@ -1311,7 +1311,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$549",
+          "v": "$597",
           "c": "bad"
         },
         {
@@ -1326,7 +1326,7 @@
         },
         {
           "l": "Reviews",
-          "v": "18.8%",
+          "v": "20.0%",
           "c": "bad"
         }
       ]
@@ -1408,7 +1408,7 @@
       "role": "CSL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 69,
+      "resiJobs": 83,
       "metrics": [
         {
           "l": "Score",
@@ -1416,7 +1416,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$571",
+          "v": "$591",
           "c": "bad"
         },
         {
@@ -1431,112 +1431,7 @@
         },
         {
           "l": "Reviews",
-          "v": "18.8%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Zion-Berrios",
-      "franchiseCode": "ct",
-      "name": "Zion Berrios",
-      "role": "CEL",
-      "score": 35,
-      "tier": "urgent",
-      "resiJobs": 15,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "35/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$607",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "13.3%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Jonathan-Escobar",
-      "franchiseCode": "ct",
-      "name": "Jonathan Escobar",
-      "role": "CEL",
-      "score": 35,
-      "tier": "urgent",
-      "resiJobs": 44,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "35/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$542",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "22.7%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Mark-Nadhazi",
-      "franchiseCode": "ct",
-      "name": "Mark Nadhazi",
-      "role": "CEL",
-      "score": 35,
-      "tier": "urgent",
-      "resiJobs": 18,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "35/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$540",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "22.2%",
+          "v": "21.7%",
           "c": "bad"
         }
       ]
@@ -1548,7 +1443,7 @@
       "role": "CEL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 14,
+      "resiJobs": 18,
       "metrics": [
         {
           "l": "Score",
@@ -1556,7 +1451,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$517",
+          "v": "$597",
           "c": "bad"
         },
         {
@@ -1571,19 +1466,19 @@
         },
         {
           "l": "Reviews",
-          "v": "50.0%",
+          "v": "38.9%",
           "c": "good"
         }
       ]
     },
     {
-      "id": "roster-ct-Emmanuel-Iyke",
+      "id": "roster-ct-Jonathan-Escobar",
       "franchiseCode": "ct",
-      "name": "Emmanuel Iyke",
-      "role": "CSL",
+      "name": "Jonathan Escobar",
+      "role": "CEL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 73,
+      "resiJobs": 50,
       "metrics": [
         {
           "l": "Score",
@@ -1591,7 +1486,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$588",
+          "v": "$583",
           "c": "bad"
         },
         {
@@ -1606,19 +1501,19 @@
         },
         {
           "l": "Reviews",
-          "v": "21.9%",
+          "v": "20.0%",
           "c": "bad"
         }
       ]
     },
     {
-      "id": "roster-ct-Rashaan-McRae",
+      "id": "roster-ct-Zion-Berrios",
       "franchiseCode": "ct",
-      "name": "Rashaan McRae",
-      "role": "CSL",
+      "name": "Zion Berrios",
+      "role": "CEL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 32,
+      "resiJobs": 20,
       "metrics": [
         {
           "l": "Score",
@@ -1626,7 +1521,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$527",
+          "v": "$562",
           "c": "bad"
         },
         {
@@ -1641,7 +1536,7 @@
         },
         {
           "l": "Reviews",
-          "v": "15.6%",
+          "v": "10.0%",
           "c": "bad"
         }
       ]
@@ -1653,7 +1548,7 @@
       "role": "CSL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 57,
+      "resiJobs": 62,
       "metrics": [
         {
           "l": "Score",
@@ -1676,7 +1571,42 @@
         },
         {
           "l": "Reviews",
-          "v": "21.1%",
+          "v": "19.4%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Rashaan-McRae",
+      "franchiseCode": "ct",
+      "name": "Rashaan McRae",
+      "role": "CSL",
+      "score": 35,
+      "tier": "urgent",
+      "resiJobs": 42,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "35/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$488",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "21.4%",
           "c": "bad"
         }
       ]
@@ -1723,7 +1653,7 @@
       "role": "CSL",
       "score": 35,
       "tier": "urgent",
-      "resiJobs": 85,
+      "resiJobs": 90,
       "metrics": [
         {
           "l": "Score",
@@ -1731,7 +1661,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$484",
+          "v": "$481",
           "c": "bad"
         },
         {
@@ -1741,12 +1671,12 @@
         },
         {
           "l": "NPS",
-          "v": "92%",
+          "v": "93%",
           "c": "good"
         },
         {
           "l": "Reviews",
-          "v": "16.5%",
+          "v": "15.6%",
           "c": "bad"
         }
       ]
@@ -1823,7 +1753,7 @@
       "role": "CSL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 62,
+      "resiJobs": 64,
       "metrics": [
         {
           "l": "Score",
@@ -1831,7 +1761,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$678",
+          "v": "$693",
           "c": "bad"
         },
         {
@@ -1846,7 +1776,7 @@
         },
         {
           "l": "Reviews",
-          "v": "25.8%",
+          "v": "26.6%",
           "c": "good"
         }
       ]
@@ -1858,7 +1788,7 @@
       "role": "CSL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 67,
+      "resiJobs": 74,
       "metrics": [
         {
           "l": "Score",
@@ -1866,7 +1796,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$445",
+          "v": "$471",
           "c": "bad"
         },
         {
@@ -1881,19 +1811,19 @@
         },
         {
           "l": "Reviews",
-          "v": "26.9%",
+          "v": "25.7%",
           "c": "good"
         }
       ]
     },
     {
-      "id": "roster-bso-Lawrence-Benton",
+      "id": "roster-bso-Kevin-Becker",
       "franchiseCode": "bso",
-      "name": "Lawrence Benton",
+      "name": "Kevin Becker",
       "role": "CEL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 67,
+      "resiJobs": 21,
       "metrics": [
         {
           "l": "Score",
@@ -1901,7 +1831,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$701",
+          "v": "$710",
           "c": "bad"
         },
         {
@@ -1911,12 +1841,47 @@
         },
         {
           "l": "NPS",
-          "v": "91%",
+          "v": "100%",
           "c": "good"
         },
         {
           "l": "Reviews",
-          "v": "26.9%",
+          "v": "38.1%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Aramis-Aviles-Aponte",
+      "franchiseCode": "bso",
+      "name": "Aramis Aviles Aponte",
+      "role": "CEL",
+      "score": 50,
+      "tier": "urgent",
+      "resiJobs": 37,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "50/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$697",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "32.4%",
           "c": "good"
         }
       ]
@@ -1957,6 +1922,76 @@
       ]
     },
     {
+      "id": "roster-bso-Lawrence-Benton",
+      "franchiseCode": "bso",
+      "name": "Lawrence Benton",
+      "role": "CEL",
+      "score": 50,
+      "tier": "urgent",
+      "resiJobs": 77,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "50/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$675",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "91%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "27.3%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Rayner-Rodriguez",
+      "franchiseCode": "bso",
+      "name": "Rayner Rodriguez",
+      "role": "CEL",
+      "score": 50,
+      "tier": "urgent",
+      "resiJobs": 67,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "50/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$671",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "35.8%",
+          "c": "good"
+        }
+      ]
+    },
+    {
       "id": "roster-bso-Leonard-Mota-Ovalles",
       "franchiseCode": "bso",
       "name": "Leonard Mota Ovalles",
@@ -1987,41 +2022,6 @@
         {
           "l": "Reviews",
           "v": "35.9%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Darion-Carrion",
-      "franchiseCode": "bso",
-      "name": "Darion Carrion",
-      "role": "CEL",
-      "score": 50,
-      "tier": "urgent",
-      "resiJobs": 40,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "50/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$645",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "93%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "80.0%",
           "c": "good"
         }
       ]
@@ -2068,6 +2068,41 @@
       "role": "CEL",
       "score": 50,
       "tier": "urgent",
+      "resiJobs": 50,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "50/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$638",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "48.0%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Darion-Carrion",
+      "franchiseCode": "bso",
+      "name": "Darion Carrion",
+      "role": "CEL",
+      "score": 50,
+      "tier": "urgent",
       "resiJobs": 45,
       "metrics": [
         {
@@ -2076,7 +2111,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$636",
+          "v": "$635",
           "c": "bad"
         },
         {
@@ -2086,117 +2121,12 @@
         },
         {
           "l": "NPS",
-          "v": "100%",
+          "v": "95%",
           "c": "good"
         },
         {
           "l": "Reviews",
-          "v": "53.3%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Rayner-Rodriguez",
-      "franchiseCode": "bso",
-      "name": "Rayner Rodriguez",
-      "role": "CEL",
-      "score": 50,
-      "tier": "urgent",
-      "resiJobs": 63,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "50/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$618",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "36.5%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Logan-Ballou",
-      "franchiseCode": "bso",
-      "name": "Logan Ballou",
-      "role": "CEL",
-      "score": 50,
-      "tier": "urgent",
-      "resiJobs": 52,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "50/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$604",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "30.8%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Woody-Fanfan",
-      "franchiseCode": "bso",
-      "name": "Woody Fanfan",
-      "role": "CEL",
-      "score": 50,
-      "tier": "urgent",
-      "resiJobs": 72,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "50/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$593",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "25.0%",
+          "v": "77.8%",
           "c": "good"
         }
       ]
@@ -2208,7 +2138,7 @@
       "role": "CEL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 37,
+      "resiJobs": 50,
       "metrics": [
         {
           "l": "Score",
@@ -2216,7 +2146,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$549",
+          "v": "$555",
           "c": "bad"
         },
         {
@@ -2231,77 +2161,7 @@
         },
         {
           "l": "Reviews",
-          "v": "48.6%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Aramis-Aviles-Aponte",
-      "franchiseCode": "bso",
-      "name": "Aramis Aviles Aponte",
-      "role": "CEL",
-      "score": 50,
-      "tier": "urgent",
-      "resiJobs": 33,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "50/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$536",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "33.3%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Nicholas-Becker",
-      "franchiseCode": "bso",
-      "name": "Nicholas Becker",
-      "role": "CEL",
-      "score": 50,
-      "tier": "urgent",
-      "resiJobs": 28,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "50/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$461",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "25.0%",
+          "v": "42.0%",
           "c": "good"
         }
       ]
@@ -2313,7 +2173,7 @@
       "role": "CSL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 47,
+      "resiJobs": 49,
       "metrics": [
         {
           "l": "Score",
@@ -2321,7 +2181,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$690",
+          "v": "$681",
           "c": "bad"
         },
         {
@@ -2336,7 +2196,7 @@
         },
         {
           "l": "Reviews",
-          "v": "36.2%",
+          "v": "34.7%",
           "c": "good"
         }
       ]
@@ -2412,13 +2272,13 @@
       ]
     },
     {
-      "id": "roster-ct-Jermaine-Higgs",
+      "id": "roster-ct-Jordan-Oneil",
       "franchiseCode": "ct",
-      "name": "Jermaine Higgs",
+      "name": "Jordan Oneil",
       "role": "CEL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 62,
+      "resiJobs": 69,
       "metrics": [
         {
           "l": "Score",
@@ -2426,34 +2286,34 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$944",
-          "c": "good"
+          "v": "$616",
+          "c": "bad"
         },
         {
           "l": "Complaints",
-          "v": "1.50%",
-          "c": "bad"
+          "v": "0.00%",
+          "c": "good"
         },
         {
           "l": "NPS",
-          "v": "80%",
-          "c": "bad"
+          "v": "94%",
+          "c": "good"
         },
         {
           "l": "Reviews",
-          "v": "19.4%",
-          "c": "bad"
+          "v": "29.0%",
+          "c": "good"
         }
       ]
     },
     {
-      "id": "roster-ct-Yousef-Boukraya",
+      "id": "roster-ct-Adrian-phillip",
       "franchiseCode": "ct",
-      "name": "Yousef Boukraya",
+      "name": "Adrian phillip",
       "role": "CEL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 74,
+      "resiJobs": 57,
       "metrics": [
         {
           "l": "Score",
@@ -2461,7 +2321,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$560",
+          "v": "$565",
           "c": "bad"
         },
         {
@@ -2476,19 +2336,19 @@
         },
         {
           "l": "Reviews",
-          "v": "33.8%",
+          "v": "33.3%",
           "c": "good"
         }
       ]
     },
     {
-      "id": "roster-ct-Adrian-phillip",
+      "id": "roster-ct-Yousef-Boukraya",
       "franchiseCode": "ct",
-      "name": "Adrian phillip",
+      "name": "Yousef Boukraya",
       "role": "CEL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 56,
+      "resiJobs": 79,
       "metrics": [
         {
           "l": "Score",
@@ -2511,42 +2371,7 @@
         },
         {
           "l": "Reviews",
-          "v": "33.9%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Zachary-Hulevitch",
-      "franchiseCode": "ct",
-      "name": "Zachary Hulevitch",
-      "role": "CEL",
-      "score": 50,
-      "tier": "urgent",
-      "resiJobs": 12,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "50/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$487",
-          "c": "bad"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "33.3%",
+          "v": "35.4%",
           "c": "good"
         }
       ]
@@ -2558,7 +2383,7 @@
       "role": "CEL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 64,
+      "resiJobs": 68,
       "metrics": [
         {
           "l": "Score",
@@ -2566,7 +2391,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$480",
+          "v": "$507",
           "c": "bad"
         },
         {
@@ -2581,7 +2406,42 @@
         },
         {
           "l": "Reviews",
-          "v": "34.4%",
+          "v": "32.4%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Zachary-Hulevitch",
+      "franchiseCode": "ct",
+      "name": "Zachary Hulevitch",
+      "role": "CEL",
+      "score": 50,
+      "tier": "urgent",
+      "resiJobs": 16,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "50/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$470",
+          "c": "bad"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "62.5%",
           "c": "good"
         }
       ]
@@ -2628,7 +2488,7 @@
       "role": "CSL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 55,
+      "resiJobs": 61,
       "metrics": [
         {
           "l": "Score",
@@ -2636,7 +2496,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$614",
+          "v": "$597",
           "c": "bad"
         },
         {
@@ -2646,12 +2506,12 @@
         },
         {
           "l": "NPS",
-          "v": "95%",
+          "v": "96%",
           "c": "good"
         },
         {
           "l": "Reviews",
-          "v": "41.8%",
+          "v": "44.3%",
           "c": "good"
         }
       ]
@@ -2663,7 +2523,7 @@
       "role": "CSL",
       "score": 50,
       "tier": "urgent",
-      "resiJobs": 60,
+      "resiJobs": 68,
       "metrics": [
         {
           "l": "Score",
@@ -2671,7 +2531,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$545",
+          "v": "$564",
           "c": "bad"
         },
         {
@@ -2686,7 +2546,7 @@
         },
         {
           "l": "Reviews",
-          "v": "30.0%",
+          "v": "32.4%",
           "c": "good"
         }
       ]
@@ -2698,7 +2558,7 @@
       "role": "CSL",
       "score": 70,
       "tier": "watch",
-      "resiJobs": 35,
+      "resiJobs": 37,
       "metrics": [
         {
           "l": "Score",
@@ -2706,7 +2566,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$967",
+          "v": "$997",
           "c": "good"
         },
         {
@@ -2721,7 +2581,7 @@
         },
         {
           "l": "Reviews",
-          "v": "11.4%",
+          "v": "13.5%",
           "c": "bad"
         }
       ]
@@ -2733,7 +2593,7 @@
       "role": "CSL",
       "score": 70,
       "tier": "watch",
-      "resiJobs": 57,
+      "resiJobs": 62,
       "metrics": [
         {
           "l": "Score",
@@ -2741,7 +2601,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$754",
+          "v": "$748",
           "c": "good"
         },
         {
@@ -2751,12 +2611,82 @@
         },
         {
           "l": "NPS",
-          "v": "83%",
+          "v": "86%",
           "c": "bad"
         },
         {
           "l": "Reviews",
-          "v": "5.3%",
+          "v": "4.8%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bno-Taginie-Taylor",
+      "franchiseCode": "bno",
+      "name": "Taginie Taylor",
+      "role": "CSL",
+      "score": 70,
+      "tier": "watch",
+      "resiJobs": 26,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "70/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$741",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "71%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "15.4%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Leibnitz-Albarran",
+      "franchiseCode": "bso",
+      "name": "Leibnitz Albarran",
+      "role": "CEL",
+      "score": 70,
+      "tier": "watch",
+      "resiJobs": 65,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "70/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$845",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "60%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "23.1%",
           "c": "bad"
         }
       ]
@@ -2768,7 +2698,7 @@
       "role": "CEL",
       "score": 70,
       "tier": "watch",
-      "resiJobs": 85,
+      "resiJobs": 92,
       "metrics": [
         {
           "l": "Score",
@@ -2776,7 +2706,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$766",
+          "v": "$747",
           "c": "good"
         },
         {
@@ -2791,42 +2721,7 @@
         },
         {
           "l": "Reviews",
-          "v": "23.5%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Edward-Marroquin",
-      "franchiseCode": "bso",
-      "name": "Edward Marroquin",
-      "role": "CEL",
-      "score": 70,
-      "tier": "watch",
-      "resiJobs": 63,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "70/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$737",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "75%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "22.2%",
+          "v": "23.9%",
           "c": "bad"
         }
       ]
@@ -2838,7 +2733,7 @@
       "role": "CEL",
       "score": 70,
       "tier": "watch",
-      "resiJobs": 41,
+      "resiJobs": 51,
       "metrics": [
         {
           "l": "Score",
@@ -2846,7 +2741,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$731",
+          "v": "$725",
           "c": "good"
         },
         {
@@ -2861,7 +2756,7 @@
         },
         {
           "l": "Reviews",
-          "v": "24.4%",
+          "v": "21.6%",
           "c": "bad"
         }
       ]
@@ -2873,7 +2768,7 @@
       "role": "CSL",
       "score": 70,
       "tier": "watch",
-      "resiJobs": 61,
+      "resiJobs": 69,
       "metrics": [
         {
           "l": "Score",
@@ -2881,7 +2776,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$944",
+          "v": "$889",
           "c": "good"
         },
         {
@@ -2891,12 +2786,117 @@
         },
         {
           "l": "NPS",
-          "v": "56%",
+          "v": "60%",
           "c": "bad"
         },
         {
           "l": "Reviews",
-          "v": "16.4%",
+          "v": "17.4%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Javian-Eason",
+      "franchiseCode": "bso",
+      "name": "Javian Eason",
+      "role": "CSL",
+      "score": 70,
+      "tier": "watch",
+      "resiJobs": 79,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "70/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$726",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "72%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "24.1%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Jermaine-Higgs",
+      "franchiseCode": "ct",
+      "name": "Jermaine Higgs",
+      "role": "CEL",
+      "score": 70,
+      "tier": "watch",
+      "resiJobs": 74,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "70/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$888",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "1.20%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "81%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "17.6%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Jordan-Anderson",
+      "franchiseCode": "ct",
+      "name": "Jordan Anderson",
+      "role": "CEL",
+      "score": 70,
+      "tier": "watch",
+      "resiJobs": 63,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "70/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$866",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "83%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "9.5%",
           "c": "bad"
         }
       ]
@@ -2937,13 +2937,13 @@
       ]
     },
     {
-      "id": "roster-ct-Ernest-Harold",
+      "id": "roster-ct-Zachary-Light",
       "franchiseCode": "ct",
-      "name": "Ernest Harold",
-      "role": "CEL",
+      "name": "Zachary Light",
+      "role": "CSL",
       "score": 70,
       "tier": "watch",
-      "resiJobs": 32,
+      "resiJobs": 72,
       "metrics": [
         {
           "l": "Score",
@@ -2951,7 +2951,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$660",
+          "v": "$951",
           "c": "good"
         },
         {
@@ -2961,12 +2961,12 @@
         },
         {
           "l": "NPS",
-          "v": "80%",
+          "v": "86%",
           "c": "bad"
         },
         {
           "l": "Reviews",
-          "v": "18.8%",
+          "v": "23.6%",
           "c": "bad"
         }
       ]
@@ -2978,7 +2978,7 @@
       "role": "CSL",
       "score": 70,
       "tier": "watch",
-      "resiJobs": 83,
+      "resiJobs": 87,
       "metrics": [
         {
           "l": "Score",
@@ -2986,7 +2986,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$733",
+          "v": "$719",
           "c": "good"
         },
         {
@@ -2996,12 +2996,12 @@
         },
         {
           "l": "NPS",
-          "v": "81%",
+          "v": "85%",
           "c": "bad"
         },
         {
           "l": "Reviews",
-          "v": "15.7%",
+          "v": "21.8%",
           "c": "bad"
         }
       ]
@@ -3013,7 +3013,7 @@
       "role": "CSL",
       "score": 70,
       "tier": "watch",
-      "resiJobs": 81,
+      "resiJobs": 93,
       "metrics": [
         {
           "l": "Score",
@@ -3021,7 +3021,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$670",
+          "v": "$683",
           "c": "good"
         },
         {
@@ -3031,12 +3031,12 @@
         },
         {
           "l": "NPS",
-          "v": "73%",
+          "v": "76%",
           "c": "bad"
         },
         {
           "l": "Reviews",
-          "v": "18.5%",
+          "v": "17.2%",
           "c": "bad"
         }
       ]
@@ -3048,7 +3048,7 @@
       "role": "CSL",
       "score": 70,
       "tier": "watch",
-      "resiJobs": 57,
+      "resiJobs": 63,
       "metrics": [
         {
           "l": "Score",
@@ -3056,7 +3056,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$668",
+          "v": "$651",
           "c": "good"
         },
         {
@@ -3066,13 +3066,83 @@
         },
         {
           "l": "NPS",
-          "v": "83%",
+          "v": "88%",
           "c": "bad"
         },
         {
           "l": "Reviews",
-          "v": "8.8%",
+          "v": "12.7%",
           "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Joel-Azar",
+      "franchiseCode": "ct",
+      "name": "Joel Azar",
+      "role": "CSL",
+      "score": 70,
+      "tier": "watch",
+      "resiJobs": 65,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "70/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$639",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "86%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "23.1%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-RaeQuan-Barber",
+      "franchiseCode": "ct",
+      "name": "RaeQuan Barber",
+      "role": "CSL",
+      "score": 80,
+      "tier": "solid",
+      "resiJobs": 86,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "80/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$723",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "1.60%",
+          "c": "bad"
+        },
+        {
+          "l": "NPS",
+          "v": "95%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "27.9%",
+          "c": "good"
         }
       ]
     },
@@ -3083,7 +3153,7 @@
       "role": "CSL",
       "score": 80,
       "tier": "solid",
-      "resiJobs": 75,
+      "resiJobs": 82,
       "metrics": [
         {
           "l": "Score",
@@ -3091,34 +3161,69 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$629",
+          "v": "$632",
           "c": "good"
         },
         {
           "l": "Complaints",
-          "v": "1.50%",
+          "v": "1.40%",
           "c": "bad"
         },
         {
           "l": "NPS",
-          "v": "91%",
+          "v": "93%",
           "c": "good"
         },
         {
           "l": "Reviews",
-          "v": "30.7%",
+          "v": "35.4%",
           "c": "good"
         }
       ]
     },
     {
-      "id": "roster-bno-Kevin-Periel",
+      "id": "roster-ct-Byron-Goforth",
+      "franchiseCode": "ct",
+      "name": "Byron Goforth",
+      "role": "CSL",
+      "score": 80,
+      "tier": "solid",
+      "resiJobs": 70,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "80/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$623",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "1.80%",
+          "c": "bad"
+        },
+        {
+          "l": "NPS",
+          "v": "95%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "28.6%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bno-Jeff-Thelfort",
       "franchiseCode": "bno",
-      "name": "Kevin Periel",
+      "name": "Jeff Thelfort",
       "role": "CSL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 23,
+      "resiJobs": 77,
       "metrics": [
         {
           "l": "Score",
@@ -3126,42 +3231,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$1,042",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "75%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "30.4%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bno-Juan-Torres",
-      "franchiseCode": "bno",
-      "name": "Juan Torres",
-      "role": "CSL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 66,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$905",
+          "v": "$1,079",
           "c": "good"
         },
         {
@@ -3176,7 +3246,77 @@
         },
         {
           "l": "Reviews",
-          "v": "12.1%",
+          "v": "24.7%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bno-Kevin-Periel",
+      "franchiseCode": "bno",
+      "name": "Kevin Periel",
+      "role": "CSL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 30,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$1,049",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "78%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "30.0%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bno-Isaiah-Henry",
+      "franchiseCode": "bno",
+      "name": "Isaiah Henry",
+      "role": "CSL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 62,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$947",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "22.6%",
           "c": "bad"
         }
       ]
@@ -3188,7 +3328,7 @@
       "role": "CSL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 50,
+      "resiJobs": 58,
       "metrics": [
         {
           "l": "Score",
@@ -3196,7 +3336,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$900",
+          "v": "$928",
           "c": "good"
         },
         {
@@ -3211,7 +3351,42 @@
         },
         {
           "l": "Reviews",
-          "v": "16.0%",
+          "v": "13.8%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bno-Juan-Torres",
+      "franchiseCode": "bno",
+      "name": "Juan Torres",
+      "role": "CSL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 75,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$917",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "12.0%",
           "c": "bad"
         }
       ]
@@ -3223,7 +3398,7 @@
       "role": "CSL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 42,
+      "resiJobs": 50,
       "metrics": [
         {
           "l": "Score",
@@ -3231,7 +3406,42 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$893",
+          "v": "$906",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "8.0%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bno-Nathaniel-Rodriguez",
+      "franchiseCode": "bno",
+      "name": "Nathaniel Rodriguez",
+      "role": "CSL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 74,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$873",
           "c": "good"
         },
         {
@@ -3252,13 +3462,13 @@
       ]
     },
     {
-      "id": "roster-bno-Nathaniel-Rodriguez",
+      "id": "roster-bno-Emanuel-Pinero",
       "franchiseCode": "bno",
-      "name": "Nathaniel Rodriguez",
+      "name": "Emanuel Pinero",
       "role": "CSL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 71,
+      "resiJobs": 13,
       "metrics": [
         {
           "l": "Score",
@@ -3266,7 +3476,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$838",
+          "v": "$800",
           "c": "good"
         },
         {
@@ -3281,7 +3491,7 @@
         },
         {
           "l": "Reviews",
-          "v": "9.9%",
+          "v": "23.1%",
           "c": "bad"
         }
       ]
@@ -3317,41 +3527,6 @@
         {
           "l": "Reviews",
           "v": "8.0%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bno-Taginie-Taylor",
-      "franchiseCode": "bno",
-      "name": "Taginie Taylor",
-      "role": "CSL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 22,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$745",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "18.2%",
           "c": "bad"
         }
       ]
@@ -3433,7 +3608,7 @@
       "role": "CEL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 63,
+      "resiJobs": 71,
       "metrics": [
         {
           "l": "Score",
@@ -3441,7 +3616,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$1,014",
+          "v": "$970",
           "c": "good"
         },
         {
@@ -3456,7 +3631,7 @@
         },
         {
           "l": "Reviews",
-          "v": "23.8%",
+          "v": "22.5%",
           "c": "bad"
         }
       ]
@@ -3493,41 +3668,6 @@
           "l": "Reviews",
           "v": "23.5%",
           "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Leibnitz-Albarran",
-      "franchiseCode": "bso",
-      "name": "Leibnitz Albarran",
-      "role": "CEL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 60,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$860",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "50%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "25.0%",
-          "c": "good"
         }
       ]
     },
@@ -3573,7 +3713,7 @@
       "role": "CEL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 48,
+      "resiJobs": 54,
       "metrics": [
         {
           "l": "Score",
@@ -3581,7 +3721,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$816",
+          "v": "$774",
           "c": "good"
         },
         {
@@ -3596,7 +3736,42 @@
         },
         {
           "l": "Reviews",
-          "v": "14.6%",
+          "v": "13.0%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Shymare-Haynes",
+      "franchiseCode": "bso",
+      "name": "Shymare Haynes",
+      "role": "CEL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 61,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$755",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "21.3%",
           "c": "bad"
         }
       ]
@@ -3637,13 +3812,13 @@
       ]
     },
     {
-      "id": "roster-bso-Shymare-Haynes",
+      "id": "roster-bso-Brian-Colon",
       "franchiseCode": "bso",
-      "name": "Shymare Haynes",
+      "name": "Brian Colon",
       "role": "CEL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 59,
+      "resiJobs": 12,
       "metrics": [
         {
           "l": "Score",
@@ -3651,7 +3826,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$739",
+          "v": "$745",
           "c": "good"
         },
         {
@@ -3661,13 +3836,48 @@
         },
         {
           "l": "NPS",
-          "v": "100%",
-          "c": "good"
+          "v": "60%",
+          "c": "bad"
         },
         {
           "l": "Reviews",
-          "v": "20.3%",
+          "v": "83.3%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Justin-O'Keeffe",
+      "franchiseCode": "bso",
+      "name": "Justin O'Keeffe",
+      "role": "CEL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 24,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$736",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "60%",
           "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "29.2%",
+          "c": "good"
         }
       ]
     },
@@ -3678,7 +3888,7 @@
       "role": "CSL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 58,
+      "resiJobs": 65,
       "metrics": [
         {
           "l": "Score",
@@ -3686,7 +3896,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$1,142",
+          "v": "$1,102",
           "c": "good"
         },
         {
@@ -3701,7 +3911,7 @@
         },
         {
           "l": "Reviews",
-          "v": "19.0%",
+          "v": "18.5%",
           "c": "bad"
         }
       ]
@@ -3812,13 +4022,13 @@
       ]
     },
     {
-      "id": "roster-bso-Kyrei-Bell",
+      "id": "roster-bso-Francisco-Patzan",
       "franchiseCode": "bso",
-      "name": "Kyrei Bell",
+      "name": "Francisco Patzan",
       "role": "CSL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 81,
+      "resiJobs": 55,
       "metrics": [
         {
           "l": "Score",
@@ -3826,77 +4036,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$737",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "85%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "25.9%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Javian-Eason",
-      "franchiseCode": "bso",
-      "name": "Javian Eason",
-      "role": "CSL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 67,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$731",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "80%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "26.9%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-cp-Anthony-Tudor",
-      "franchiseCode": "cp",
-      "name": "Anthony Tudor",
-      "role": "CEL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 23,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$700",
+          "v": "$727",
           "c": "good"
         },
         {
@@ -3911,7 +4051,42 @@
         },
         {
           "l": "Reviews",
-          "v": "17.4%",
+          "v": "12.7%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-cp-Anthony-Tudor",
+      "franchiseCode": "cp",
+      "name": "Anthony Tudor",
+      "role": "CEL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 30,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$745",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "13.3%",
           "c": "bad"
         }
       ]
@@ -3923,7 +4098,7 @@
       "role": "CEL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 28,
+      "resiJobs": 37,
       "metrics": [
         {
           "l": "Score",
@@ -3931,7 +4106,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$659",
+          "v": "$637",
           "c": "good"
         },
         {
@@ -3946,7 +4121,7 @@
         },
         {
           "l": "Reviews",
-          "v": "17.9%",
+          "v": "24.3%",
           "c": "bad"
         }
       ]
@@ -3993,7 +4168,7 @@
       "role": "CSL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 71,
+      "resiJobs": 80,
       "metrics": [
         {
           "l": "Score",
@@ -4001,7 +4176,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$945",
+          "v": "$897",
           "c": "good"
         },
         {
@@ -4016,7 +4191,7 @@
         },
         {
           "l": "Reviews",
-          "v": "18.3%",
+          "v": "16.2%",
           "c": "bad"
         }
       ]
@@ -4028,7 +4203,7 @@
       "role": "CSL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 61,
+      "resiJobs": 63,
       "metrics": [
         {
           "l": "Score",
@@ -4036,7 +4211,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$676",
+          "v": "$678",
           "c": "good"
         },
         {
@@ -4051,19 +4226,19 @@
         },
         {
           "l": "Reviews",
-          "v": "19.7%",
+          "v": "20.6%",
           "c": "bad"
         }
       ]
     },
     {
-      "id": "roster-ct-Jordan-Anderson",
+      "id": "roster-ct-Felipe-Mendez",
       "franchiseCode": "ct",
-      "name": "Jordan Anderson",
+      "name": "Felipe Mendez",
       "role": "CEL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 54,
+      "resiJobs": 63,
       "metrics": [
         {
           "l": "Score",
@@ -4071,7 +4246,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$930",
+          "v": "$842",
           "c": "good"
         },
         {
@@ -4086,7 +4261,7 @@
         },
         {
           "l": "Reviews",
-          "v": "9.3%",
+          "v": "17.5%",
           "c": "bad"
         }
       ]
@@ -4098,7 +4273,7 @@
       "role": "CEL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 45,
+      "resiJobs": 49,
       "metrics": [
         {
           "l": "Score",
@@ -4106,7 +4281,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$859",
+          "v": "$822",
           "c": "good"
         },
         {
@@ -4116,12 +4291,12 @@
         },
         {
           "l": "NPS",
-          "v": "90%",
+          "v": "91%",
           "c": "good"
         },
         {
           "l": "Reviews",
-          "v": "24.4%",
+          "v": "22.4%",
           "c": "bad"
         }
       ]
@@ -4133,7 +4308,7 @@
       "role": "CEL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 60,
+      "resiJobs": 69,
       "metrics": [
         {
           "l": "Score",
@@ -4141,147 +4316,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$852",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "82%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "40.0%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Felipe-Mendez",
-      "franchiseCode": "ct",
-      "name": "Felipe Mendez",
-      "role": "CEL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 60,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$773",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "18.3%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Benajmin-Tibbetts",
-      "franchiseCode": "ct",
-      "name": "Benajmin Tibbetts",
-      "role": "CEL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 56,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$750",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "92%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "21.4%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Tyrell-Gore",
-      "franchiseCode": "ct",
-      "name": "Tyrell Gore",
-      "role": "CEL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 20,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$744",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "10.0%",
-          "c": "bad"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Miguel-Marchany",
-      "franchiseCode": "ct",
-      "name": "Miguel Marchany",
-      "role": "CEL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 45,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$724",
+          "v": "$796",
           "c": "good"
         },
         {
@@ -4296,19 +4331,19 @@
         },
         {
           "l": "Reviews",
-          "v": "26.7%",
+          "v": "39.1%",
           "c": "good"
         }
       ]
     },
     {
-      "id": "roster-ct-Jorge-Cividanes",
+      "id": "roster-ct-Benajmin-Tibbetts",
       "franchiseCode": "ct",
-      "name": "Jorge Cividanes",
+      "name": "Benajmin Tibbetts",
       "role": "CEL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 10,
+      "resiJobs": 62,
       "metrics": [
         {
           "l": "Score",
@@ -4316,7 +4351,42 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$645",
+          "v": "$783",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "93%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "19.4%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Mark-Nadhazi",
+      "franchiseCode": "ct",
+      "name": "Mark Nadhazi",
+      "role": "CEL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 20,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$736",
           "c": "good"
         },
         {
@@ -4331,8 +4401,113 @@
         },
         {
           "l": "Reviews",
-          "v": "10.0%",
+          "v": "20.0%",
           "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Tyrell-Gore",
+      "franchiseCode": "ct",
+      "name": "Tyrell Gore",
+      "role": "CEL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 33,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$701",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "12.1%",
+          "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Miguel-Marchany",
+      "franchiseCode": "ct",
+      "name": "Miguel Marchany",
+      "role": "CEL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 51,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$691",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "87%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "31.4%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Ernest-Harold",
+      "franchiseCode": "ct",
+      "name": "Ernest Harold",
+      "role": "CEL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 50,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$634",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "89%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "36.0%",
+          "c": "good"
         }
       ]
     },
@@ -4367,41 +4542,6 @@
         {
           "l": "Reviews",
           "v": "55.3%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Zachary-Light",
-      "franchiseCode": "ct",
-      "name": "Zachary Light",
-      "role": "CSL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 66,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$942",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "86%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "25.8%",
           "c": "good"
         }
       ]
@@ -4448,7 +4588,7 @@
       "role": "CSL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 73,
+      "resiJobs": 78,
       "metrics": [
         {
           "l": "Score",
@@ -4456,7 +4596,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$685",
+          "v": "$684",
           "c": "good"
         },
         {
@@ -4466,13 +4606,48 @@
         },
         {
           "l": "NPS",
-          "v": "93%",
+          "v": "94%",
           "c": "good"
         },
         {
           "l": "Reviews",
-          "v": "21.9%",
+          "v": "21.8%",
           "c": "bad"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Nathaniel-Falcon",
+      "franchiseCode": "ct",
+      "name": "Nathaniel Falcon",
+      "role": "CSL",
+      "score": 85,
+      "tier": "solid",
+      "resiJobs": 69,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "85/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$669",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "89%",
+          "c": "bad"
+        },
+        {
+          "l": "Reviews",
+          "v": "40.6%",
+          "c": "good"
         }
       ]
     },
@@ -4512,13 +4687,13 @@
       ]
     },
     {
-      "id": "roster-ct-Nathaniel-Falcon",
+      "id": "roster-ct-Emmanuel-Iyke",
       "franchiseCode": "ct",
-      "name": "Nathaniel Falcon",
+      "name": "Emmanuel Iyke",
       "role": "CSL",
       "score": 85,
       "tier": "solid",
-      "resiJobs": 63,
+      "resiJobs": 82,
       "metrics": [
         {
           "l": "Score",
@@ -4526,77 +4701,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$662",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "88%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "34.9%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-Joel-Azar",
-      "franchiseCode": "ct",
-      "name": "Joel Azar",
-      "role": "CSL",
-      "score": 85,
-      "tier": "solid",
-      "resiJobs": 55,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "85/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$651",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "83%",
-          "c": "bad"
-        },
-        {
-          "l": "Reviews",
-          "v": "27.3%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bno-Jeff-Thelfort",
-      "franchiseCode": "bno",
-      "name": "Jeff Thelfort",
-      "role": "CSL",
-      "score": 100,
-      "tier": "elite",
-      "resiJobs": 65,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "100/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$1,118",
+          "v": "$623",
           "c": "good"
         },
         {
@@ -4611,43 +4716,8 @@
         },
         {
           "l": "Reviews",
-          "v": "26.1%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bno-Isaiah-Henry",
-      "franchiseCode": "bno",
-      "name": "Isaiah Henry",
-      "role": "CSL",
-      "score": 100,
-      "tier": "elite",
-      "resiJobs": 51,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "100/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$988",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "25.5%",
-          "c": "good"
+          "v": "20.7%",
+          "c": "bad"
         }
       ]
     },
@@ -4682,41 +4752,6 @@
         {
           "l": "Reviews",
           "v": "42.5%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bno-Emanuel-Pinero",
-      "franchiseCode": "bno",
-      "name": "Emanuel Pinero",
-      "role": "CSL",
-      "score": 100,
-      "tier": "elite",
-      "resiJobs": 11,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "100/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$760",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "27.3%",
           "c": "good"
         }
       ]
@@ -4763,7 +4798,7 @@
       "role": "CSL",
       "score": 100,
       "tier": "elite",
-      "resiJobs": 38,
+      "resiJobs": 42,
       "metrics": [
         {
           "l": "Score",
@@ -4771,7 +4806,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$729",
+          "v": "$745",
           "c": "good"
         },
         {
@@ -4786,7 +4821,7 @@
         },
         {
           "l": "Reviews",
-          "v": "57.9%",
+          "v": "57.1%",
           "c": "good"
         }
       ]
@@ -4798,7 +4833,7 @@
       "role": "CEL",
       "score": 100,
       "tier": "elite",
-      "resiJobs": 10,
+      "resiJobs": 16,
       "metrics": [
         {
           "l": "Score",
@@ -4806,7 +4841,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$1,164",
+          "v": "$900",
           "c": "good"
         },
         {
@@ -4821,77 +4856,7 @@
         },
         {
           "l": "Reviews",
-          "v": "30.0%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Donaldo-Mitogo",
-      "franchiseCode": "bso",
-      "name": "Donaldo Mitogo",
-      "role": "CEL",
-      "score": 100,
-      "tier": "elite",
-      "resiJobs": 25,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "100/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$809",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "40.0%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Kevin-Becker",
-      "franchiseCode": "bso",
-      "name": "Kevin Becker",
-      "role": "CEL",
-      "score": 100,
-      "tier": "elite",
-      "resiJobs": 15,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "100/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$797",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "40.0%",
+          "v": "25.0%",
           "c": "good"
         }
       ]
@@ -4903,7 +4868,7 @@
       "role": "CEL",
       "score": 100,
       "tier": "elite",
-      "resiJobs": 54,
+      "resiJobs": 61,
       "metrics": [
         {
           "l": "Score",
@@ -4911,7 +4876,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$749",
+          "v": "$777",
           "c": "good"
         },
         {
@@ -4926,7 +4891,77 @@
         },
         {
           "l": "Reviews",
-          "v": "38.9%",
+          "v": "39.3%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Donaldo-Mitogo",
+      "franchiseCode": "bso",
+      "name": "Donaldo Mitogo",
+      "role": "CEL",
+      "score": 100,
+      "tier": "elite",
+      "resiJobs": 28,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "100/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$768",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "35.7%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Logan-Ballou",
+      "franchiseCode": "bso",
+      "name": "Logan Ballou",
+      "role": "CEL",
+      "score": 100,
+      "tier": "elite",
+      "resiJobs": 61,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "100/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$765",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "29.5%",
           "c": "good"
         }
       ]
@@ -4938,7 +4973,7 @@
       "role": "CEL",
       "score": 100,
       "tier": "elite",
-      "resiJobs": 54,
+      "resiJobs": 58,
       "metrics": [
         {
           "l": "Score",
@@ -4946,7 +4981,147 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$744",
+          "v": "$760",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "91%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "27.6%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Tyler-Coelho",
+      "franchiseCode": "bso",
+      "name": "Tyler Coelho",
+      "role": "CEL",
+      "score": 100,
+      "tier": "elite",
+      "resiJobs": 12,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "100/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$751",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "50.0%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Ian-Clayton",
+      "franchiseCode": "bso",
+      "name": "Ian Clayton",
+      "role": "CSL",
+      "score": 100,
+      "tier": "elite",
+      "resiJobs": 55,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "100/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$1,101",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "38.2%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Jonathan-Gill",
+      "franchiseCode": "bso",
+      "name": "Jonathan Gill",
+      "role": "CSL",
+      "score": 100,
+      "tier": "elite",
+      "resiJobs": 90,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "100/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$862",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "93%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "27.8%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-bso-Kyrei-Bell",
+      "franchiseCode": "bso",
+      "name": "Kyrei Bell",
+      "role": "CSL",
+      "score": 100,
+      "tier": "elite",
+      "resiJobs": 86,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "100/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$752",
           "c": "good"
         },
         {
@@ -4961,77 +5136,7 @@
         },
         {
           "l": "Reviews",
-          "v": "27.8%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Ian-Clayton",
-      "franchiseCode": "bso",
-      "name": "Ian Clayton",
-      "role": "CSL",
-      "score": 100,
-      "tier": "elite",
-      "resiJobs": 49,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "100/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$1,060",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "36.7%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-bso-Jonathan-Gill",
-      "franchiseCode": "bso",
-      "name": "Jonathan Gill",
-      "role": "CSL",
-      "score": 100,
-      "tier": "elite",
-      "resiJobs": 81,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "100/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$854",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "29.6%",
+          "v": "27.9%",
           "c": "good"
         }
       ]
@@ -5043,7 +5148,7 @@
       "role": "CEL",
       "score": 100,
       "tier": "elite",
-      "resiJobs": 69,
+      "resiJobs": 81,
       "metrics": [
         {
           "l": "Score",
@@ -5051,7 +5156,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$898",
+          "v": "$857",
           "c": "good"
         },
         {
@@ -5066,7 +5171,7 @@
         },
         {
           "l": "Reviews",
-          "v": "27.5%",
+          "v": "27.2%",
           "c": "good"
         }
       ]
@@ -5078,7 +5183,7 @@
       "role": "CEL",
       "score": 100,
       "tier": "elite",
-      "resiJobs": 56,
+      "resiJobs": 61,
       "metrics": [
         {
           "l": "Score",
@@ -5086,7 +5191,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$1,004",
+          "v": "$970",
           "c": "good"
         },
         {
@@ -5101,7 +5206,7 @@
         },
         {
           "l": "Reviews",
-          "v": "32.1%",
+          "v": "31.1%",
           "c": "good"
         }
       ]
@@ -5113,6 +5218,41 @@
       "role": "CEL",
       "score": 100,
       "tier": "elite",
+      "resiJobs": 66,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "100/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$818",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "36.4%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Devin-Perry",
+      "franchiseCode": "ct",
+      "name": "Devin Perry",
+      "role": "CEL",
+      "score": 100,
+      "tier": "elite",
       "resiJobs": 58,
       "metrics": [
         {
@@ -5121,7 +5261,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$872",
+          "v": "$808",
           "c": "good"
         },
         {
@@ -5142,48 +5282,13 @@
       ]
     },
     {
-      "id": "roster-ct-Devin-Perry",
-      "franchiseCode": "ct",
-      "name": "Devin Perry",
-      "role": "CEL",
-      "score": 100,
-      "tier": "elite",
-      "resiJobs": 54,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "100/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$820",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "100%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "33.3%",
-          "c": "good"
-        }
-      ]
-    },
-    {
       "id": "roster-ct-Patrick-Zantow",
       "franchiseCode": "ct",
       "name": "Patrick Zantow",
       "role": "CEL",
       "score": 100,
       "tier": "elite",
-      "resiJobs": 59,
+      "resiJobs": 69,
       "metrics": [
         {
           "l": "Score",
@@ -5191,7 +5296,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$807",
+          "v": "$773",
           "c": "good"
         },
         {
@@ -5206,7 +5311,7 @@
         },
         {
           "l": "Reviews",
-          "v": "35.6%",
+          "v": "30.4%",
           "c": "good"
         }
       ]
@@ -5247,48 +5352,13 @@
       ]
     },
     {
-      "id": "roster-ct-Desmond-Rodriguez",
-      "franchiseCode": "ct",
-      "name": "Desmond Rodriguez",
-      "role": "CEL",
-      "score": 100,
-      "tier": "elite",
-      "resiJobs": 51,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "100/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$716",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "0.00%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "94%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "27.4%",
-          "c": "good"
-        }
-      ]
-    },
-    {
       "id": "roster-ct-Joel-Falero",
       "franchiseCode": "ct",
       "name": "Joel Falero",
       "role": "CEL",
       "score": 100,
       "tier": "elite",
-      "resiJobs": 25,
+      "resiJobs": 26,
       "metrics": [
         {
           "l": "Score",
@@ -5296,7 +5366,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$684",
+          "v": "$718",
           "c": "good"
         },
         {
@@ -5311,19 +5381,19 @@
         },
         {
           "l": "Reviews",
-          "v": "40.0%",
+          "v": "53.9%",
           "c": "good"
         }
       ]
     },
     {
-      "id": "roster-ct-Jordan-Oneil",
+      "id": "roster-ct-Desmond-Rodriguez",
       "franchiseCode": "ct",
-      "name": "Jordan Oneil",
+      "name": "Desmond Rodriguez",
       "role": "CEL",
       "score": 100,
       "tier": "elite",
-      "resiJobs": 61,
+      "resiJobs": 64,
       "metrics": [
         {
           "l": "Score",
@@ -5331,7 +5401,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$627",
+          "v": "$698",
           "c": "good"
         },
         {
@@ -5341,12 +5411,47 @@
         },
         {
           "l": "NPS",
-          "v": "94%",
+          "v": "95%",
           "c": "good"
         },
         {
           "l": "Reviews",
-          "v": "31.1%",
+          "v": "29.7%",
+          "c": "good"
+        }
+      ]
+    },
+    {
+      "id": "roster-ct-Jorge-Cividanes",
+      "franchiseCode": "ct",
+      "name": "Jorge Cividanes",
+      "role": "CEL",
+      "score": 100,
+      "tier": "elite",
+      "resiJobs": 13,
+      "metrics": [
+        {
+          "l": "Score",
+          "v": "100/100"
+        },
+        {
+          "l": "Adj AJS",
+          "v": "$685",
+          "c": "good"
+        },
+        {
+          "l": "Complaints",
+          "v": "0.00%",
+          "c": "good"
+        },
+        {
+          "l": "NPS",
+          "v": "100%",
+          "c": "good"
+        },
+        {
+          "l": "Reviews",
+          "v": "53.9%",
           "c": "good"
         }
       ]
@@ -5358,7 +5463,7 @@
       "role": "CSL",
       "score": 100,
       "tier": "elite",
-      "resiJobs": 79,
+      "resiJobs": 92,
       "metrics": [
         {
           "l": "Score",
@@ -5366,7 +5471,7 @@
         },
         {
           "l": "Adj AJS",
-          "v": "$799",
+          "v": "$807",
           "c": "good"
         },
         {
@@ -5376,47 +5481,12 @@
         },
         {
           "l": "NPS",
-          "v": "94%",
+          "v": "96%",
           "c": "good"
         },
         {
           "l": "Reviews",
-          "v": "27.9%",
-          "c": "good"
-        }
-      ]
-    },
-    {
-      "id": "roster-ct-RaeQuan-Barber",
-      "franchiseCode": "ct",
-      "name": "RaeQuan Barber",
-      "role": "CSL",
-      "score": 100,
-      "tier": "elite",
-      "resiJobs": 79,
-      "metrics": [
-        {
-          "l": "Score",
-          "v": "100/100"
-        },
-        {
-          "l": "Adj AJS",
-          "v": "$738",
-          "c": "good"
-        },
-        {
-          "l": "Complaints",
-          "v": "1.20%",
-          "c": "good"
-        },
-        {
-          "l": "NPS",
-          "v": "95%",
-          "c": "good"
-        },
-        {
-          "l": "Reviews",
-          "v": "30.4%",
+          "v": "29.4%",
           "c": "good"
         }
       ]
